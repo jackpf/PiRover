@@ -25,7 +25,7 @@ private:
 public:
     Rover();
     void setup();
-    void process(int, char **);
+    void process(int);
     void forward();
     void backward();
     void left();

@@ -15,7 +15,7 @@ void Rover::setup()
     pinMode(PIN_RIGHT_B, OUTPUT);
 }
 
-void Rover::process(int argc, char *argv[])
+/*void Rover::process(int argc, char **argv)
 {
     assert_args(argc, 1);
     char *cmd = argv[1];
@@ -39,6 +39,27 @@ void Rover::process(int argc, char *argv[])
     } else if (strcmp(cmd, "stop") == 0) {
         stop();
     }
+}*/
+
+void Rover::process(int keyCode)
+{
+    switch (keyCode) {
+        case 65:
+            forward();
+        break;
+        case 66:
+            backward();
+        break;
+        case 68:
+            left();
+        break;
+        case 67:
+            right();
+        break;
+        default:
+            stop();
+        break;
+    }
 }
 
 void Rover::forward()
@@ -47,8 +68,6 @@ void Rover::forward()
     digitalWrite(PIN_LEFT_B, LOW);
     digitalWrite(PIN_RIGHT_A, HIGH);
     digitalWrite(PIN_RIGHT_B, LOW);
-    delay((int) (args->time * 1000));
-    stop();
 }
 
 void Rover::backward()
@@ -57,8 +76,6 @@ void Rover::backward()
     digitalWrite(PIN_LEFT_B, HIGH);
     digitalWrite(PIN_RIGHT_A, LOW);
     digitalWrite(PIN_RIGHT_B, HIGH);
-    delay((int) (args->time * 1000));
-    stop();
 }
 
 void Rover::left()
@@ -67,8 +84,6 @@ void Rover::left()
     digitalWrite(PIN_LEFT_B, HIGH);
     digitalWrite(PIN_RIGHT_A, HIGH);
     digitalWrite(PIN_RIGHT_B, LOW);
-    delay((int) (args->time * 1000));
-    stop();
 }
 
 void Rover::right()
@@ -77,8 +92,6 @@ void Rover::right()
     digitalWrite(PIN_LEFT_B, LOW);
     digitalWrite(PIN_RIGHT_A, LOW);
     digitalWrite(PIN_RIGHT_B, HIGH);
-    delay((int) (args->time * 1000));
-    stop();
 }
 
 void Rover::stop()
