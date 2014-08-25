@@ -2,10 +2,10 @@
 
 int main(int argc, char *argv[])
 {
-	Rover *rover = new Rover();
+    Rover *rover = new Rover();
 
-	rover->setup();
-	rover->process(argc, argv);
+    rover->setup();
+    rover->process(argc, argv);
 
-	return 0;
+    return 0;
 }

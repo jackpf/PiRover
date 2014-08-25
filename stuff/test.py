@@ -20,19 +20,19 @@ if cmd == "forward":
 	gpio.output(15, False)
 elif cmd == "backward":
 	gpio.output(5, False)
-        gpio.output(7, True)
-        gpio.output(13, False)
-        gpio.output(15, True)
+	gpio.output(7, True)
+	gpio.output(13, False)
+	gpio.output(15, True)
 elif cmd == "left":
 	gpio.output(5, False)
-        gpio.output(7, True)
-        gpio.output(13, True)
-        gpio.output(15, False)
+	gpio.output(7, True)
+	gpio.output(13, True)
+	gpio.output(15, False)
 elif cmd == "right":
 	gpio.output(5, True)
-        gpio.output(7, False)
-        gpio.output(13, False)
-        gpio.output(15, True)
+	gpio.output(7, False)
+	gpio.output(13, False)
+	gpio.output(15, True)
 
 time.sleep(float(t))
 
