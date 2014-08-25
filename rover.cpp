@@ -9,52 +9,36 @@ void Rover::setup()
 {
     wiringPiSetup();
 
-    pinMode(PIN_LEFT_A, OUTPUT);
-    pinMode(PIN_LEFT_B, OUTPUT);
-    pinMode(PIN_RIGHT_A, OUTPUT);
-    pinMode(PIN_RIGHT_B, OUTPUT);
+    softPwmCreate(PIN_LEFT_A, PWM_OFF, PWM_MAX);
+    softPwmCreate(PIN_LEFT_B, PWM_OFF, PWM_MAX);
+    softPwmCreate(PIN_RIGHT_A, PWM_OFF, PWM_MAX);
+    softPwmCreate(PIN_RIGHT_B, PWM_OFF, PWM_MAX);
 }
-
-/*void Rover::process(int argc, char **argv)
-{
-    assert_args(argc, 1);
-    char *cmd = argv[1];
-
-    if (strcmp(cmd, "forward") == 0) {
-        assert_args(argc, 2);
-        args->time = atof(argv[2]);
-        forward();
-    } else if (strcmp(cmd, "backward") == 0) {
-        assert_args(argc, 2);
-        args->time = atof(argv[2]);
-        backward();
-    } else if (strcmp(cmd, "left") == 0) {
-        assert_args(argc, 2);
-        args->time = atof(argv[2]);
-        left();
-    } else if (strcmp(cmd, "right") == 0) {
-        assert_args(argc, 2);
-        args->time = atof(argv[2]);
-        right();
-    } else if (strcmp(cmd, "stop") == 0) {
-        stop();
-    }
-}*/
 
 void Rover::process(int keyCode)
 {
+    static int v, lastKey = -1;
+
+    if (lastKey == keyCode) {
+        v += 25;
+    } else {
+        v = 25;
+    }
+
+    lastKey = keyCode;
+
     switch (keyCode) {
         case 65:
-            forward();
+            forward(v);
         break;
         case 66:
-            backward();
+            backward(v);
         break;
         case 68:
-            left();
+            left(v);
         break;
         case 67:
-            right();
+            right(v);
         break;
         default:
             stop();
@@ -62,42 +46,42 @@ void Rover::process(int keyCode)
     }
 }
 
-void Rover::forward()
+void Rover::forward(int v)
 {
-    digitalWrite(PIN_LEFT_A, HIGH);
-    digitalWrite(PIN_LEFT_B, LOW);
-    digitalWrite(PIN_RIGHT_A, HIGH);
-    digitalWrite(PIN_RIGHT_B, LOW);
+    softPwmWrite(PIN_LEFT_A, v);
+    softPwmWrite(PIN_LEFT_B, PWM_OFF);
+    softPwmWrite(PIN_RIGHT_A, v);
+    softPwmWrite(PIN_RIGHT_B, PWM_OFF);
 }
 
-void Rover::backward()
+void Rover::backward(int v)
 {
-    digitalWrite(PIN_LEFT_A, LOW);
-    digitalWrite(PIN_LEFT_B, HIGH);
-    digitalWrite(PIN_RIGHT_A, LOW);
-    digitalWrite(PIN_RIGHT_B, HIGH);
+    softPwmWrite(PIN_LEFT_A, PWM_OFF);
+    softPwmWrite(PIN_LEFT_B, v);
+    softPwmWrite(PIN_RIGHT_A, PWM_OFF);
+    softPwmWrite(PIN_RIGHT_B, v);
 }
 
-void Rover::left()
+void Rover::left(int v)
 {
-    digitalWrite(PIN_LEFT_A, LOW);
-    digitalWrite(PIN_LEFT_B, HIGH);
-    digitalWrite(PIN_RIGHT_A, HIGH);
-    digitalWrite(PIN_RIGHT_B, LOW);
+    softPwmWrite(PIN_LEFT_A, PWM_OFF);
+    softPwmWrite(PIN_LEFT_B, v);
+    softPwmWrite(PIN_RIGHT_A, v);
+    softPwmWrite(PIN_RIGHT_B, PWM_OFF);
 }
 
-void Rover::right()
+void Rover::right(int v)
 {
-    digitalWrite(PIN_LEFT_A, HIGH);
-    digitalWrite(PIN_LEFT_B, LOW);
-    digitalWrite(PIN_RIGHT_A, LOW);
-    digitalWrite(PIN_RIGHT_B, HIGH);
+    softPwmWrite(PIN_LEFT_A, v);
+    softPwmWrite(PIN_LEFT_B, PWM_OFF);
+    softPwmWrite(PIN_RIGHT_A, v);
+    softPwmWrite(PIN_RIGHT_B, v);
 }
 
 void Rover::stop()
 {
-    digitalWrite(PIN_LEFT_A, LOW);
-    digitalWrite(PIN_LEFT_B, LOW);
-    digitalWrite(PIN_RIGHT_A, LOW);
-    digitalWrite(PIN_RIGHT_B, LOW);
+    softPwmWrite(PIN_LEFT_A, PWM_OFF);
+    softPwmWrite(PIN_LEFT_B, PWM_OFF);
+    softPwmWrite(PIN_RIGHT_A, PWM_OFF);
+    softPwmWrite(PIN_RIGHT_B, PWM_OFF);
 }
