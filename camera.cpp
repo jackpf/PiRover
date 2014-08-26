@@ -32,12 +32,13 @@ public:
 
     bool setup()
     {
+        camera.set(CV_CAP_PROP_FRAME_WIDTH, 320);
+        camera.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
+        camera.set(CV_CAP_PROP_FORMAT, CV_8UC1);
+
         if (!camera.open()) {
             return false;
         }
-
-        //camera.set(CV_CAP_PROP_FRAME_WIDTH, 640);
-        //camera.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
 
         // Warm up - seems like we need to get some frames so exposure and contrast and stuff are set up
         for (int i = 0; i < WARMUP_FRAMES; i++) {
@@ -99,19 +100,21 @@ public:
     void *receive(int connection)
     {
         void *data = malloc(1024);
-        ::read(connection, data, 1024);
+        if (::read(connection, data, 1024) < 0) {
+            return NULL;
+        }
 
         return data;
     }
 
-    void send(int connection, void *data, int len)
+    int send(int connection, void *data, int len)
     {
-        ::write(connection, data, len); 
+        return ::send(connection, data, len, MSG_NOSIGNAL); 
     }
 
-    void close(int connection)
+    int close(int connection)
     {
-        ::close(connection);
+        return ::close(connection);
     }
 };
  
@@ -134,25 +137,45 @@ int main(int argc, char **argv)
 
     if (!server.create(1337)) {
         printf("Could not create server: %s\n", strerror(errno));
+        exit(-1);
     }
 
-    printf("Listening...\n");
+    while (true) {
+        printf("Listening...\n");
+        
+        int conn = server.listen();
 
-    int conn = server.listen();
+        printf("Client connected\n");
 
-    while(true) {
-        char *data = (char *) server.receive(conn);
-        printf("Received: '%s'\n", data);
-        if (strcmp(data, "frame\n") == 0) {
-            printf("Capturing frame\n");
-            vector<uchar> buf = cam.getFrame();
-            printf("Sending data\n");
-            server.send(conn, &buf[0], buf.size());
-            printf("Data sent\n");
-        }
+        int status;
+
+        do {
+            //char *data = (char *) server.receive(conn);
+            //printf("Received data: %s\n", data);
+
+            //if (strcmp(data, "frame") == 0) {
+                printf("Capturing frame\n");
+                vector<uchar> buf = cam.getFrame();
+
+                printf("Sending data\n");
+
+                // Send image size
+                int sent = 0;
+                int sz[1] = {buf.size()};
+                status = server.send(conn, &sz, sizeof(int));
+
+                // Send image data
+                do {
+                    sent += server.send(conn, &buf[sent], buf.size() - sent);
+                    printf("Sent %d bytes\n", sent);
+                } while (sent < buf.size());
+            //}
+        } while (status >= 0);
+
+        printf("Closing server\n");
+
+        server.close(conn);
     }
-
-    server.close(conn);
 
     return 0;
 }
