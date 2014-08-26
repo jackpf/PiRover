@@ -20,7 +20,9 @@ void Rover::process(int keyCode)
     static int v, lastKey = -1;
 
     if (lastKey == keyCode) {
-        v += 25;
+        if (v < PWM_MAX) {
+            v += 25;
+        }
     } else {
         v = 25;
     }
