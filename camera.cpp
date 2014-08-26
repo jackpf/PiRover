@@ -23,13 +23,6 @@ private:
     RaspiCam_Cv camera;
 
 public:
-    ~PiCam()
-    {
-        if (camera.isOpened()) {
-            camera.release();
-        }
-    }
-
     bool setup()
     {
         camera.set(CV_CAP_PROP_FRAME_WIDTH, 320);
@@ -46,6 +39,13 @@ public:
         }
 
         return true;
+    }
+
+    void close()
+    {
+        if (camera.isOpened()) {
+            camera.release();
+        }
     }
 
     vector<uchar> getFrame()
@@ -120,19 +120,10 @@ public:
  
 int main(int argc, char **argv)
 {
-    // Connect to camera
+    PiCamServer server;
     PiCam cam;
 
-    printf("Setting up camera\n");
-    
-    if (!cam.setup()) {
-        printf("Unable to open camera\n");
-        exit(-1);
-    }
-
     // Create server
-    PiCamServer server;
-
     printf("Creating server\n");
 
     if (!server.create(1337)) {
@@ -142,10 +133,18 @@ int main(int argc, char **argv)
 
     while (true) {
         printf("Listening...\n");
-        
+
         int conn = server.listen();
 
         printf("Client connected\n");
+
+        printf("Setting up camera\n");
+    
+        if (!cam.setup()) {
+            printf("Unable to open camera\n");
+            server.close(conn);
+            continue;
+        }
 
         int status;
 
@@ -171,6 +170,10 @@ int main(int argc, char **argv)
                 } while (sent < buf.size());
             //}
         } while (status >= 0);
+
+        printf("Disconnecting camera\n");
+
+        cam.close();
 
         printf("Closing server\n");
 
