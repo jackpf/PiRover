@@ -42,7 +42,7 @@ public class Client
         return image;
     }
     
-    protected int byteArrayToInt(byte[] bytes)
+    public int byteArrayToInt(byte[] bytes)
     {
         int int32 = 0;
         
@@ -51,6 +51,16 @@ public class Client
         }
         
         return int32;
+    }
+    
+    public byte[] intToByteArray(int i)
+    {
+        return new byte[]{
+            (byte) (i),
+            (byte) (i >> 8),
+            (byte) (i >> 16),
+            (byte) (i >> 24)
+        };  
     }
     
     public StreamStats getStreamStats()

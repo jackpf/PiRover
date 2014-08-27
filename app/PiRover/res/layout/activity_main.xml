@@ -22,8 +22,19 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/camera"
         android:layout_centerHorizontal="true"
-        android:text="Button"
-        android:onClick="onClick" />
+        android:text="Connect"
+        android:onClick="onConnectClick" />
+
+    <Button
+        android:id="@+id/button2"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/camera"
+        android:layout_alignTop="@+id/camera"
+        android:layout_marginRight="17dp"
+        android:text="R"
+        android:onClick="onRecordClick" />
 
     <TextView
         android:id="@+id/fps_counter"

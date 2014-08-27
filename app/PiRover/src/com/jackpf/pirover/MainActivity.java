@@ -2,6 +2,7 @@ package com.jackpf.pirover;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,7 @@ public class MainActivity extends ActionBarActivity
 {
     protected NetworkThread thread;
     protected UIInterface ui;
+    protected /*RequestInterface*/CameraRequest request;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -24,13 +26,17 @@ public class MainActivity extends ActionBarActivity
         setContentView(R.layout.activity_main);
         
         ui = new MainActivityUI(this);
-        
-        //refresh();
+        request = new CameraRequest();
     }
     
-    public void onClick(View v)
+    public void onConnectClick(View v)
     {
-        refresh();
+        run();
+    }
+    
+    public void onRecordClick(View v)
+    {Log.d("d", "click");
+        request.getRecorder().toggleRecording();
     }
     
     @Override
@@ -45,7 +51,7 @@ public class MainActivity extends ActionBarActivity
      * Runs the network thread and updates the UI
      * Sectioned off since it's called from onCreate and from the refresh button
      */
-    protected void refresh()
+    protected void run()
     {
         if (thread instanceof NetworkThread) {
             thread.cancel(true);
@@ -53,13 +59,13 @@ public class MainActivity extends ActionBarActivity
         
         thread = new NetworkThread(
             this,
-            new CameraRequest(),
+            request,
             ui
         );
         
         thread.setCallback(new Callback() {
             public void onPostExecute() {
-                refresh();
+                run();
             }
         });
         
