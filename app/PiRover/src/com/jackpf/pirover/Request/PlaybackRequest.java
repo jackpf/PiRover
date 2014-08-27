@@ -46,7 +46,8 @@ public class PlaybackRequest extends Request
         
         if (image != null) {
             Log.d("Camera", "Read " + image.length + " bytes");
-            
+
+            @SuppressWarnings("deprecation")
             Drawable drawable = new BitmapDrawable(BitmapFactory.decodeByteArray(image, 0, image.length));
             response.put("drawable", drawable);
         } else {

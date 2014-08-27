@@ -15,75 +15,44 @@ void Rover::setup()
     softPwmCreate(PIN_RIGHT_B, PWM_OFF, PWM_MAX);
 }
 
-void Rover::process(int keyCode)
+void Rover::process(int acceleration, int steering)
 {
-    static int v, lastKey = -1;
+    int left = acceleration, right = acceleration;
 
-    if (lastKey == keyCode) {
-        if (v < PWM_MAX) {
-            v += 25;
-        }
-    } else {
-        v = 25;
+    if (steering < 0) {
+        steering = -steering;
+        left -= round((float) acceleration * (2.0 * (float) steering / 10.0));
+    } else if (steering > 0) {
+        right -= round((float) acceleration * (2.0 * (float) steering / 10.0));
     }
 
-    lastKey = keyCode;
+    int leftA = 0, leftB = 0, rightA = 0, rightB = 0;
 
-    switch (keyCode) {
-        case 65:
-            forward(v);
-        break;
-        case 66:
-            backward(v);
-        break;
-        case 68:
-            left(v);
-        break;
-        case 67:
-            right(v);
-        break;
-        default:
-            stop();
-        break;
+    if (left > 0) {
+        leftA = left;
+        leftB = 0;
+    } else if (left < 0) {
+        leftA = 0;
+        leftB = -left;
     }
+
+    if (right > 0) {
+        rightA = right;
+        rightB = 0;
+    } else if (right < 0) {
+        rightA = 0;
+        rightB = -right;
+    }
+
+    printf("left %d, right %d, la %d, lb %d, ra %d, rb %d\n", left, right, leftA, leftB, rightA, rightB);
+
+    go(leftA, leftB, rightA, rightB);
 }
 
-void Rover::forward(int v)
+void Rover::go(int leftA, int leftB, int rightA, int rightB)
 {
-    softPwmWrite(PIN_LEFT_A, v);
-    softPwmWrite(PIN_LEFT_B, PWM_OFF);
-    softPwmWrite(PIN_RIGHT_A, v);
-    softPwmWrite(PIN_RIGHT_B, PWM_OFF);
-}
-
-void Rover::backward(int v)
-{
-    softPwmWrite(PIN_LEFT_A, PWM_OFF);
-    softPwmWrite(PIN_LEFT_B, v);
-    softPwmWrite(PIN_RIGHT_A, PWM_OFF);
-    softPwmWrite(PIN_RIGHT_B, v);
-}
-
-void Rover::left(int v)
-{
-    softPwmWrite(PIN_LEFT_A, PWM_OFF);
-    softPwmWrite(PIN_LEFT_B, v);
-    softPwmWrite(PIN_RIGHT_A, v);
-    softPwmWrite(PIN_RIGHT_B, PWM_OFF);
-}
-
-void Rover::right(int v)
-{
-    softPwmWrite(PIN_LEFT_A, v);
-    softPwmWrite(PIN_LEFT_B, PWM_OFF);
-    softPwmWrite(PIN_RIGHT_A, v);
-    softPwmWrite(PIN_RIGHT_B, v);
-}
-
-void Rover::stop()
-{
-    softPwmWrite(PIN_LEFT_A, PWM_OFF);
-    softPwmWrite(PIN_LEFT_B, PWM_OFF);
-    softPwmWrite(PIN_RIGHT_A, PWM_OFF);
-    softPwmWrite(PIN_RIGHT_B, PWM_OFF);
+    softPwmWrite(PIN_LEFT_A, leftA);
+    softPwmWrite(PIN_LEFT_B, leftB);
+    softPwmWrite(PIN_RIGHT_A, rightA);
+    softPwmWrite(PIN_RIGHT_B, rightB);
 }

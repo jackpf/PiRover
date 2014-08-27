@@ -10,8 +10,6 @@ import com.jackpf.pirover.Model.UI;
 
 public class PlaybackUI extends UI
 {
-    private TextView tvStatus;
-    
     public PlaybackUI(Context context)
     {
         super(context);

@@ -10,6 +10,8 @@ import android.view.View;
 
 import com.jackpf.pirover.NetworkThread.Callback;
 import com.jackpf.pirover.Camera.ClientException;
+import com.jackpf.pirover.Control.Controller;
+import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Model.UI;
 import com.jackpf.pirover.Request.CameraRequest;
@@ -21,6 +23,8 @@ public class MainActivity extends ActionBarActivity
     protected NetworkThread thread;
     protected UI cameraUI, controlUI;
     protected /*Request*/CameraRequest cameraRequest;
+    protected Request controlRequest;
+    protected Controller controller;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -29,10 +33,11 @@ public class MainActivity extends ActionBarActivity
         
         setContentView(R.layout.activity_main);
         
+        controller = new Controller();
         cameraRequest = new CameraRequest();
 
         cameraUI = new CameraUI(this);
-        controlUI = new ControlUI(this);
+        controlUI = new ControlUI(this, controller);
 
         cameraUI.initialise();
         controlUI.initialise();
@@ -103,7 +108,6 @@ public class MainActivity extends ActionBarActivity
         }
         
         thread = new NetworkThread(
-            this,
             cameraRequest,
             cameraUI
         );

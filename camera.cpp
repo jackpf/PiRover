@@ -1,16 +1,14 @@
 #include <stdio.h>
 #include <raspicam/raspicam_cv.h>
 
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
 #include <sys/types.h>
-#include <time.h>
+
+#include "server.hpp"
 
 #define CAM_WIDTH   320
 #define CAM_HEIGHT  240
@@ -58,66 +56,11 @@ public:
     }
 };
 
-class PiCamServer
-{
-private:
-    int sock;
-    struct sockaddr_in sockAddress;
 
-public:
-    bool create(int port)
-    {
-        sock = socket(AF_INET, SOCK_STREAM, 0);
-
-        if (sock < 0) {
-            return false;
-        }
-
-        memset(&sockAddress, '0', sizeof(sockAddress));
-        sockAddress.sin_family = AF_INET;
-        sockAddress.sin_addr.s_addr = htonl(INADDR_ANY);
-        sockAddress.sin_port = htons(port); 
-
-        if (::bind(sock, (struct sockaddr *) &sockAddress, sizeof(sockAddress)) < 0) {
-            return false;
-        }
-
-        if (::listen(sock, 1) < 0) {
-            return false;
-        }
-
-        return true;
-    }
-
-    int listen()
-    {
-        return ::accept(sock, (struct sockaddr *) NULL, NULL);
-    }
-
-    void *receive(int connection)
-    {
-        void *data = malloc(1024);
-        if (::read(connection, data, 1024) < 0) {
-            return NULL;
-        }
-
-        return data;
-    }
-
-    int send(int connection, void *data, int len)
-    {
-        return ::send(connection, data, len, MSG_NOSIGNAL); 
-    }
-
-    int close(int connection)
-    {
-        return ::close(connection);
-    }
-};
  
 int main(int argc, char **argv)
 {
-    PiCamServer server;
+    Server server;
     PiCam cam;
 
     // Create server

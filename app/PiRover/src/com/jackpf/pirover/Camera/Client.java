@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
+import com.jackpf.pirover.Service.Utils;
+
 public class Client
 {
     private Socket socket;
@@ -11,7 +13,7 @@ public class Client
     
     public Client()
     {
-        
+        // Connectionless client for local playback
     }
     
     public Client(String host, int port) throws ClientException
@@ -56,7 +58,7 @@ public class Client
             if (is.read(szBuf, 0, 4) < 0) {
                 return null;
             }
-            int sz = byteArrayToInt(szBuf);
+            int sz = Utils.byteArrayToInt(szBuf);
             
             byte[] buffer = new byte[sz], image = new byte[sz];
             int bytesRead = 0, bytesReadTotal = 0, bytesWritten = 0;
@@ -79,27 +81,6 @@ public class Client
         } catch (IOException e) {
             throw new ClientException("Unable to capture frame", e);
         }
-    }
-    
-    public int byteArrayToInt(byte[] bytes)
-    {
-        int int32 = 0;
-        
-        for (int i = 0; i < bytes.length; i++) {
-            int32 += (bytes[i] & 0xFF) << (8 * i);
-        }
-        
-        return int32;
-    }
-    
-    public byte[] intToByteArray(int i)
-    {
-        return new byte[]{
-            (byte) (i),
-            (byte) (i >> 8),
-            (byte) (i >> 16),
-            (byte) (i >> 24)
-        };  
     }
     
     public StreamStats getStreamStats()

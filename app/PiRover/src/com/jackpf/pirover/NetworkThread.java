@@ -1,6 +1,5 @@
 package com.jackpf.pirover;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import com.jackpf.pirover.Model.Request;
@@ -13,12 +12,6 @@ import com.jackpf.pirover.Model.UI;
  */
 public class NetworkThread extends AsyncTask<String, Void, Void>
 {
-    /**
-     * Context called from
-     */
-    // Not really needed
-    //private Context context;
-    
     /**
      * Api request to call
      */
@@ -47,13 +40,21 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
     /**
      * Constructor
      * 
-     * @param context
+     * @param request
+     */
+    public NetworkThread(Request request)
+    {
+        this.request = request;
+    }
+    
+    /**
+     * Constructor
+     * 
      * @param request
      * @param ui
      */
-    public NetworkThread(Context context, Request request, UI ui)
+    public NetworkThread(Request request, UI ui)
     {
-        //this.context = context;
         this.request = request;
         this.ui = ui;
     }
@@ -75,7 +76,9 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
     @Override
     protected void onPreExecute()
     {
-        ui.preUpdate();
+        if (ui != null) {
+            ui.preUpdate();
+        }
     }
 
     /**
@@ -105,12 +108,14 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
     @Override
     protected void onPostExecute(Void _void)
     {
-        ui.setVars(vars);
-
-        if (e == null) {
-            ui.update();
-        } else {
-            ui.error(e);
+        if (ui != null) {
+            ui.setVars(vars);
+    
+            if (e == null) {
+                ui.update();
+            } else {
+                ui.error(e);
+            }
         }
         
         if (callback != null) {

@@ -1,8 +1,8 @@
-package com.jackpf.pirover.Camera;
+package com.jackpf.pirover.Control;
 
 public class ClientException extends Exception
 {
-    private static final long serialVersionUID = 4535506108817453998L;
+    private static final long serialVersionUID = 4339739609713664573L;
 
     public ClientException(String message)
     {

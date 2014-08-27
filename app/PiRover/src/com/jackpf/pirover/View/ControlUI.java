@@ -9,13 +9,18 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.jackpf.pirover.R;
+import com.jackpf.pirover.Control.Controller;
 import com.jackpf.pirover.Model.UI;
 
 public class ControlUI extends UI
 {
-    public ControlUI(Context context)
+    private Controller controller;
+    
+    public ControlUI(Context context, Controller controller)
     {
         super(context);
+        
+        this.controller = controller;
     }
     
     public void initialise()
@@ -44,14 +49,16 @@ public class ControlUI extends UI
                         
                         Log.d("Touch", "x: " + x + ", y: " + y + ", degrees : " + angle);
                         
-                        int roundedAngle = (int) (Math.round(angle / 9) * 9);
-                        int position = (int) Math.round(roundedAngle / 9.0);
+                        int position = (int) Math.round(angle / 9.0);
+                        int roundedAngle = (int) (position * 9.0);
                         
                         Log.d("Touch", "rounded: " + roundedAngle  + ", position: " + position);
                         
                         Matrix matrix = new Matrix();
                         matrix.postRotate((float) roundedAngle, ivSteeringWheel.getWidth() / 2, ivSteeringWheel.getHeight() / 2);
                         ivSteeringWheel.setImageMatrix(matrix);
+                        
+                        controller.setSteeringPosition(position);
                     break;
                 }
                 
@@ -75,11 +82,16 @@ public class ControlUI extends UI
                             y = height;
                         }
                         
-                        Log.d("Touch", "y: " + y);
+                        int position = (int) Math.round(y * 10.0 / height);
+                        int roundedY = (int) (position * (height / 10.0));
+                        
+                        Log.d("Touch", "y: " + y + ", rounded: " + roundedY);
                         
                         Matrix matrix = new Matrix();
-                        matrix.postTranslate(0, height - y);
+                        matrix.postTranslate(0, height - roundedY);
                         ivAccelerator.setImageMatrix(matrix);
+                        
+                        controller.setAcceleratorPosition(position);
                     break;
                 }
                 

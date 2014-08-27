@@ -80,7 +80,6 @@ public class PlaybackActivity extends ActionBarActivity
         }
         
         thread = new NetworkThread(
-            this,
             playbackRequest,
             playbackUI
         );

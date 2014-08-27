@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 #include <wiringPi.h>
 #include <softPwm.h>
@@ -13,7 +14,7 @@
 #define PIN_RIGHT_A 2
 #define PIN_RIGHT_B 3
 #define PWM_OFF     0
-#define PWM_MAX     100
+#define PWM_MAX     10
 
 struct RoverArgs {
     float time;
@@ -28,10 +29,6 @@ private:
 public:
     Rover();
     void setup();
-    void process(int);
-    void forward(int);
-    void backward(int);
-    void left(int);
-    void right(int);
-    void stop();
+    void process(int acceleration, int steering);
+    void go(int leftA, int leftB, int rightA, int rightB);
 };
