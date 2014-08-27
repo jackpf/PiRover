@@ -7,10 +7,12 @@ import java.net.Socket;
 public class Client
 {
     private Socket socket;
+    private StreamStats streamStats;
     
     public Client(String host, int port) throws IOException
     {
         socket = new Socket(host, port);
+        streamStats = new StreamStats();
     }
     
     public byte[] getFrame() throws IOException
@@ -35,6 +37,8 @@ public class Client
             }
         }
         
+        streamStats.addFrame(bytesReadTotal);
+        
         return image;
     }
     
@@ -47,5 +51,10 @@ public class Client
         }
         
         return int32;
+    }
+    
+    public StreamStats getStreamStats()
+    {
+        return streamStats;
     }
 }

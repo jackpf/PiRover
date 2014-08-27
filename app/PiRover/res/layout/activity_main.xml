@@ -25,4 +25,21 @@
         android:text="Button"
         android:onClick="onClick" />
 
+    <TextView
+        android:id="@+id/fps_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/camera"
+        android:layout_alignLeft="@+id/button1"
+        android:layout_marginBottom="27dp"
+        android:text="0 FPS" />
+
+    <TextView
+        android:id="@+id/bandwidth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/camera"
+        android:layout_alignLeft="@+id/fps_counter"
+        android:text="0 bytes/s" />
+
 </RelativeLayout>

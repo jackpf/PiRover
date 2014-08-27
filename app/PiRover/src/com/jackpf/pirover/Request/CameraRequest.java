@@ -5,7 +5,6 @@ import java.io.IOException;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import com.jackpf.pirover.Camera.Client;
 import com.jackpf.pirover.Entity.RequestResponse;
@@ -31,10 +30,13 @@ public class CameraRequest extends RequestInterface
         
         byte[] image = client.getFrame();
 
-        Log.d("Camera", "Read " + image.length + " bytes");
+        //Log.d("Camera", "Read " + image.length + " bytes");
         
         Drawable drawable = new BitmapDrawable(BitmapFactory.decodeByteArray(image, 0, image.length));
         response.put("drawable", drawable);
+
+        response.put("fpsCount", client.getStreamStats().getFps());
+        response.put("bandwidth", client.getStreamStats().getBandwidth());
         
         return response;
     }

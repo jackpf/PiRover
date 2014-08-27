@@ -12,10 +12,12 @@
 #include <sys/types.h>
 #include <time.h>
 
+#define CAM_WIDTH   320
+#define CAM_HEIGHT  240
+#define CAM_RGB     false
+
 using namespace cv;
 using namespace raspicam;
-
-#define WARMUP_FRAMES 10
 
 class PiCam
 {
@@ -25,17 +27,12 @@ private:
 public:
     bool setup()
     {
-        camera.set(CV_CAP_PROP_FRAME_WIDTH, 320);
-        camera.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
-        camera.set(CV_CAP_PROP_FORMAT, CV_8UC1);
+        camera.set(CV_CAP_PROP_FRAME_WIDTH, CAM_WIDTH);
+        camera.set(CV_CAP_PROP_FRAME_HEIGHT, CAM_HEIGHT);
+        camera.set(CV_CAP_PROP_FORMAT, CAM_RGB ? CV_8UC3 : CV_8UC1);
 
         if (!camera.open()) {
             return false;
-        }
-
-        // Warm up - seems like we need to get some frames so exposure and contrast and stuff are set up
-        for (int i = 0; i < WARMUP_FRAMES; i++) {
-            camera.grab();
         }
 
         return true;
