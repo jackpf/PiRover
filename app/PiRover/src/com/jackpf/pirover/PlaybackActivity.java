@@ -1,41 +1,34 @@
 package com.jackpf.pirover;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.jackpf.pirover.NetworkThread.Callback;
-import com.jackpf.pirover.Camera.ClientException;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Model.UI;
-import com.jackpf.pirover.Request.CameraRequest;
-import com.jackpf.pirover.View.CameraUI;
-import com.jackpf.pirover.View.ControlUI;
+import com.jackpf.pirover.Request.PlaybackRequest;
+import com.jackpf.pirover.View.PlaybackUI;
 
-public class MainActivity extends ActionBarActivity
+public class PlaybackActivity extends ActionBarActivity
 {
     protected NetworkThread thread;
-    protected UI cameraUI, controlUI;
-    protected /*Request*/CameraRequest cameraRequest;
+    protected UI playbackUI;
+    protected /*Request*/PlaybackRequest playbackRequest;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_playback);
         
-        cameraRequest = new CameraRequest();
+        playbackRequest = new PlaybackRequest();
 
-        cameraUI = new CameraUI(this);
-        controlUI = new ControlUI(this);
-
-        cameraUI.initialise();
-        controlUI.initialise();
+        playbackUI = new PlaybackUI(this);
+        playbackUI.initialise();
     }
     
     @Override
@@ -43,7 +36,7 @@ public class MainActivity extends ActionBarActivity
     {
         super.onResume();
         
-        executeCameraRequest();
+        executePlaybackRequest();
     }
     
     @Override
@@ -76,27 +69,11 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
     
-    public void onConnectClick(View v)
-    {
-        //executeCameraRequest();
-    }
-    
-    public void onRecordClick(View v)
-    {
-        cameraRequest.getRecorder().toggleRecording();
-    }
-    
-    public void playback(View v)
-    {
-        Intent intent = new Intent(this, PlaybackActivity.class);
-        startActivity(intent);
-    }
-    
     /**
      * Runs the network thread and updates the UI
      * Sectioned off since it's called from onCreate and from the refresh button
      */
-    protected void executeCameraRequest()
+    protected void executePlaybackRequest()
     {
         if (thread instanceof NetworkThread) {
             thread.cancel(true);
@@ -104,22 +81,25 @@ public class MainActivity extends ActionBarActivity
         
         thread = new NetworkThread(
             this,
-            cameraRequest,
-            cameraUI
+            playbackRequest,
+            playbackUI
         );
         
         // Set repeating
         thread.setCallback(new Callback() {
             public void onPostExecute(RequestResponse vars, Exception e) {
-                int delay = !(e instanceof ClientException) ? 0 : 5000;
-                
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        executeCameraRequest();
-                    }
-                }, delay);
+                if ((vars.get("finished") == null || !(Boolean) vars.get("finished")) && e == null) {
+                    int fps = 11;
+                    int delay = 1000 / fps;
+                    
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            executePlaybackRequest();
+                        }
+                    }, delay);
+                }
             }
         });
         

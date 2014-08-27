@@ -1,15 +1,11 @@
 package com.jackpf.pirover.Model;
 
-import java.io.IOException;
 
-import org.apache.http.ParseException;
-
-import com.jackpf.pirover.Entity.RequestResponse;
 
 /**
  * Request interface
  */
-public abstract class RequestInterface
+public abstract class Request
 {
     /**
      * Api call params
@@ -21,7 +17,7 @@ public abstract class RequestInterface
      * 
      * @param params
      */
-    public RequestInterface(Object ...params)
+    public Request(Object ...params)
     {
         this.params = params;
     }
@@ -32,5 +28,5 @@ public abstract class RequestInterface
      * @return
      * @throws Exception
      */
-    public abstract RequestResponse call() throws ParseException, IOException;
+    public abstract RequestResponse call() throws Exception;
 }

@@ -14,7 +14,7 @@
 
 #define CAM_WIDTH   320
 #define CAM_HEIGHT  240
-#define CAM_RGB     false
+#define CAM_RGB     true
 
 using namespace cv;
 using namespace raspicam;
@@ -47,7 +47,7 @@ public:
 
     vector<uchar> getFrame()
     {
-        Mat image;//(640, 480, CV_8UC1);
+        Mat image(CAM_WIDTH, CAM_HEIGHT, CAM_RGB ? CV_8UC3 : CV_8UC1);
         vector<uchar> buf;
 
         camera.grab();

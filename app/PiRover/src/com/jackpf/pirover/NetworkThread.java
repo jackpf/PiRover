@@ -1,12 +1,11 @@
 package com.jackpf.pirover;
 
-import java.util.HashMap;
-
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.jackpf.pirover.Model.RequestInterface;
-import com.jackpf.pirover.Model.UIInterface;
+import com.jackpf.pirover.Model.Request;
+import com.jackpf.pirover.Model.RequestResponse;
+import com.jackpf.pirover.Model.UI;
 
 /**
  * Network thread
@@ -23,17 +22,17 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
     /**
      * Api request to call
      */
-    private RequestInterface request;
+    private Request request;
     
     /**
      * UI to pass data to
      */
-    private UIInterface ui;
+    private UI ui;
     
     /**
      * UI vars
      */
-    HashMap<String, Object> vars = new HashMap<String, Object>();
+    RequestResponse vars = new RequestResponse();
     
     /**
      * Exception caused in the network thread
@@ -52,7 +51,7 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
      * @param request
      * @param ui
      */
-    public NetworkThread(Context context, RequestInterface request, UIInterface ui)
+    public NetworkThread(Context context, Request request, UI ui)
     {
         //this.context = context;
         this.request = request;
@@ -115,7 +114,7 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
         }
         
         if (callback != null) {
-            callback.onPostExecute();
+            callback.onPostExecute(vars, e);
         }
     }
     
@@ -124,6 +123,6 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
      */
     public interface Callback
     {
-        public void onPostExecute();
+        public void onPostExecute(RequestResponse vars, Exception e);
     }
 }

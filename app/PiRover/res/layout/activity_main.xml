@@ -10,47 +10,73 @@
 
     <ImageView
         android:id="@+id/camera"
-        android:layout_width="640sp"
-        android:layout_height="480sp"
+        android:layout_width="320sp"
+        android:layout_height="240sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
 
-    <Button
-        android:id="@+id/button1"
+    <ImageView
+        android:id="@+id/steering_wheel"
+        android:layout_width="128sp"
+        android:layout_height="128sp"
+        android:layout_alignLeft="@+id/fps_counter"
+        android:layout_below="@+id/fps_counter"
+        android:layout_marginTop="28dp"
+        android:scaleType="matrix"
+        android:src="@drawable/steering_wheel" />
+
+    <TextView
+        android:id="@+id/camera_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/camera"
+        android:layout_below="@+id/camera"
         android:layout_centerHorizontal="true"
-        android:text="Connect"
-        android:onClick="onConnectClick" />
+        android:text="Not connected" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/record"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/camera"
         android:layout_alignTop="@+id/camera"
-        android:layout_marginRight="17dp"
-        android:text="R"
-        android:onClick="onRecordClick" />
+        android:onClick="onRecordClick"
+        android:text="R" />
 
-    <TextView
-        android:id="@+id/fps_counter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/camera"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_marginBottom="27dp"
-        android:text="0 FPS" />
+    <ImageView
+        android:id="@+id/accelerator"
+        android:layout_width="32sp"
+        android:layout_height="128sp"
+        android:layout_alignLeft="@+id/record"
+        android:layout_alignTop="@+id/steering_wheel"
+        android:scaleType="matrix"
+        android:src="@drawable/accelerator" />
 
     <TextView
         android:id="@+id/bandwidth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/camera"
-        android:layout_alignLeft="@+id/fps_counter"
+        android:layout_alignRight="@+id/camera"
+        android:layout_below="@+id/camera"
         android:text="0 bytes/s" />
+
+    <TextView
+        android:id="@+id/fps_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/camera_status"
+        android:layout_alignBottom="@+id/camera_status"
+        android:layout_alignLeft="@+id/camera"
+        android:text="0 FPS" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/accelerator"
+        android:layout_toLeftOf="@+id/accelerator"
+        android:text="Button"
+        android:onClick="playback" />
 
 </RelativeLayout>

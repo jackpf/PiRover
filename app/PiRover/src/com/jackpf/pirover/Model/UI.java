@@ -1,13 +1,12 @@
 package com.jackpf.pirover.Model;
 
-import java.util.HashMap;
-
+import android.app.Activity;
 import android.content.Context;
 
 /**
  * UI interface
  */
-public abstract class UIInterface
+public abstract class UI
 {
     /**
      * Parent context
@@ -15,18 +14,24 @@ public abstract class UIInterface
     protected Context context;
     
     /**
+     * Parent activity
+     */
+    protected Activity activity;
+    
+    /**
      * UI vars
      */
-    protected HashMap<String, Object> vars;
+    protected RequestResponse vars;
     
     /**
      * Constructor
      * 
      * @param context
      */
-    public UIInterface(Context context)
+    public UI(Context context)
     {
         this.context = context;
+        this.activity = (Activity) context;
     }
     
     /**
@@ -34,7 +39,7 @@ public abstract class UIInterface
      * 
      * @param vars
      */
-    public void setVars(HashMap<String, Object> vars)
+    public void setVars(RequestResponse vars)
     {
         this.vars = vars;
     }

@@ -1,4 +1,4 @@
-package com.jackpf.pirover.Entity;
+package com.jackpf.pirover.Model;
 
 import java.util.HashMap;
 

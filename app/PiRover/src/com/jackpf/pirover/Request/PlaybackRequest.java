@@ -1,10 +1,13 @@
 package com.jackpf.pirover.Request;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.util.Log;
 
 import com.jackpf.pirover.Camera.Client;
@@ -13,12 +16,13 @@ import com.jackpf.pirover.Camera.Recorder;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 
-public class CameraRequest extends Request
+public class PlaybackRequest extends Request
 {
     private static Client client;
     private Recorder recorder;
+    private InputStream is;
     
-    public CameraRequest(Object ...params)
+    public PlaybackRequest(Object ...params)
     {
         super(params);
         
@@ -29,26 +33,26 @@ public class CameraRequest extends Request
     public RequestResponse call() throws ClientException, IOException
     {
         if (client == null || !client.isConnected()) {
-            client = new Client("192.168.0.8", 1337);
+            client = new Client();
+        }
+        
+        if (is == null) {
+            is = new FileInputStream(Environment.getExternalStorageDirectory() + "/PiRoverRecordings/record.pirover");
         }
         
         RequestResponse response = new RequestResponse();
         
-        byte[] image = client.getFrame();
-
-        Log.d("Camera", "Read " + image.length + " bytes");
+        byte[] image = client.getFrame(is);
         
-        if (recorder.isRecording()) {
-            recorder.record(client.intToByteArray(image.length), image);
+        if (image != null) {
+            Log.d("Camera", "Read " + image.length + " bytes");
+            
+            Drawable drawable = new BitmapDrawable(BitmapFactory.decodeByteArray(image, 0, image.length));
+            response.put("drawable", drawable);
+        } else {
+            response.put("finished", true);
         }
-        
-        Drawable drawable = new BitmapDrawable(BitmapFactory.decodeByteArray(image, 0, image.length));
-        response.put("drawable", drawable);
 
-        response.put("fpsCount", client.getStreamStats().getFps());
-        response.put("bandwidth", client.getStreamStats().getBandwidth());
-        response.put("recording", recorder.isRecording());
-        
         return response;
     }
     
