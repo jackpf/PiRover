@@ -16,16 +16,8 @@
 #define PWM_OFF     0
 #define PWM_MAX     10
 
-struct RoverArgs {
-    float time;
-    float velocity;
-};
-
 class Rover
 {
-private:
-    RoverArgs *args;
-
 public:
     Rover();
     void setup();
