@@ -1,7 +1,5 @@
 #include "gpio.hpp"
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+
 bool GPIO::isSetup = false;
 
 void GPIO::setup()

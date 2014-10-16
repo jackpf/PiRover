@@ -9,6 +9,8 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <unistd.h>
+#include <string.h>
+#include <errno.h>
 
 // I/O access
 static volatile unsigned int *gpio;
