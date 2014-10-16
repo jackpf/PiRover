@@ -6,10 +6,10 @@ if [ "$1" = "start" ]
 then
 	eval "$dir/controller &"
 	eval "$dir/camera &"
-	eval "python $dir/lights.py &"
+	eval "$dir/lights &"
 elif [ "$1" = "stop" ]
 then
-	processes=( "controller" "camera" "python" )
+	processes=( "controller" "camera" "lights" )
 	for process in "${processes[@]}"
 	do
 		pid=$(pidof "$process")
