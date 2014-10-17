@@ -1,15 +1,22 @@
 #!/bin/bash
 
-dir="/home/pi/workspace/PiRover/bin"
+base_dir="/home/pi/workspace/PiRover"
+bin_dir="$base_dir/bin"
+log_dir="$base_dir/logs"
+logging=false
+
+processes=( "controller" "camera" "broadcast" "lights" )
 
 if [ "$1" = "start" ]
 then
-	eval "$dir/controller &"
-	eval "$dir/camera &"
-	eval "$dir/lights &"
+    log_redir=$([ "$logging" == true ] && echo "&>$log_dir/$(date +"%d_%m_%y-%T").txt" || echo "")
+
+	for process in "${processes[@]}"
+	do
+        eval "$bin_dir/$process $log_redir &"
+	done
 elif [ "$1" = "stop" ]
 then
-	processes=( "controller" "camera" "lights" )
 	for process in "${processes[@]}"
 	do
 		pid=$(pidof "$process")
@@ -21,4 +28,6 @@ then
 			echo "$process is not running"
 		fi
 	done
+else
+    echo "Invalid command"
 fi

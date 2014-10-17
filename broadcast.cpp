@@ -26,8 +26,6 @@ int main(int argc, char *argv[])
     int broadcast = 1;
     setsockopt(sock, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof(broadcast));
 
-    printf("Listening for broadcasts\n");
-
     memset(&receiveAddress, 0, sizeof(receiveAddress));
     receiveAddress.sin_family = AF_INET;
     receiveAddress.sin_port = htons(PORT);
@@ -67,6 +65,8 @@ int main(int argc, char *argv[])
             perror("Bind");
             exit(-1);
         }
+
+        printf("Listening for broadcasts\n");
 
         while (true) {
             addressLength = sizeof(sendAddress);
