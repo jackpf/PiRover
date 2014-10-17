@@ -19,7 +19,6 @@
 class Rover
 {
 public:
-    Rover();
     void setup();
     void process(int acceleration, int steering);
     void go(int leftA, int leftB, int rightA, int rightB);

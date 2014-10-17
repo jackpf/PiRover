@@ -1,10 +1,5 @@
 #include "rover.hpp"
 
-Rover::Rover()
-{
-    args = new RoverArgs;
-}
-
 void Rover::setup()
 {
     wiringPiSetup();

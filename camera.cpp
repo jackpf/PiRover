@@ -7,6 +7,7 @@
 
 #include "server.hpp"
 
+#define PORT        1337
 #define CAM_WIDTH   320
 #define CAM_HEIGHT  240
 #define CAM_RGB     true
@@ -53,8 +54,6 @@ public:
     }
 };
 
-
- 
 int main(int argc, char **argv)
 {
     Server server;
@@ -63,8 +62,8 @@ int main(int argc, char **argv)
     // Create server
     printf("Creating server\n");
 
-    if (!server.create(1337)) {
-        printf("Could not create server: %s\n", strerror(errno));
+    if (!server.create(PORT)) {
+        perror("Could not create server");
         exit(-1);
     }
 

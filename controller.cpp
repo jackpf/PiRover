@@ -1,5 +1,7 @@
 #include "server.hpp"
 #include "rover.hpp"
+
+#define PORT 1338
  
 int main(int argc, char **argv)
 {
@@ -14,8 +16,8 @@ int main(int argc, char **argv)
     // Create server
     printf("Creating server\n");
 
-    if (!server.create(1338)) {
-        printf("Could not create server: %s\n", strerror(errno));
+    if (!server.create(PORT)) {
+        perror("Could not create server");
         exit(-1);
     }
 
