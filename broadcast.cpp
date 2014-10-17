@@ -33,20 +33,41 @@ int main(int argc, char *argv[])
     receiveAddress.sin_port = htons(PORT);
     receiveAddress.sin_addr.s_addr = INADDR_ANY;
 
-    if (bind(sock, (struct sockaddr *) &receiveAddress, sizeof(receiveAddress)) < 0) {
-        perror("Bind");
-        exit(-1);
-    }
-
     char buf[32];
     int bytes;
 
     if (argc > 1) { /* Broadcast as client */
-        char msg[] = "PiRover";
-        numbytes = sendto(sockfd, msg, sizeof(msg), 0, (struct sockaddr *) &sendaddr, sizeof sendaddr);
-        printf("Broadcasted packet: '%s'\n", msg);
+        memset(&sendAddress, 0, sizeof(sendAddress));
+        sendAddress.sin_family = AF_INET;
+        sendAddress.sin_port = htons(PORT);
+        sendAddress.sin_addr.s_addr = INADDR_BROADCAST;
+
+        bytes = sendto(sock, argv[1], sizeof(argv[1]), 0, (struct sockaddr *) &sendAddress, sizeof sendAddress);
+        printf("Broadcasted packet: '%s'\n", argv[1]);
+
+        struct timeval tv;
+        tv.tv_sec = 0;
+        tv.tv_usec = 500000;
+        setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
+
+        bytes = recvfrom(sock, buf, sizeof(buf), 0, (struct sockaddr *) &sendAddress, &addressLength);
+
+        if (bytes > -1) {
+            char sendIP[INET_ADDRSTRLEN + 1];
+            inet_ntop(AF_INET, &sendAddress.sin_addr.s_addr, sendIP, INET_ADDRSTRLEN);
+
+            printf("Device address: %s\n", sendIP);
+        } else {
+            printf("Unable to determine device IP\n");
+        }
+
         exit(0);
     } else {
+        if (bind(sock, (struct sockaddr *) &receiveAddress, sizeof(receiveAddress)) < 0) {
+            perror("Bind");
+            exit(-1);
+        }
+
         while (true) {
             addressLength = sizeof(sendAddress);
             if ((bytes = recvfrom(sock, buf, sizeof(buf), 0, (struct sockaddr *) &sendAddress, &addressLength)) > 0) {
