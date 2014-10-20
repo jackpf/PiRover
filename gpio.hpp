@@ -81,11 +81,42 @@ private:
     static void assertSetup();
 
 public:
+    /**
+     * Pin mode direction
+     */
     enum direction {IN, OUT};
+
+    /**
+     * Pin value
+     */
     enum value {HIGH, LOW};
 
+    /**
+     * Set up GPIO access
+     */
     static void setup();
+
+    /**
+     * Set the direction of a pin
+     *
+     * @param pin   Pin number
+     * @param d     Direction of pin
+     */
     static void pinMode(int pin, direction d);
+
+    /**
+     * Write to a pin
+     *
+     * @param pin   Pin number
+     * @param v     Value of pin
+     */
     static void write(int pin, value v);
+
+    /**
+     * Read value of a pin
+     *
+     * @param pin   Pin number
+     * @return      Value of pin
+     */
     static value read(int pin);
 };
