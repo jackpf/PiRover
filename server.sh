@@ -20,7 +20,7 @@ then
 
 	for process in "${processes[@]}"
 	do
-        eval "$bin_dir/$process $log_redir &"
+		eval "$bin_dir/$process $log_redir &"
 	done
 elif [ "$1" = "stop" ]
 then
