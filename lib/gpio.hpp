@@ -12,7 +12,9 @@
 #include <string.h>
 #include <errno.h>
 
-// I/O access
+/**
+ * IO access
+ */
 static volatile unsigned int *gpio;
 static void *gpioMap;
 
@@ -20,24 +22,26 @@ static void *gpioMap;
  * BCM2708 base address
  */
 #define BCM2708_PERI_BASE   0x20000000
+
 /**
  * GPIO controller base address
  */
-
 #define GPIO_BASE           (BCM2708_PERI_BASE + 0x200000)
+
 /**
  * Pi memory page size
  */
-
 #define PAGE_SIZE           (4 * 1024)
+
 /**
  * Pi memory block size
  */
-
 #define BLOCK_SIZE          (4 * 1024)
 
-/* GPIO setup macros
-   Always use INP_GPIO(x) before using OUT_GPIO(x) or SET_GPIO_ALT(x,y) */
+/**
+ * GPIO setup macros
+ * Always use INP_GPIO(x) before using OUT_GPIO(x) or SET_GPIO_ALT(x,y)
+ */
 #define INP_GPIO(g)         *(gpio + ((g) / 10)) &= ~(7 << (((g) % 10) * 3))
 #define OUT_GPIO(g)         *(gpio + ((g) / 10)) |=  (1 << (((g) % 10) * 3))
 #define SET_GPIO_ALT(g, a)  *(gpio + ((g) / 10)) |=  (((a) <= 3 ? (a) + 4 : (a) == 4 ? 3 : 2) << (((g) % 10) * 3))
@@ -70,6 +74,7 @@ static void *gpioMap;
 class GPIO
 {
 private:
+
     /**
      * Set to true once setup has been called
      */
@@ -81,6 +86,7 @@ private:
     static void assertSetup();
 
 public:
+
     /**
      * Pin mode direction
      */

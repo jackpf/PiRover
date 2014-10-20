@@ -1,4 +1,4 @@
-#include "gpio.hpp"
+#include "lib/gpio.hpp"
 
 #define LIGHT 11
 

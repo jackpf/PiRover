@@ -41,10 +41,10 @@ void Rover::process(int acceleration, int steering)
 
     printf("left %d, right %d, la %d, lb %d, ra %d, rb %d\n", left, right, leftA, leftB, rightA, rightB);
 
-    go(leftA, leftB, rightA, rightB);
+    accelerate(leftA, leftB, rightA, rightB);
 }
 
-void Rover::go(int leftA, int leftB, int rightA, int rightB)
+void Rover::accelerate(int leftA, int leftB, int rightA, int rightB)
 {
     softPwmWrite(PIN_LEFT_A, leftA);
     softPwmWrite(PIN_LEFT_B, leftB);

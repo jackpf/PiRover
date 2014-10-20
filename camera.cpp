@@ -5,7 +5,7 @@
 #include <errno.h>
 #include <string.h>
 
-#include "server.hpp"
+#include "lib/server.hpp"
 
 #define PORT        1337
 #define CAM_WIDTH   320

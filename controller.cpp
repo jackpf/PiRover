@@ -1,5 +1,5 @@
-#include "server.hpp"
-#include "rover.hpp"
+#include "lib/server.hpp"
+#include "lib/rover.hpp"
 
 #define PORT 1338
  
