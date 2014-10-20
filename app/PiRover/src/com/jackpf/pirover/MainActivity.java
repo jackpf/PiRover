@@ -1,9 +1,11 @@
 package com.jackpf.pirover;
 
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +16,9 @@ import com.jackpf.pirover.Control.Controller;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Model.UI;
+import com.jackpf.pirover.Request.BroadcastRequest;
 import com.jackpf.pirover.Request.CameraRequest;
+import com.jackpf.pirover.View.BroadcastUI;
 import com.jackpf.pirover.View.CameraUI;
 import com.jackpf.pirover.View.ControlUI;
 
@@ -25,6 +29,7 @@ public class MainActivity extends ActionBarActivity
     protected /*Request*/CameraRequest cameraRequest;
     protected Request controlRequest;
     protected Controller controller;
+    protected static String ip;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,8 +38,8 @@ public class MainActivity extends ActionBarActivity
         
         setContentView(R.layout.activity_main);
         
-        controller = new Controller();
         cameraRequest = new CameraRequest();
+        controller = new Controller();
 
         cameraUI = new CameraUI(this);
         controlUI = new ControlUI(this, controller);
@@ -47,6 +52,18 @@ public class MainActivity extends ActionBarActivity
     protected void onResume()
     {
         super.onResume();
+        
+        if (ip == null) {
+            new NetworkThread(new BroadcastRequest((WifiManager) getSystemService(WIFI_SERVICE)), new BroadcastUI(this))
+                .setCallback(new NetworkThread.Callback() {
+                    @Override
+                    public void onPostExecute(RequestResponse vars, Exception e) {
+                        ip = (String) vars.get("ip");
+                        Log.d("Broadcast", "Resolved IP: " + ip);
+                    }
+                })
+                .execute();
+        }
         
         executeCameraRequest();
     }
@@ -81,11 +98,6 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
     
-    public void onConnectClick(View v)
-    {
-        //executeCameraRequest();
-    }
-    
     public void onRecordClick(View v)
     {
         cameraRequest.getRecorder().toggleRecording();
@@ -99,7 +111,6 @@ public class MainActivity extends ActionBarActivity
     
     /**
      * Runs the network thread and updates the UI
-     * Sectioned off since it's called from onCreate and from the refresh button
      */
     protected void executeCameraRequest()
     {
@@ -127,6 +138,6 @@ public class MainActivity extends ActionBarActivity
             }
         });
         
-        thread.execute();
+        thread.execute(ip);
     }
 }

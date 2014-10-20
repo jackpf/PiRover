@@ -18,10 +18,16 @@ public class ControlRequest extends Request
     }
 
     @Override
-    public RequestResponse call() throws ClientException, IOException
+    public RequestResponse call(String ...args) throws ClientException, IOException
     {
+        String ip = args[0];
+        
+        if (ip == null) {
+            throw new ClientException("No IP");
+        }
+        
         if (client == null || !client.isConnected()) {
-            client = new Client("192.168.0.8", 1338);
+            client = new Client(ip, 1338);
         }
         
         Controller controller = (Controller) params[0];

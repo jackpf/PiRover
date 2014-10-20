@@ -63,10 +63,13 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
      * Set callback
      * 
      * @param callback
+     * @return
      */
-    public void setCallback(Callback callback)
+    public NetworkThread setCallback(Callback callback)
     {
         this.callback = callback;
+        
+        return this;
     }
 
     /**
@@ -76,6 +79,8 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
     @Override
     protected void onPreExecute()
     {
+        request.preCall();
+        
         if (ui != null) {
             ui.preUpdate();
         }
@@ -91,7 +96,7 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
     {
         try {
             // Just set the vars to the response
-            vars = request.call();
+            vars = request.call(params);
         } catch (Exception e) {
             this.e = e;
         }
@@ -117,6 +122,8 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
                 ui.error(e);
             }
         }
+        
+        request.postCall(vars, e);
         
         if (callback != null) {
             callback.onPostExecute(vars, e);

@@ -10,6 +10,7 @@
     <string name="camera_fps_count">%d fps</string>
     <string name="camera_bandwidth">%d bytes/s</string>
     <string name="title_activity_playback_activity">PlaybackAction</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="broadcast_loading">Loading</string>
+    <string name="broadcast_detecting">Detecting PiRover on network...</string>
 
 </resources>

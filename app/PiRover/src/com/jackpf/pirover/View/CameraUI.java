@@ -53,8 +53,13 @@ public class CameraUI extends UI
         ImageView ivCamera = (ImageView) activity.findViewById(R.id.camera);
         ivCamera.setImageDrawable(drawable);
 
+        // Fps counter & bandwidth
+        displayStats((Double) vars.get("fpsCount"), (Double) vars.get("bandwidth"));
+    }
+    
+    protected void displayStats(Double fpsCount, Double bandwidth)
+    {
         // Fps counter
-        Double fpsCount = (Double) vars.get("fpsCount");
         if (fpsCount != null) {
             TextView tvFpsCount = (TextView) activity.findViewById(R.id.fps_counter);
             tvFpsCount.setText(
@@ -66,7 +71,6 @@ public class CameraUI extends UI
         }
         
         // Bandwidth
-        Double bandwidth = (Double) vars.get("bandwidth");
         if (bandwidth != null) {
             TextView tvBandwidth = (TextView) activity.findViewById(R.id.bandwidth);
             tvBandwidth.setText(
@@ -84,6 +88,9 @@ public class CameraUI extends UI
         if (e instanceof ClientException) {
             tvStatus.setText(context.getString(R.string.camera_state_unable_to_connect));
         }
+        
+        // Reset stats
+        displayStats(0.0, 0.0);
         
         e.printStackTrace();
     }

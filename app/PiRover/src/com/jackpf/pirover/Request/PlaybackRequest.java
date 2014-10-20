@@ -30,7 +30,7 @@ public class PlaybackRequest extends Request
     }
 
     @Override
-    public RequestResponse call() throws ClientException, IOException
+    public RequestResponse call(String ...args) throws ClientException, IOException
     {
         if (client == null || !client.isConnected()) {
             client = new Client();
