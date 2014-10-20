@@ -9,7 +9,7 @@ void GPIO::setup()
 
     // Access physical memory
     if ((mem = open("/dev/mem", O_RDWR | O_SYNC)) < 0) {
-        perror("Unable to access /dev/mem: %s\n");
+        perror("Unable to access /dev/mem\n");
         exit(-1);
     }
 
@@ -26,7 +26,7 @@ void GPIO::setup()
     close(mem); // No need to keep mem_fd open after mmap
 
     if (gpioMap == MAP_FAILED) {
-        perror("Unable to map GPIO address space: %s\n");
+        perror("Unable to map GPIO address space\n");
         exit(-1);
     }
 

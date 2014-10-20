@@ -1,9 +1,16 @@
 #!/bin/bash
 
+#################################################
+# Script to start and stop the PiRover controller
+#################################################
+
 base_dir="/home/pi/workspace/PiRover"
+logging=false
+
+#################################################
+
 bin_dir="$base_dir/bin"
 log_dir="$base_dir/logs"
-logging=false
 
 processes=( "controller" "camera" "broadcast" "lights" )
 

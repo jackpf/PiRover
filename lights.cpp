@@ -1,16 +1,27 @@
 #include "gpio.hpp"
 
+#define LIGHT 11
+
 int main(int argc, char *argv[])
 {
     GPIO::setup();
 
-    GPIO::pinMode(11, GPIO::OUT);
+    GPIO::pinMode(LIGHT, GPIO::OUT);
+
+    int t = 1000000;
+
+    if (argc > 1) {
+        int tmp = atoi(argv[1]);
+        if (tmp > 0) {
+            t = tmp;
+        }
+    }
 
     while (true) {
-        GPIO::write(11, GPIO::HIGH);
-        sleep(1);
-        GPIO::write(11, GPIO::LOW);
-        sleep(1);
+        GPIO::write(LIGHT, GPIO::HIGH);
+        usleep(t);
+        GPIO::write(LIGHT, GPIO::LOW);
+        usleep(t);
     }
 
     return 0;
