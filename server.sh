@@ -16,7 +16,7 @@ processes=( "controller" "camera" "broadcast" "lights" )
 
 if [ "$1" = "start" ]
 then
-    log_redir=$([ "$logging" == true ] && echo "&>$log_dir/$(date +"%d_%m_%y-%T").txt" || echo "")
+	log_redir=$([ "$logging" == true ] && echo "&>$log_dir/$(date +"%d_%m_%y-%T").txt" || echo "")
 
 	for process in "${processes[@]}"
 	do
