@@ -1,58 +1,5 @@
-#include <stdio.h>
-#include <raspicam/raspicam_cv.h>
-
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
-
+#include "lib/picam.hpp"
 #include "lib/server.hpp"
-
-#define PORT        1337
-#define CAM_WIDTH   320
-#define CAM_HEIGHT  240
-#define CAM_RGB     true
-
-using namespace cv;
-using namespace raspicam;
-
-class PiCam
-{
-private:
-    RaspiCam_Cv camera;
-
-public:
-    bool setup()
-    {
-        camera.set(CV_CAP_PROP_FRAME_WIDTH, CAM_WIDTH);
-        camera.set(CV_CAP_PROP_FRAME_HEIGHT, CAM_HEIGHT);
-        camera.set(CV_CAP_PROP_FORMAT, CAM_RGB ? CV_8UC3 : CV_8UC1);
-
-        if (!camera.open()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    void close()
-    {
-        if (camera.isOpened()) {
-            camera.release();
-        }
-    }
-
-    vector<uchar> getFrame()
-    {
-        Mat image(CAM_WIDTH, CAM_HEIGHT, CAM_RGB ? CV_8UC3 : CV_8UC1);
-        vector<uchar> buf;
-
-        camera.grab();
-        camera.retrieve(image);
-        imencode(".jpg", image, buf);
-
-        return buf;
-    }
-};
 
 int main(int argc, char **argv)
 {
@@ -95,7 +42,7 @@ int main(int argc, char **argv)
                 printf("Sending data\n");
 
                 // Send image size
-                int sent = 0;
+                size_t sent = 0;
                 int sz[1] = {buf.size()};
                 status = server.send(conn, &sz, sizeof(int));
 
