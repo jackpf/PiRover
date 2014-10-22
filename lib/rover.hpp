@@ -7,8 +7,6 @@
 #include <wiringPi.h>
 #include <softPwm.h>
 
-#include "lib/lib.hpp"
-
 /**
  * GPIO pin numbers
  */
@@ -18,6 +16,13 @@
 #define PIN_RIGHT_B 3
 #define PWM_OFF     0
 #define PWM_MAX     10
+
+typedef struct {
+    int leftA;
+    int leftB;
+    int rightA;
+    int rightB;
+} MotorValues;
 
 class Rover
 {
@@ -34,15 +39,12 @@ public:
      * @param acceleration  Acceleration of rover on a scale of 1-10
      * @param steering      Steering position of rover on a scale of -10-10
      */
-    void process(int acceleration, int steering);
+    MotorValues process(int acceleration, int steering);
 
     /**
      * Accelerate motors
      *
-     * @param leftA         Left forward
-     * @param leftB         Left backward
-     * @param rightA        Right forward
-     * @param rightB        Right backward
+     * @param values        Motor values to be applied
      */
-    void accelerate(int leftA, int leftB, int rightA, int rightB);
+    void accelerate(MotorValues values);
 };
