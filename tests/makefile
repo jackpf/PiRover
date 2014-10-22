@@ -6,3 +6,6 @@ gpio:
 
 camera:
 	gcc -lgtest -lgtest_main -lpthread camera.cpp ../lib/picam.cpp -o bin/camera -I/usr/local/include/ -lraspicam -lraspicam_cv -lopencv_core -lopencv_highgui
+
+broadcast:
+	gcc -lgtest -lgtest_main -lpthread broadcast.cpp ../lib/broadcast.cpp -o bin/broadcast

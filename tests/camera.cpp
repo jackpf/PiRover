@@ -17,7 +17,7 @@ TEST(Camera, CaptureFrame)
 
     cam.setup();
 
-    ASSERT_GT(cam.getFrame().size(), 0);
+    EXPECT_GT(cam.getFrame().size(), 0);
 
     cam.close();
 }

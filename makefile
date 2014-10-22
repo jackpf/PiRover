@@ -11,4 +11,4 @@ lights:
 	g++ $(warnings) $(debug) lights.cpp gpio.cpp -o bin/lights
 
 broadcast:
-	g++ $(warnings) $(debug) broadcast.cpp -o bin/broadcast
+	g++ $(warnings) $(debug) broadcast.cpp lib/broadcast.cpp -o bin/broadcast
