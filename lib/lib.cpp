@@ -1,5 +1,4 @@
 #include "lib.hpp"
-#include <string.h>
 
 namespace Lib
 {

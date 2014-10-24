@@ -21,7 +21,7 @@ private:
     void debug();
 
 public:
-    void init(int port);
+    Broadcast(int port);
 
     void listen(const char *broadcast);
 

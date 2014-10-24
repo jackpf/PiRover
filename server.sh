@@ -12,7 +12,7 @@ logging=false
 bin_dir="$base_dir/bin"
 log_dir="$base_dir/logs"
 
-declare -A processes=( ["controller"]="" ["camera"]="" ["broadcast"]="" ["lights"]="100000" )
+declare -A processes=( ["controller"]="--port=1338" ["camera"]="--port=1339" ["broadcast"]="--port=1337" ["lights"]="--blink=100000" )
 
 if [ "$1" = "start" ]
 then

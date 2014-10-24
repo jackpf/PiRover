@@ -1,6 +1,6 @@
 #include "broadcast.hpp"
 
-void Broadcast::init(int port)
+Broadcast::Broadcast(int port)
 {
     this->port = port;
 

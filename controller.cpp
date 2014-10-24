@@ -1,3 +1,4 @@
+#include "lib/lib.hpp"
 #include "lib/server.hpp"
 #include "lib/rover.hpp"
 
@@ -8,6 +9,8 @@ static struct argp_option options[] = {
  
 int main(int argc, char **argv)
 {
+    Lib::Args args(argc, argv, options, sizeof(options));
+
     Server server;
     Rover rover;
 

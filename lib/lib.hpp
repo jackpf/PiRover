@@ -1,6 +1,7 @@
 #include <argp.h>
 #include <map>
 #include <stdlib.h>
+#include <string.h>
 
 /**
  * Extra flag to specify that option is required

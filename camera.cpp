@@ -1,3 +1,4 @@
+#include "lib/lib.hpp"
 #include "lib/picam.hpp"
 #include "lib/server.hpp"
 

@@ -13,9 +13,7 @@ int main(int argc, char *argv[])
 {
     Lib::Args args(argc, argv, options, sizeof(options));
 
-    Broadcast broadcaster;
-
-    broadcaster.init(atoi(args.get("port")));
+    Broadcast broadcaster(atoi(args.get("port")));
 
     if (args.count() > 0) { /* Broadcast as client */
         printf("Resolved IP: %s\n", broadcaster.resolve(args.get(0)));
