@@ -1,7 +1,10 @@
 #include "lib/server.hpp"
 #include "lib/rover.hpp"
 
-#define PORT 1338
+static struct argp_option options[] = {
+    {"port", 'p', "PORT", OPTION_REQUIRED, "Port to listen to"},
+    {0}
+};
  
 int main(int argc, char **argv)
 {
@@ -16,7 +19,7 @@ int main(int argc, char **argv)
     // Create server
     printf("Creating server\n");
 
-    if (!server.create(PORT)) {
+    if (!server.create(atoi(args.get("port")))) {
         perror("Could not create server");
         exit(-1);
     }

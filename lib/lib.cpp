@@ -1,11 +1,13 @@
 #include "lib.hpp"
+#include <string.h>
 
 namespace Lib
 {
     struct argp_option *Args::options = NULL;
     int Args::numOptions = 0;
+    int Args::argCount = 0;
 
-    void Args::parse(int argc, char *argv[], struct argp_option *options, size_t optionsLen)
+    Args::Args(int argc, char *argv[], struct argp_option *options, size_t optionsLen)
     {
         this->options = options;
         this->numOptions = optionsLen / sizeof(struct argp_option) - 1 /* -1 for {0} */;
@@ -17,7 +19,24 @@ namespace Lib
 
     const char *Args::get(const char *key)
     {
-        return (const char *) arguments[key];
+        // Just returning arguments[key] doesn't seem to work too well...
+        ArgumentsIterator it;
+
+        for (it = arguments.begin(); it != arguments.end(); it++) {
+            if (strcmp(it->first, key) == 0) {
+                return (const char *) it->second;
+            }
+        }
+
+        return NULL;
+    }
+
+    const char *Args::get(int key)
+    {
+        char *num = (char *) malloc(5 * sizeof(char));
+        sprintf(num, "%d", key);
+
+        return get(num);
     }
 
     const char *Args::get(const char *key, const char defaultValue[])
@@ -25,36 +44,42 @@ namespace Lib
         return arguments[key] != NULL ? (const char *) arguments[key] : defaultValue;
     }
 
+    int Args::count()
+    {
+        return argCount;
+    }
+
     error_t Args::_parse_opt(int key, char *arg, struct argp_state *state)
     {
         Arguments *arguments = (Arguments *) state->input;
 
-        if (key == ARGP_KEY_ARG) {
-            return 0;
-        } else if (key == ARGP_KEY_END) {
-            for (int i = 0; i < numOptions; i++) {
-                if (options[i].flags & OPTION_REQUIRED && (*arguments)[options[i].name] == NULL) {
-                    //argp_usage(state);
-                    printf(
-                        "%1$s: required option missing -- '%2$c'\nTry `%1$s --help' or `%1$s --usage' for more information.\n",
-                        state->argv[0],
-                        options[i].key
-                    );
-                    exit(-1);
+        switch (key) {
+            case ARGP_KEY_END: {
+                for (int i = 0; i < numOptions; i++) {
+                    if (options[i].flags & OPTION_REQUIRED && (*arguments)[options[i].name] == NULL) {
+                        //argp_usage(state);
+                        printf(
+                            "%1$s: required option missing -- '%2$c'\nTry `%1$s --help' or `%1$s --usage' for more information.\n",
+                            state->argv[0],
+                            options[i].key
+                        );
+                        exit(-1);
+                    }
                 }
-            }
-        }
-
-        if (key == 0) { // Normal argument
-            char num[5];
-            sprintf(num, "%d", state->arg_num);
-            (*arguments)[(const char *) num] = arg;
-        } else { // Option
-            for (int i = 0; i < numOptions; i++) {
-                if (options[i].key == key) {
-                    (*arguments)[options[i].name] = arg;
+            } break;
+            case ARGP_KEY_ARG: {
+                char *num = (char *) malloc(5 * sizeof(char));
+                sprintf(num, "%d", state->arg_num);
+                (*arguments)[num] = arg;
+                argCount++;
+            } break;
+            default: {
+                for (int i = 0; i < numOptions; i++) {
+                    if (options[i].key == key) {
+                        (*arguments)[options[i].name] = arg;
+                    }
                 }
-            }
+            } break;
         }
 
         return 0;

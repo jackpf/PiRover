@@ -4,7 +4,6 @@
 #include <string.h>
 #include <raspicam/raspicam_cv.h>
 
-#define PORT        1337
 #define CAM_WIDTH   320
 #define CAM_HEIGHT  240
 #define CAM_RGB     true

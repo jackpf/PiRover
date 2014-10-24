@@ -1,5 +1,5 @@
-#include "lib/gpio.hpp"
 #include "lib/lib.hpp"
+#include "lib/gpio.hpp"
 
 #define LIGHT 11
 
@@ -10,8 +10,7 @@ static struct argp_option options[] = {
 
 int main(int argc, char *argv[])
 {
-    Lib::Args args;
-    args.parse(argc, argv, options, sizeof(options));
+    Lib::Args args(argc, argv, options, sizeof(options));
 
     GPIO::setup();
 

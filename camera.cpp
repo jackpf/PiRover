@@ -1,15 +1,22 @@
 #include "lib/picam.hpp"
 #include "lib/server.hpp"
 
+static struct argp_option options[] = {
+    {"port", 'p', "PORT", OPTION_REQUIRED, "Port to listen to"},
+    {0}
+};
+
 int main(int argc, char **argv)
 {
+    Lib::Args args(argc, argv, options, sizeof(options));
+
     Server server;
     PiCam cam;
 
     // Create server
     printf("Creating server\n");
 
-    if (!server.create(PORT)) {
+    if (!server.create(atoi(args.get("port")))) {
         perror("Could not create server");
         exit(-1);
     }

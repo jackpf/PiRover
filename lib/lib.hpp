@@ -14,9 +14,14 @@ namespace Lib
     public:
 
         /**
-        * Argument list type
-        */
+         * Arguments map type
+         */
         typedef std::map<const char *, char *> Arguments;
+
+        /**
+         * Arguments iterator type
+         */
+        typedef std::map<const char*, char*>::iterator ArgumentsIterator;
 
     private:
 
@@ -35,17 +40,27 @@ namespace Lib
          */
         static int numOptions;
 
+        /**
+         * Number of arguments, excluding options
+         */
+        static int argCount;
+
     public:
 
         /**
-         * Parse arguments
+         * Constructor
          *
          * @param argc          Arg count
          * @param argv          Arg values
          * @param options       Options to parse
          * @param optionsLen    Length of options
          */
-        void parse(int argc, char *argv[], struct argp_option *options, size_t optionsLen);
+        Args(int argc, char *argv[], struct argp_option *options, size_t optionsLen);
+
+        /**
+         * Internal options parser
+         */
+        static error_t _parse_opt(int key, char *arg, struct argp_state *state);
 
         /**
          * Get option by name
@@ -66,8 +81,16 @@ namespace Lib
         const char *get(const char *key, const char defaultValue[]);
 
         /**
-         * Internal options parser
+         * Get argument
+         *
+         * @param key           Position of argument
+         * @return              Argument value
          */
-        static error_t _parse_opt(int key, char *arg, struct argp_state *state);
+        const char *get(int key);
+
+        /**
+         * Get arg count
+         */
+        int count();
     };
 }
