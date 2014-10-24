@@ -1,21 +1,23 @@
 #include "lib/gpio.hpp"
+#include "lib/lib.hpp"
 
 #define LIGHT 11
 
+static struct argp_option options[] = {
+    {"blink", 'b', "BLINKSPEED", 0, "LED blink speed in microseconds"},
+    {0}
+};
+
 int main(int argc, char *argv[])
 {
+    Lib::Args args;
+    args.parse(argc, argv, options, sizeof(options));
+
     GPIO::setup();
 
     GPIO::pinMode(LIGHT, GPIO::OUT);
 
-    int t = 1000000;
-
-    if (argc > 1) {
-        int tmp = atoi(argv[1]);
-        if (tmp > 0) {
-            t = tmp;
-        }
-    }
+    int t = atoi(args.get("blink", "1000000"));
 
     while (true) {
         GPIO::write(LIGHT, GPIO::HIGH);

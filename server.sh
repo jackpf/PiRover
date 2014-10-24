@@ -12,19 +12,19 @@ logging=false
 bin_dir="$base_dir/bin"
 log_dir="$base_dir/logs"
 
-processes=( "controller" "camera" "broadcast" "lights" )
+declare -A processes=( ["controller"]="" ["camera"]="" ["broadcast"]="" ["lights"]="100000" )
 
 if [ "$1" = "start" ]
 then
 	log_redir=$([ "$logging" == true ] && echo "&>$log_dir/$(date +"%d_%m_%y-%T").txt" || echo "")
 
-	for process in "${processes[@]}"
+	for process in "${!processes[@]}"
 	do
-		eval "$bin_dir/$process $log_redir &"
+		eval "$bin_dir/$process $log_redir ${processes[$process]} &"
 	done
 elif [ "$1" = "stop" ]
 then
-	for process in "${processes[@]}"
+	for process in "${!processes[@]}"
 	do
 		pid=$(pidof "$process")
 		if [ "$pid" -eq "$pid" ] 2>/dev/null # If is an actual PID
