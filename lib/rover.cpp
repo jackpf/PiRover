@@ -10,7 +10,7 @@ void Rover::setup()
     softPwmCreate(PIN_RIGHT_B, PWM_OFF, PWM_MAX);
 }
 
-MotorValues Rover::process(int acceleration, int steering)
+MotorValues Rover::calculate(int acceleration, int steering)
 {
     MotorValues values = {0, 0, 0, 0};
 
@@ -48,4 +48,11 @@ void Rover::accelerate(MotorValues values)
     softPwmWrite(PIN_LEFT_B, values.leftB);
     softPwmWrite(PIN_RIGHT_A, values.rightA);
     softPwmWrite(PIN_RIGHT_B, values.rightB);
+}
+
+MotorValues Rover::process(int acceleration, int steering)
+{
+    accelerate(
+        calculate(acceleration, steering)
+    );
 }

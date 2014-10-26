@@ -34,12 +34,13 @@ public:
     void setup();
 
     /**
-     * Process given acceleration and steering to produce motor values
+     * Calculate motor values from given acceleration and steering
      *
      * @param acceleration  Acceleration of rover on a scale of 1-10
      * @param steering      Steering position of rover on a scale of -10-10
+     * @return              Motor values
      */
-    MotorValues process(int acceleration, int steering);
+    MotorValues calculate(int acceleration, int steering);
 
     /**
      * Accelerate motors
@@ -47,4 +48,12 @@ public:
      * @param values        Motor values to be applied
      */
     void accelerate(MotorValues values);
+
+    /**
+     * Calculate values and accelerate motors
+     *
+     * @param acceleration  Acceleration of rover on a scale of 1-10
+     * @param steering      Steering position of rover on a scale of -10-10
+     */
+    void process(int acceleration, int steering);
 };
