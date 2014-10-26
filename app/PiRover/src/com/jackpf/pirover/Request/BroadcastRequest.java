@@ -9,7 +9,7 @@ import java.net.SocketTimeoutException;
 import android.net.wifi.WifiManager;
 import android.text.format.Formatter;
 
-import com.jackpf.pirover.Control.ClientException;
+import com.jackpf.pirover.Controller.ClientException;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 
@@ -34,8 +34,11 @@ public class BroadcastRequest extends Request
             socket.setBroadcast(true);
             
             WifiManager wm = (WifiManager) params[0];
+            
+            @SuppressWarnings("deprecation") // formatIpAddress doesn't currently support IPv6 addresses
             String broadcastIp = "", localIp = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
             String[] parts = localIp.split("\\.");
+            
             for (int i = 0; i < parts.length; i++) {
                 broadcastIp += i != parts.length - 1 ? parts[i] + "." : "255";
             }

@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.jackpf.pirover.R;
-import com.jackpf.pirover.Control.Controller;
+import com.jackpf.pirover.Controller.Controller;
 import com.jackpf.pirover.Model.UI;
 
 public class ControlUI extends UI
@@ -30,6 +30,8 @@ public class ControlUI extends UI
         ivSteeringWheel.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                v.performClick();
+                
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_MOVE:
                         float x = event.getX() - (ivSteeringWheel.getWidth() / 2);
@@ -71,6 +73,8 @@ public class ControlUI extends UI
         ivAccelerator.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                v.performClick();
+                
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_MOVE:
                         float height = ivAccelerator.getHeight() - ivAccelerator.getDrawable().getIntrinsicHeight();

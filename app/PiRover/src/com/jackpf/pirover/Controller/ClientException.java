@@ -1,4 +1,4 @@
-package com.jackpf.pirover.Control;
+package com.jackpf.pirover.Controller;
 
 public class ClientException extends Exception
 {

@@ -12,7 +12,7 @@ import android.view.View;
 
 import com.jackpf.pirover.NetworkThread.Callback;
 import com.jackpf.pirover.Camera.ClientException;
-import com.jackpf.pirover.Control.Controller;
+import com.jackpf.pirover.Controller.Controller;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Model.UI;

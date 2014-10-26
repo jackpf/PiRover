@@ -3,7 +3,6 @@ package com.jackpf.pirover.View;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.jackpf.pirover.R;
 import com.jackpf.pirover.Model.UI;

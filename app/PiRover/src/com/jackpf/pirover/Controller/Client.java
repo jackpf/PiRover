@@ -1,4 +1,4 @@
-package com.jackpf.pirover.Control;
+package com.jackpf.pirover.Controller;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

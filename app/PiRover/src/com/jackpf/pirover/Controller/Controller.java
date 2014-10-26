@@ -1,4 +1,4 @@
-package com.jackpf.pirover.Control;
+package com.jackpf.pirover.Controller;
 
 import com.jackpf.pirover.NetworkThread;
 import com.jackpf.pirover.Request.ControlRequest;

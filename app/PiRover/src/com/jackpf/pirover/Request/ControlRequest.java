@@ -2,9 +2,9 @@ package com.jackpf.pirover.Request;
 
 import java.io.IOException;
 
-import com.jackpf.pirover.Control.Client;
-import com.jackpf.pirover.Control.ClientException;
-import com.jackpf.pirover.Control.Controller;
+import com.jackpf.pirover.Controller.Client;
+import com.jackpf.pirover.Controller.ClientException;
+import com.jackpf.pirover.Controller.Controller;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 
