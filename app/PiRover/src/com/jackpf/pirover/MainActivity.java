@@ -20,17 +20,38 @@ import com.jackpf.pirover.Request.BroadcastRequest;
 import com.jackpf.pirover.Request.CameraRequest;
 import com.jackpf.pirover.View.BroadcastUI;
 import com.jackpf.pirover.View.CameraUI;
-import com.jackpf.pirover.View.ControlUI;
+import com.jackpf.pirover.View.ControllerUI;
 
 public class MainActivity extends ActionBarActivity
 {
+    /**
+     * Network thread instance
+     */
     protected NetworkThread thread;
-    protected UI cameraUI, controlUI;
-    protected /*Request*/CameraRequest cameraRequest;
-    protected Request controlRequest;
-    protected Controller controller;
-    protected static String ip;
     
+    /**
+     * Network request instances
+     */
+    protected Request cameraRequest, controlRequest;
+    
+    /**
+     * User interface instances
+     */
+    protected UI cameraUI, controlUI;
+    
+    /**
+     * Controller instance
+     */
+    protected Controller controller;
+    
+    /**
+     * Resolved IP address
+     */
+    protected String ip;
+    
+    /**
+     * Activity created event
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -42,75 +63,14 @@ public class MainActivity extends ActionBarActivity
         controller = new Controller();
 
         cameraUI = new CameraUI(this);
-        controlUI = new ControlUI(this, controller);
+        controlUI = new ControllerUI(this, controller);
 
         cameraUI.initialise();
         controlUI.initialise();
     }
     
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        
-        if (ip == null) {
-            new NetworkThread(new BroadcastRequest((WifiManager) getSystemService(WIFI_SERVICE)), new BroadcastUI(this))
-                .setCallback(new NetworkThread.Callback() {
-                    @Override
-                    public void onPostExecute(RequestResponse vars, Exception e) {
-                        ip = (String) vars.get("ip");
-                        Log.d("Broadcast", "Resolved IP: " + ip);
-                    }
-                })
-                .execute();
-        }
-        
-        executeCameraRequest();
-    }
-    
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-        
-        if (thread instanceof NetworkThread) {
-            thread.cancel(true);
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.main, menu);
-        
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        int id = item.getItemId();
-        
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        
-        return super.onOptionsItemSelected(item);
-    }
-    
-    public void onRecordClick(View v)
-    {
-        cameraRequest.getRecorder().toggleRecording();
-    }
-    
-    public void playback(View v)
-    {
-        Intent intent = new Intent(this, PlaybackActivity.class);
-        startActivity(intent);
-    }
-    
     /**
-     * Runs the network thread and updates the UI
+     * Continuously executes camera requests
      */
     protected void executeCameraRequest()
     {
@@ -139,5 +99,92 @@ public class MainActivity extends ActionBarActivity
         });
         
         thread.execute(ip);
+    }
+    
+    /**
+     * Activity resumed event
+     */
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        
+        if (ip == null) {
+            new NetworkThread(new BroadcastRequest((WifiManager) getSystemService(WIFI_SERVICE)), new BroadcastUI(this))
+                .setCallback(new NetworkThread.Callback() {
+                    @Override
+                    public void onPostExecute(RequestResponse vars, Exception e) {
+                        ip = (String) vars.get("ip");
+                        Log.d("Broadcast", "Resolved IP: " + ip);
+                    }
+                })
+                .execute();
+        }
+        
+        executeCameraRequest();
+    }
+    
+    /**
+     * Activity paused event
+     */
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        
+        if (thread instanceof NetworkThread) {
+            thread.cancel(true);
+        }
+    }
+
+    /**
+     * Menu create event
+     * 
+     * @param menu
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.main, menu);
+        
+        return true;
+    }
+
+    /**
+     * Menu item click event
+     * 
+     * @param item
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int id = item.getItemId();
+        
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        
+        return super.onOptionsItemSelected(item);
+    }
+    
+    /**
+     * Record button click event
+     * 
+     * @param v
+     */
+    public void onRecordClick(View v)
+    {
+        ((CameraRequest) cameraRequest).getRecorder().toggleRecording();
+    }
+    
+    /**
+     * Playback button click event
+     * 
+     * @param v
+     */
+    public void onPlaybackClick(View v)
+    {
+        Intent intent = new Intent(this, PlaybackActivity.class);
+        startActivity(intent);
     }
 }

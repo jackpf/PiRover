@@ -77,6 +77,6 @@
         android:layout_alignBottom="@+id/accelerator"
         android:layout_toLeftOf="@+id/accelerator"
         android:text="Button"
-        android:onClick="playback" />
+        android:onClick="onPlaybackClick" />
 
 </RelativeLayout>

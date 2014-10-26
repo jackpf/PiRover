@@ -12,11 +12,11 @@ import com.jackpf.pirover.R;
 import com.jackpf.pirover.Controller.Controller;
 import com.jackpf.pirover.Model.UI;
 
-public class ControlUI extends UI
+public class ControllerUI extends UI
 {
     private Controller controller;
     
-    public ControlUI(Context context, Controller controller)
+    public ControllerUI(Context context, Controller controller)
     {
         super(context);
         
