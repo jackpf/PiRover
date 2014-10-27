@@ -48,7 +48,7 @@ public class MainActivity extends ActionBarActivity
     /**
      * Resolved IP address
      */
-    protected String ip;
+    protected static String ip;
     
     /**
      * Activity created event
@@ -111,10 +111,8 @@ public class MainActivity extends ActionBarActivity
         super.onResume();
         
         if (ip == null) {
-            resolveIp(null);
+            connect(null);
         }
-        
-        executeCameraRequest();
     }
     
     /**
@@ -122,14 +120,19 @@ public class MainActivity extends ActionBarActivity
      * 
      * @param manualIp
      */
-    public void resolveIp(String manualIp)
+    public void connect(String manualIp)
     {
         new NetworkThread(new BroadcastRequest((WifiManager) getSystemService(WIFI_SERVICE), getSystemService(Context.CONNECTIVITY_SERVICE)), new BroadcastUI(this))
             .setCallback(new NetworkThread.Callback() {
                 @Override
                 public void onPostExecute(RequestResponse vars, Exception e) {
-                    ip = (String) vars.get("ip");
-                    Log.d("Broadcast", "Resolved IP: " + ip);
+                    if (vars.get("ip") != null && !(e instanceof Exception)) {
+                        ip = (String) vars.get("ip");
+                        Log.d("Broadcast", "Resolved IP: " + ip);
+                        
+                        // Start connecting to camera
+                        executeCameraRequest();
+                    }
                 }
             })
             .execute(manualIp);

@@ -17,7 +17,8 @@ import com.jackpf.pirover.Model.UI;
 
 public class BroadcastUI extends UI
 {
-    ProgressDialog dialog;
+    private static ProgressDialog dialog;
+    private static AlertDialog alertDialog;
     
     public BroadcastUI(Context context)
     {
@@ -31,6 +32,10 @@ public class BroadcastUI extends UI
     
     public void preUpdate()
     {
+        if (alertDialog != null && alertDialog.isShowing()) {
+            alertDialog.dismiss();
+        }
+        
         dialog = new ProgressDialog(context);
         
         dialog.setTitle(context.getString(R.string.broadcast_loading));
@@ -50,7 +55,7 @@ public class BroadcastUI extends UI
         e.printStackTrace();
         
         if (e instanceof ConnectionException) {
-            new AlertDialog.Builder(context)
+            alertDialog = new AlertDialog.Builder(context)
                 .setTitle(context.getString(R.string.broadcast_disconnected_title))
                 .setMessage(context.getString(R.string.broadcast_disconnected_message))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -66,13 +71,13 @@ public class BroadcastUI extends UI
             final EditText input = new EditText(context);
             input.setInputType(InputType.TYPE_CLASS_PHONE);
             
-            new AlertDialog.Builder(context)
+            alertDialog = new AlertDialog.Builder(context)
                 .setTitle(context.getString(R.string.broadcast_timeout_title))
                 .setMessage(context.getString(R.string.broadcast_timeout_message))
                 .setView(input)
                 .setPositiveButton(context.getString(R.string.dialog_positive), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        ((MainActivity) activity).resolveIp(input.getText().toString());
+                        ((MainActivity) activity).connect(input.getText().toString());
                     }
                 })
                 .setCancelable(false)
