@@ -48,6 +48,10 @@ int main(int argc, char **argv)
             rover.process(accelerationPosition, steeringPosition);
         }
 
+        printf("Resetting rover\n");
+
+        rover.process(0, 0);
+
         printf("Closing server\n");
 
         server.close(conn);
