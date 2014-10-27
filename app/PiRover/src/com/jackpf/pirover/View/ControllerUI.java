@@ -52,6 +52,15 @@ public class ControllerUI extends UI
         
         final ImageView ivAccelerator = (ImageView) ((Activity) context).findViewById(R.id.accelerator);
         
+        /* Initially translate to the bottom
+           ivAccelerator.getHeight() seems to return 0 at this point
+           So 288 is hard coded (height - drawable height)
+           TODO: Needs dynamically calculating (or gravity of the image
+           view set to bottom, which doesn't seem possible with a matrix scale type */
+        Matrix matrix = new Matrix();
+        matrix.postTranslate(0, 288);
+        ivAccelerator.setImageMatrix(matrix);
+        
         ivAccelerator.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -61,7 +70,7 @@ public class ControllerUI extends UI
                     ControllerCalculator.Position acceleratorPosition
                         = ControllerCalculator.calculateAcceleratorPosition(event.getY(), ivAccelerator.getWidth(), ivAccelerator.getHeight(), ivAccelerator.getDrawable().getIntrinsicHeight());
                 
-                    Log.d("Touch", "position: " + acceleratorPosition.position + "value: " + acceleratorPosition.value);
+                    Log.d("Touch", "position: " + acceleratorPosition.position + ", value: " + acceleratorPosition.value);
                     
                     Matrix matrix = new Matrix();
                     matrix.postTranslate(0, acceleratorPosition.position);

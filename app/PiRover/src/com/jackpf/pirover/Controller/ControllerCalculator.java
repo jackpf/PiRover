@@ -77,7 +77,7 @@ public class ControllerCalculator
         y = height - (y - (drawableHeight / 2));
         
         if (y < 0) {
-            y = 0;
+            y = 0.0f;
         } else if (y > height) {
             y = height;
         }

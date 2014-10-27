@@ -109,7 +109,7 @@ public class MainActivity extends ActionBarActivity
     {
         super.onResume();
         
-        if (ip == null) {
+        /*if (ip == null) {
             new NetworkThread(new BroadcastRequest((WifiManager) getSystemService(WIFI_SERVICE)), new BroadcastUI(this))
                 .setCallback(new NetworkThread.Callback() {
                     @Override
@@ -121,7 +121,7 @@ public class MainActivity extends ActionBarActivity
                 .execute();
         }
         
-        executeCameraRequest();
+        executeCameraRequest();*/
     }
     
     /**
