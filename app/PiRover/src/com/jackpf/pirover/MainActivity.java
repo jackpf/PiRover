@@ -1,5 +1,6 @@
 package com.jackpf.pirover;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -109,19 +110,29 @@ public class MainActivity extends ActionBarActivity
     {
         super.onResume();
         
-        /*if (ip == null) {
-            new NetworkThread(new BroadcastRequest((WifiManager) getSystemService(WIFI_SERVICE)), new BroadcastUI(this))
-                .setCallback(new NetworkThread.Callback() {
-                    @Override
-                    public void onPostExecute(RequestResponse vars, Exception e) {
-                        ip = (String) vars.get("ip");
-                        Log.d("Broadcast", "Resolved IP: " + ip);
-                    }
-                })
-                .execute();
+        if (ip == null) {
+            resolveIp(null);
         }
         
-        executeCameraRequest();*/
+        executeCameraRequest();
+    }
+    
+    /**
+     * Resolve IP
+     * 
+     * @param manualIp
+     */
+    public void resolveIp(String manualIp)
+    {
+        new NetworkThread(new BroadcastRequest((WifiManager) getSystemService(WIFI_SERVICE), getSystemService(Context.CONNECTIVITY_SERVICE)), new BroadcastUI(this))
+            .setCallback(new NetworkThread.Callback() {
+                @Override
+                public void onPostExecute(RequestResponse vars, Exception e) {
+                    ip = (String) vars.get("ip");
+                    Log.d("Broadcast", "Resolved IP: " + ip);
+                }
+            })
+            .execute(manualIp);
     }
     
     /**
