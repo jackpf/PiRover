@@ -16,7 +16,7 @@ TEST(Controller, NoAccelerationOrSteering)
 TEST(Controller, FullAccelerationFullRightSteering)
 {
     Rover rover;
-    MotorValues values = rover.process(10, 10);
+    Rover::MotorValues values = rover.process(10, 10);
 
     EXPECT_EQ(values.leftA, 10);
     EXPECT_EQ(values.leftB, 0);
@@ -27,7 +27,7 @@ TEST(Controller, FullAccelerationFullRightSteering)
 TEST(Controller, FullAccelerationFullLeftSteering)
 {
     Rover rover;
-    MotorValues values = rover.process(10, -10);
+    Rover::MotorValues values = rover.process(10, -10);
 
     EXPECT_EQ(values.leftA, 0);
     EXPECT_EQ(values.leftB, 10);
@@ -49,7 +49,7 @@ TEST(Controller, HalfAccelerationNoSteering)
 TEST(Controller, HalfAccelerationHalfRightSteering)
 {
     Rover rover;
-    MotorValues values = rover.process(5, 5);
+    Rover::MotorValues values = rover.process(5, 5);
 
     EXPECT_EQ(values.leftA, 5);
     EXPECT_EQ(values.leftB, 0);
@@ -60,7 +60,7 @@ TEST(Controller, HalfAccelerationHalfRightSteering)
 TEST(Controller, HalfAccelerationFullLeftSteering)
 {
     Rover rover;
-    MotorValues values = rover.process(5, -10);
+    Rover::MotorValues values = rover.process(5, -10);
 
     EXPECT_EQ(values.leftA, 0);
     EXPECT_EQ(values.leftB, 5);

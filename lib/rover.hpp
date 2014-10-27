@@ -17,16 +17,19 @@
 #define PWM_OFF     0
 #define PWM_MAX     10
 
-typedef struct {
-    int leftA;
-    int leftB;
-    int rightA;
-    int rightB;
-} MotorValues;
-
 class Rover
 {
 public:
+
+    /**
+     * Motor values struct
+     */
+    typedef struct {
+        int leftA;
+        int leftB;
+        int rightA;
+        int rightB;
+    } MotorValues;
 
     /**
      * Initialise rover
