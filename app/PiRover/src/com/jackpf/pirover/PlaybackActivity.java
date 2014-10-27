@@ -1,8 +1,8 @@
 package com.jackpf.pirover;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,7 +12,7 @@ import com.jackpf.pirover.Model.UI;
 import com.jackpf.pirover.Request.PlaybackRequest;
 import com.jackpf.pirover.View.PlaybackUI;
 
-public class PlaybackActivity extends ActionBarActivity
+public class PlaybackActivity extends Activity
 {
     protected NetworkThread thread;
     protected UI playbackUI;
