@@ -4,11 +4,18 @@
 # Script to start and stop the PiRover controller
 #################################################
 
+# Base directory of PiRover source
 base_dir="/home/pi/workspace/PiRover"
+
+# Redirect output to logs
 logging=false
+
+# Ports to listen to
 broadcast_port=1337
 controller_port=1338
 camera_port=1339
+
+# LED blink speed
 blink_speed=100000
 
 #################################################
