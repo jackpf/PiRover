@@ -19,10 +19,6 @@
 
 class Rover
 {
-private:
-
-    MotorValues motors;
-
 public:
 
     /**
@@ -37,6 +33,12 @@ public:
         Motor left;
         Motor right;
     } MotorValues;
+
+private:
+
+    MotorValues motors;
+
+public:
 
     /**
      * Initialise rover
