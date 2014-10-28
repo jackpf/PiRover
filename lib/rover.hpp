@@ -19,16 +19,23 @@
 
 class Rover
 {
+private:
+
+    MotorValues motors;
+
 public:
 
     /**
-     * Motor values struct
+     * Motor values
      */
     typedef struct {
-        int leftA;
-        int leftB;
-        int rightA;
-        int rightB;
+        int motorA;
+        int motorB;
+    } Motor;
+
+    typedef struct {
+        Motor left;
+        Motor right;
     } MotorValues;
 
     /**
@@ -37,26 +44,18 @@ public:
     void setup();
 
     /**
-     * Calculate motor values from given acceleration and steering
-     *
-     * @param acceleration  Acceleration of rover on a scale of 1-10
-     * @param steering      Steering position of rover on a scale of -10-10
-     * @return              Motor values
-     */
-    MotorValues calculate(int acceleration, int steering);
-
-    /**
-     * Accelerate motors
-     *
-     * @param values        Motor values to be applied
-     */
-    void accelerate(MotorValues values);
-
-    /**
-     * Calculate values and accelerate motors
+     * Calculate motor values from given acceleration and steering,
+     * and send values to motors
      *
      * @param acceleration  Acceleration of rover on a scale of 1-10
      * @param steering      Steering position of rover on a scale of -10-10
      */
-    void process(int acceleration, int steering);
+    MotorValues process(int acceleration, int steering);
+
+    /**
+     * Get motor values
+     *
+     * @return              Motor values struct
+     */
+    MotorValues getMotors();
 };

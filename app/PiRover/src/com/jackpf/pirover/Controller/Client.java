@@ -11,13 +11,17 @@ public class Client
 {
     private Socket socket;
     
-    public Client(String host, int port) throws ClientException
+    private Controller controller;
+    
+    public Client(String host, int port, Controller controller) throws ClientException
     {
         try {
             socket = new Socket(host, port);
         } catch (IOException e) {
             throw new ClientException("Unable to connect to control server", e);
         }
+        
+        this.controller = controller;
     }
     
     public boolean isConnected()
@@ -25,7 +29,7 @@ public class Client
         return socket != null && socket.isConnected();
     }
     
-    public void update(Controller controller) throws IOException
+    public void update() throws IOException
     {
         OutputStream os = new DataOutputStream(socket.getOutputStream());
 

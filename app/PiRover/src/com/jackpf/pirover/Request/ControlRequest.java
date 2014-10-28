@@ -27,12 +27,10 @@ public class ControlRequest extends Request
         }
         
         if (client == null || !client.isConnected()) {
-            client = new Client(ip, 1338);
+            client = new Client(ip, 1338, (Controller) params[0]);
         }
         
-        Controller controller = (Controller) params[0];
-        
-        client.update(controller);
+        client.update();
         
         return null;
     }
