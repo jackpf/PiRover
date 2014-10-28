@@ -9,10 +9,9 @@ pthread_t listener_thread;
 
 void *spawn_listener(void *data)
 {
-    Broadcast broadcaster;
+    Broadcast broadcaster(PORT);
 
-    broadcaster.init(PORT);
-    broadcaster.listen("PiRover");
+    broadcaster.listen("PiRover", "return string");
 
     return NULL;
 }
@@ -32,9 +31,8 @@ TEST(Broadcast, ResolveIP)
 {
     create_listener_thread();
 
-    Broadcast broadcaster;
+    Broadcast broadcaster(PORT);
 
-    broadcaster.init(PORT);
     EXPECT_STRNE(broadcaster.resolve("PiRover"), NULL);
     sleep(1);
     EXPECT_STREQ(broadcaster.resolve("this is wrong :("), NULL);
@@ -44,8 +42,7 @@ TEST(Broadcast, ResolveIP)
 
 TEST(Broadcast, ResolveIPNoListener)
 {
-    Broadcast broadcaster;
+    Broadcast broadcaster(PORT);
 
-    broadcaster.init(PORT);
     EXPECT_STREQ(broadcaster.resolve("PiRover"), NULL);
 }

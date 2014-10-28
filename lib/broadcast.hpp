@@ -23,9 +23,9 @@ private:
 public:
     Broadcast(int port);
 
-    void listen(const char *broadcast);
+    void listen(const char *handshake, const char *returnStr);
 
-    char *resolve(const char *broadcast);
+    char *resolve(const char *handshake);
 
     void close();
 };
