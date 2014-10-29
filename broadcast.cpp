@@ -24,8 +24,10 @@ int main(int argc, char *argv[])
         printf("Listening for broadcasts\n");
 
         // Generate return string
-        char returnStr[64];
-        snprintf(returnStr, 64, "PiRover;control:%s;camera:%s;", args.get("ctrlport"), args.get("camport"));
+        const char *format = "PiRover;control:%s;camera:%s;";
+        int len = snprintf(NULL, 0, format, args.get("ctrlport"), args.get("camport"));
+        char returnStr[len + 1];
+        snprintf(returnStr, len + 1, format, args.get("ctrlport"), args.get("camport"));
 
         broadcaster.listen(HANDSHAKE, returnStr);
     }

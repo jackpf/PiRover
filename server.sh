@@ -11,6 +11,8 @@ base_dir="/home/pi/workspace/PiRover"
 logging=false
 
 # Ports to listen to
+# Note that if you change the broadcast port,
+# you will need to change the broadcast port in the app settings also
 broadcast_port=1337
 controller_port=1338
 camera_port=1339
