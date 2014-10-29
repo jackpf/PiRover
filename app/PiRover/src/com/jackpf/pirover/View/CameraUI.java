@@ -91,7 +91,5 @@ public class CameraUI extends UI
         
         // Reset stats
         displayStats(0.0, 0.0);
-        
-        e.printStackTrace();
     }
 }

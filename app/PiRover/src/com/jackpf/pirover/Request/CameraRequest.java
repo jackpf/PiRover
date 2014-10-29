@@ -29,14 +29,19 @@ public class CameraRequest extends Request
     @Override
     public RequestResponse call(String ...args) throws ClientException, IOException
     {
-        String ip = args[0];
+        String ip = args[0], portStr = args[1];
         
         if (ip == null) {
             throw new ClientException("No IP");
         }
+        if (portStr == null) {
+            throw new ClientException("No port");
+        }
+        
+        int port = Integer.parseInt(portStr);
         
         if (client == null || !client.isConnected()) {
-            client = new Client(ip, 1337);
+            client = new Client(ip, port);
         }
         
         RequestResponse response = new RequestResponse();

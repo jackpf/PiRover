@@ -8,6 +8,17 @@ public class Controller
     private int acceleratorPosition;
     private int steeringPosition;
     private NetworkThread thread;
+    private String ip, port;
+
+    public void setIp(String ip)
+    {
+        this.ip = ip;
+    }
+    
+    public void setPort(String port)
+    {
+        this.port = port;
+    }
     
     private void pendingUpdate(int a, int b)
     {
@@ -24,7 +35,7 @@ public class Controller
         
         thread = new NetworkThread(new ControlRequest(this));
         
-        thread.execute();
+        thread.execute(ip, port);
     }
     
     public void setAcceleratorPosition(int acceleratorPosition)

@@ -96,6 +96,6 @@ public class ControllerUI extends UI
     
     public void error(Exception e)
     {
-        e.printStackTrace();
+        
     }
 }

@@ -52,8 +52,6 @@ public class BroadcastUI extends UI
     
     public void error(Exception e)
     {
-        e.printStackTrace();
-        
         if (e instanceof ConnectionException) {
             alertDialog = new AlertDialog.Builder(context)
                 .setTitle(context.getString(R.string.broadcast_disconnected_title))
