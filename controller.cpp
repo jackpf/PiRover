@@ -45,12 +45,14 @@ int main(int argc, char **argv)
 
             printf("Steering: %d, Accel: %d\n", steeringPosition, accelerationPosition);
 
-            rover.process(accelerationPosition, steeringPosition);
+            rover.calculateMotorValues(accelerationPosition, steeringPosition);
+            rover.write();
         }
 
         printf("Resetting rover\n");
 
-        rover.process(0, 0);
+        rover.resetMotorValues();
+        rover.write();
 
         printf("Closing server\n");
 

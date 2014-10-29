@@ -4,15 +4,33 @@
 # Script to start and stop the PiRover controller
 #################################################
 
+# Base directory of PiRover source
 base_dir="/home/pi/workspace/PiRover"
+
+# Redirect output to logs
 logging=false
+
+# Ports to listen to
+# Note that if you change the broadcast port,
+# you will need to change the broadcast port in the app settings also
+broadcast_port=1337
+controller_port=1338
+camera_port=1339
+
+# LED blink speed
+blink_speed=100000
 
 #################################################
 
 bin_dir="$base_dir/bin"
 log_dir="$base_dir/logs"
 
-declare -A processes=( ["controller"]="--port=1338" ["camera"]="--port=1339" ["broadcast"]="--port=1337" ["lights"]="--blink=100000" )
+declare -A processes=(
+	["controller"]="--port=$controller_port"
+	["camera"]="--port=$camera_port"
+	["broadcast"]="--port=$broadcast_port --ctrlport=$controller_port --camport=$camera_port"
+	["lights"]="--blink=100000"
+)
 
 if [ "$1" = "start" ]
 then

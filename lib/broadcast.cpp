@@ -18,7 +18,7 @@ Broadcast::Broadcast(int port)
     receiveAddress.sin_addr.s_addr = INADDR_ANY;
 }
 
-void Broadcast::listen(const char *handshake)
+void Broadcast::listen(const char *handshake, const char *returnStr)
 {
     if (bind(sock, (struct sockaddr *) &receiveAddress, sizeof(receiveAddress)) < 0) {
         perror("Bind");
@@ -41,7 +41,7 @@ void Broadcast::listen(const char *handshake)
                 if (DEBUG)
                     printf("Correct handshake\n");
 
-                sendto(sock, handshake, sizeof(handshake), 0, (struct sockaddr *) &sendAddress, sizeof(sendAddress));
+                sendto(sock, returnStr, strlen(returnStr) + 1, 0, (struct sockaddr *) &sendAddress, sizeof(sendAddress));
             } else {
                 if (DEBUG)
                     printf("Incorrect handshake\n");

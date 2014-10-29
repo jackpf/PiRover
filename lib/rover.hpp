@@ -19,10 +19,6 @@
 
 class Rover
 {
-private:
-
-    MotorValues motors;
-
 public:
 
     /**
@@ -38,10 +34,23 @@ public:
         Motor right;
     } MotorValues;
 
+private:
+
+    MotorValues motors;
+
+public:
+
     /**
      * Initialise rover
      */
     void setup();
+
+    /**
+     * Reset motor values back to 0
+     *
+     * @return              Motor values
+     */
+    MotorValues resetMotorValues();
 
     /**
      * Calculate motor values from given acceleration and steering,
@@ -49,13 +58,19 @@ public:
      *
      * @param acceleration  Acceleration of rover on a scale of 1-10
      * @param steering      Steering position of rover on a scale of -10-10
+     * @return              Motor values
      */
-    MotorValues process(int acceleration, int steering);
+    MotorValues calculateMotorValues(int acceleration, int steering);
+
+    /**
+     * Write motor values to GPIO pins
+     */
+    void write();
 
     /**
      * Get motor values
      *
      * @return              Motor values struct
      */
-    MotorValues getMotors();
+    MotorValues getMotorValues();
 };
