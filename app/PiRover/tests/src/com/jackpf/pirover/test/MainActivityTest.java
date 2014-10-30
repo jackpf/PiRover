@@ -1,12 +1,34 @@
 package com.jackpf.pirover.test;
 
-import android.test.InstrumentationTestCase;
+import android.content.Context;
+import android.content.Intent;
+import android.test.ActivityUnitTestCase;
 
-public class MainActivityTest extends InstrumentationTestCase
+import com.jackpf.pirover.MainActivity;
+
+public class MainActivityTest extends ActivityUnitTestCase<MainActivity>
 {
+    private Context context;
+    private MainActivity activity;
+    private Intent intent;
+    
+    public MainActivityTest()
+    {
+        super(MainActivity.class);
+        
+        context = getInstrumentation().getContext();
+        activity = getActivity();
+    }
+    
     protected void setUp() throws Exception
     {
         super.setUp();
+        
+        Intent intent = new Intent(
+            getInstrumentation().getTargetContext(),
+            MainActivity.class
+        );
+        startActivity(intent, null, null);
     }
 
     protected void tearDown() throws Exception
@@ -16,6 +38,6 @@ public class MainActivityTest extends InstrumentationTestCase
 
     public void testMainActivity()
     {
-        assertNotNull(getInstrumentation().getContext());
+        assertNotNull(intent);
     }
 }
