@@ -8,7 +8,7 @@ public class BroadcastResolver
     private String ip;
     private String data;
     
-    public static class PortsMap extends HashMap<String, String> {
+    public static class PortMap extends HashMap<String, String> {
         private static final long serialVersionUID = -133788573345576255L;
     }
     
@@ -42,13 +42,13 @@ public class BroadcastResolver
         return ip;
     }
     
-    public PortsMap resolvePorts()
+    public PortMap resolvePorts()
     {
         if (data == null) {
             return null;
         }
 
-        PortsMap ports = new PortsMap();
+        PortMap ports = new PortMap();
         
         for (String part : data.split(";")) {
             String[] parts = part.split(":");

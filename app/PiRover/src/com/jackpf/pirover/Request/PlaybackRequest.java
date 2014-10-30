@@ -12,21 +12,17 @@ import android.util.Log;
 
 import com.jackpf.pirover.Camera.Client;
 import com.jackpf.pirover.Camera.ClientException;
-import com.jackpf.pirover.Camera.Recorder;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 
 public class PlaybackRequest extends Request
 {
     private static Client client;
-    private Recorder recorder;
     private InputStream is;
     
     public PlaybackRequest(Object ...params)
     {
         super(params);
-        
-        recorder = new Recorder();
     }
 
     @Override
@@ -55,10 +51,5 @@ public class PlaybackRequest extends Request
         }
 
         return response;
-    }
-    
-    public Recorder getRecorder()
-    {
-        return recorder;
     }
 }

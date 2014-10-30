@@ -19,9 +19,17 @@ import com.jackpf.pirover.Model.RequestResponse;
 
 public class BroadcastRequest extends Request
 {
+    private WifiManager         wm;
+    private ConnectivityManager cm;
+    private BroadcastResolver   broadcastResolver;
+    
     public BroadcastRequest(Object ...params)
     {
         super(params);
+        
+        wm                  = (WifiManager) params[0];
+        cm                  = (ConnectivityManager) params[1];
+        broadcastResolver   = new BroadcastResolver();
     }
 
     @Override
@@ -29,10 +37,7 @@ public class BroadcastRequest extends Request
     {
         RequestResponse response = new RequestResponse();
 
-        WifiManager wm = (WifiManager) params[0];
-        ConnectivityManager cm = (ConnectivityManager) params[1];
-        BroadcastResolver broadcastResolver = new BroadcastResolver();
-        String manualIp = (String) args[0];
+        String manualIp = args.length > 0 ? (String) args[0] : null;
         
         for (int retries = 0; !broadcastResolver.packetIsValid() && retries < 5; retries++) {
             if (!cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {

@@ -54,7 +54,7 @@ public class MainActivity extends Activity
     /**
      * Resolved ports
      */
-    BroadcastResolver.PortsMap ports;
+    BroadcastResolver.PortMap ports;
     
     /**
      * Activity created event
@@ -83,7 +83,7 @@ public class MainActivity extends Activity
      */
     public void connect(String manualIp)
     {
-        new NetworkThread(new BroadcastRequest((WifiManager) getSystemService(WIFI_SERVICE), getSystemService(Context.CONNECTIVITY_SERVICE)), new BroadcastUI(this))
+        new NetworkThread(new BroadcastRequest(getSystemService(WIFI_SERVICE), getSystemService(Context.CONNECTIVITY_SERVICE)), new BroadcastUI(this))
             .setCallback(new NetworkThread.Callback() {
                 @Override
                 public void onPostExecute(RequestResponse vars, Exception e) {
@@ -91,7 +91,7 @@ public class MainActivity extends Activity
                         ip = (String) vars.get("ip");
                         Log.d("Broadcast", "Resolved IP: " + ip);
                         
-                        ports = (BroadcastResolver.PortsMap) vars.get("ports");
+                        ports = (BroadcastResolver.PortMap) vars.get("ports");
                         Log.d("Broadcast", "Controller port: " + ports.get("control") + ", camera port: " + ports.get("camera"));
                         
                         // Start connecting to camera
