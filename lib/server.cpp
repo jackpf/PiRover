@@ -8,6 +8,13 @@ bool Server::create(int port)
         return false;
     }
 
+    struct timeval timeout;
+    timeout.tv_sec = 5;
+    timeout.tv_usec = 0;
+
+    setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+    setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout));
+
     memset(&sockAddress, '0', sizeof(sockAddress));
     sockAddress.sin_family = AF_INET;
     sockAddress.sin_addr.s_addr = htonl(INADDR_ANY);
