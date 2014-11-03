@@ -3,19 +3,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-
-#include <wiringPi.h>
-#include <softPwm.h>
+#include "gpio.hpp"
 
 /**
  * GPIO pin numbers
  */
-#define PIN_LEFT_A  9
-#define PIN_LEFT_B  7
-#define PIN_RIGHT_A 2
-#define PIN_RIGHT_B 3
-#define PWM_OFF     0
-#define PWM_MAX     10
+#define PIN_LEFT_A  3
+#define PIN_LEFT_B  4
+#define PIN_RIGHT_A 27
+#define PIN_RIGHT_B 22
 
 class Rover
 {

@@ -8,8 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.jackpf.pirover.Camera.Client;
-import com.jackpf.pirover.Camera.ClientException;
 import com.jackpf.pirover.Camera.Recorder;
+import com.jackpf.pirover.Client.ClientException;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Service.Utils;
@@ -23,20 +23,26 @@ public class CameraRequest extends Request
     {
         super(params);
         
+        client = (Client) params[0];
         recorder = new Recorder();
     }
 
     @Override
     public RequestResponse call(String ...args) throws ClientException, IOException
     {
-        String ip = args[0];
+        String ip = args[0], portStr = args[1];
         
         if (ip == null) {
             throw new ClientException("No IP");
         }
+        if (portStr == null) {
+            throw new ClientException("No port");
+        }
         
-        if (client == null || !client.isConnected()) {
-            client = new Client(ip, 1337);
+        int port = Integer.parseInt(portStr);
+        
+        if (!client.isConnected()) {
+            client.connect(ip, port);
         }
         
         RequestResponse response = new RequestResponse();

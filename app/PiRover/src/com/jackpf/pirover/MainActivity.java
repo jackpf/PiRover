@@ -3,7 +3,6 @@ package com.jackpf.pirover;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,7 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.jackpf.pirover.NetworkThread.Callback;
+import com.jackpf.pirover.Broadcast.BroadcastResolver;
 import com.jackpf.pirover.Camera.ClientException;
+import com.jackpf.pirover.Client.Client;
 import com.jackpf.pirover.Controller.Controller;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
@@ -29,6 +30,11 @@ public class MainActivity extends Activity
      * Network thread instance
      */
     protected NetworkThread thread;
+    
+    /**
+     * Client instances
+     */
+    protected Client cameraClient, controlClient;
     
     /**
      * Network request instances
@@ -51,6 +57,11 @@ public class MainActivity extends Activity
     protected static String ip;
     
     /**
+     * Resolved ports
+     */
+    BroadcastResolver.PortMap ports;
+    
+    /**
      * Activity created event
      */
     @Override
@@ -60,14 +71,47 @@ public class MainActivity extends Activity
         
         setContentView(R.layout.activity_main);
         
-        cameraRequest = new CameraRequest();
-        controller = new Controller();
+        cameraClient = new com.jackpf.pirover.Camera.Client();
+        controlClient = new com.jackpf.pirover.Controller.Client();
+        
+        cameraRequest = new CameraRequest(cameraClient);
+        controller = new Controller(controlClient);
 
         cameraUI = new CameraUI(this);
         controlUI = new ControllerUI(this, controller);
 
         cameraUI.initialise();
         controlUI.initialise();
+    }
+    
+    /**
+     * Resolve IP and ports
+     * 
+     * @param manualIp
+     */
+    public void connect(String manualIp)
+    {
+        new NetworkThread(new BroadcastRequest(getSystemService(WIFI_SERVICE), getSystemService(Context.CONNECTIVITY_SERVICE)), new BroadcastUI(this))
+            .setCallback(new NetworkThread.Callback() {
+                @Override
+                public void onPostExecute(RequestResponse vars, Exception e) {
+                    if (vars.get("ip") != null && !(e instanceof Exception)) {
+                        ip = (String) vars.get("ip");
+                        Log.d("Broadcast", "Resolved IP: " + ip);
+                        
+                        ports = (BroadcastResolver.PortMap) vars.get("ports");
+                        Log.d("Broadcast", "Controller port: " + ports.get("control") + ", camera port: " + ports.get("camera"));
+                        
+                        // Start connecting to camera
+                        executeCameraRequest();
+                        
+                        // Set controller IP and port
+                        controller.setIp(ip);
+                        controller.setPort(ports.get("control"));
+                    }
+                }
+            })
+            .execute(manualIp);
     }
     
     /**
@@ -99,7 +143,7 @@ public class MainActivity extends Activity
             }
         });
         
-        thread.execute(ip);
+        thread.execute(ip, ports.get("camera"));
     }
     
     /**
@@ -112,30 +156,9 @@ public class MainActivity extends Activity
         
         if (ip == null) {
             connect(null);
+        } else {
+            executeCameraRequest();
         }
-    }
-    
-    /**
-     * Resolve IP
-     * 
-     * @param manualIp
-     */
-    public void connect(String manualIp)
-    {
-        new NetworkThread(new BroadcastRequest((WifiManager) getSystemService(WIFI_SERVICE), getSystemService(Context.CONNECTIVITY_SERVICE)), new BroadcastUI(this))
-            .setCallback(new NetworkThread.Callback() {
-                @Override
-                public void onPostExecute(RequestResponse vars, Exception e) {
-                    if (vars.get("ip") != null && !(e instanceof Exception)) {
-                        ip = (String) vars.get("ip");
-                        Log.d("Broadcast", "Resolved IP: " + ip);
-                        
-                        // Start connecting to camera
-                        executeCameraRequest();
-                    }
-                }
-            })
-            .execute(manualIp);
     }
     
     /**
@@ -149,6 +172,9 @@ public class MainActivity extends Activity
         if (thread instanceof NetworkThread) {
             thread.cancel(true);
         }
+        
+        cameraClient.disconnect();
+        controlClient.disconnect();
     }
 
     /**

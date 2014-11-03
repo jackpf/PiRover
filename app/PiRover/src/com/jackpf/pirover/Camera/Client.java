@@ -2,33 +2,18 @@ package com.jackpf.pirover.Camera;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.Socket;
 
 import com.jackpf.pirover.Service.Utils;
 
-public class Client
+public class Client extends com.jackpf.pirover.Client.Client
 {
-    private Socket socket;
     private StreamStats streamStats;
     
-    public Client()
+    public void connect(String host, int port) throws com.jackpf.pirover.Client.ClientException
     {
-        // Connectionless client for local playback
-    }
-    
-    public Client(String host, int port) throws ClientException
-    {
-        try {
-            socket = new Socket(host, port);
-            streamStats = new StreamStats();
-        } catch (IOException e) {
-            throw new ClientException("Unable to connect to camera server", e);
-        }
-    }
-    
-    public boolean isConnected()
-    {
-        return socket != null && socket.isConnected();
+        super.connect(host, port);
+        
+        streamStats = new StreamStats();
     }
     
     public byte[] getFrame() throws ClientException

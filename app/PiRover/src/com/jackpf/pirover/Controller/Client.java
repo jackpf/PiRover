@@ -3,30 +3,18 @@ package com.jackpf.pirover.Controller;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.Socket;
 
 import com.jackpf.pirover.Service.Utils;
 
-public class Client
+public class Client extends com.jackpf.pirover.Client.Client
 {
-    private Socket socket;
-    
     private Controller controller;
     
-    public Client(String host, int port, Controller controller) throws ClientException
+    public void connect(String host, int port, Controller controller) throws com.jackpf.pirover.Client.ClientException
     {
-        try {
-            socket = new Socket(host, port);
-        } catch (IOException e) {
-            throw new ClientException("Unable to connect to control server", e);
-        }
+        super.connect(host, port);
         
         this.controller = controller;
-    }
-    
-    public boolean isConnected()
-    {
-        return socket != null && socket.isConnected();
     }
     
     public void update() throws IOException

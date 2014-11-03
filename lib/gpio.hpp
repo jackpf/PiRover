@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+#include <pthread.h>
 
 /**
  * IO access
@@ -71,8 +72,35 @@ static void *gpioMap;
  */
 #define GPIO_PULLCLK0       *(gpio + 38)
 
+/**
+ * Number of GPIO pins
+ */
+#define NUM_PINS            26
+
+/**
+ * Valid GPIO pins
+ */
+const int GPIO_PINS[]       = {14, 15, 18, 23, 24, 25, 8,  7,
+                               2,  3,  4,  17, 27, 22, 10, 9, 11};
+
+#define PWM_MAX             10
+
+#define PULSE_TIME          10
+
 class GPIO
 {
+public:
+
+    /**
+     * Pin mode direction
+     */
+    enum direction {IN, OUT, PWM};
+
+    /**
+     * Pin value
+     */
+    enum value {HIGH, LOW};
+
 private:
 
     /**
@@ -81,21 +109,28 @@ private:
     static bool isSetup;
 
     /**
+     * Direction of pins
+     */
+    static int pinDirections[NUM_PINS];
+
+    /**
+     * Pulse width modulation values
+     */
+    static int pwmValues[NUM_PINS];
+
+    /**
      * Assert setup as been called
      */
     static void assertSetup();
 
+    /**
+     * Assert pin is a valid gpio pin
+     *
+     * @param pin   Pin number
+     */
+    static void assertValidPin(int pin);
+
 public:
-
-    /**
-     * Pin mode direction
-     */
-    enum direction {IN, OUT};
-
-    /**
-     * Pin value
-     */
-    enum value {HIGH, LOW};
 
     /**
      * Set up GPIO access
@@ -125,4 +160,34 @@ public:
      * @return      Value of pin
      */
     static value read(int pin);
+
+    /**
+     * Sleep function
+     *
+     * @param ms    Milliseconds to sleep for
+     */
+    static void delay(unsigned int ms);
+
+    /**
+     * Internal pwm thread handler
+     *
+     * @param data  Pin number to run pwn on
+     */
+    static void *pwmThread(void *data);
+
+    /**
+     * Write a pwm value
+     *
+     * @param pin   Pin number to write to
+     * @param value Pwm frequency (ratio out of PWM_MAX)
+     */
+    static void pwmWrite(int pin, int value);
+
+    /**
+     * Read pwm value of a pin
+     *
+     * @param pin   Pin to read
+     * @return      Pwm frequency of pin
+     */
+    static int pwmRead(int pin);
 };

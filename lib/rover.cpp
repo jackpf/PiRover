@@ -2,12 +2,12 @@
 
 void Rover::setup()
 {
-    wiringPiSetup();
+    GPIO::setup();
 
-    softPwmCreate(PIN_LEFT_A, PWM_OFF, PWM_MAX);
-    softPwmCreate(PIN_LEFT_B, PWM_OFF, PWM_MAX);
-    softPwmCreate(PIN_RIGHT_A, PWM_OFF, PWM_MAX);
-    softPwmCreate(PIN_RIGHT_B, PWM_OFF, PWM_MAX);
+    GPIO::pinMode(PIN_LEFT_A, GPIO::PWM);
+    GPIO::pinMode(PIN_LEFT_B, GPIO::PWM);
+    GPIO::pinMode(PIN_RIGHT_A, GPIO::PWM);
+    GPIO::pinMode(PIN_RIGHT_B, GPIO::PWM);
 }
 
 Rover::MotorValues Rover::resetMotorValues()
@@ -51,10 +51,10 @@ Rover::MotorValues Rover::calculateMotorValues(int acceleration, int steering)
 
 void Rover::write()
 {
-    softPwmWrite(PIN_LEFT_A, motors.left.motorA);
-    softPwmWrite(PIN_LEFT_B, motors.left.motorB);
-    softPwmWrite(PIN_RIGHT_A, motors.right.motorA);
-    softPwmWrite(PIN_RIGHT_B, motors.left.motorB);
+    GPIO::pwmWrite(PIN_LEFT_A, motors.left.motorA);
+    GPIO::pwmWrite(PIN_LEFT_B, motors.left.motorB);
+    GPIO::pwmWrite(PIN_RIGHT_A, motors.right.motorA);
+    GPIO::pwmWrite(PIN_RIGHT_B, motors.right.motorB);
 }
 
 Rover::MotorValues Rover::getMotorValues()

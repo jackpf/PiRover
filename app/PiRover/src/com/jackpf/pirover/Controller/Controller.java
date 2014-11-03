@@ -8,6 +8,23 @@ public class Controller
     private int acceleratorPosition;
     private int steeringPosition;
     private NetworkThread thread;
+    private String ip, port;
+    private com.jackpf.pirover.Client.Client  client;
+    
+    public Controller(com.jackpf.pirover.Client.Client client)
+    {
+        this.client = client;
+    }
+
+    public void setIp(String ip)
+    {
+        this.ip = ip;
+    }
+    
+    public void setPort(String port)
+    {
+        this.port = port;
+    }
     
     private void pendingUpdate(int a, int b)
     {
@@ -22,9 +39,9 @@ public class Controller
             thread.cancel(true);
         }
         
-        thread = new NetworkThread(new ControlRequest(this));
+        thread = new NetworkThread(new ControlRequest(client, this));
         
-        thread.execute();
+        thread.execute(ip, port);
     }
     
     public void setAcceleratorPosition(int acceleratorPosition)

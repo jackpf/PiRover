@@ -11,6 +11,7 @@ import android.net.wifi.WifiManager;
 import android.text.format.Formatter;
 import android.util.Log;
 
+import com.jackpf.pirover.Broadcast.BroadcastResolver;
 import com.jackpf.pirover.Broadcast.ConnectionException;
 import com.jackpf.pirover.Broadcast.TimeoutException;
 import com.jackpf.pirover.Model.Request;
@@ -18,9 +19,17 @@ import com.jackpf.pirover.Model.RequestResponse;
 
 public class BroadcastRequest extends Request
 {
+    private WifiManager         wm;
+    private ConnectivityManager cm;
+    private BroadcastResolver   broadcastResolver;
+    
     public BroadcastRequest(Object ...params)
     {
         super(params);
+        
+        wm                  = (WifiManager) params[0];
+        cm                  = (ConnectivityManager) params[1];
+        broadcastResolver   = new BroadcastResolver();
     }
 
     @Override
@@ -28,11 +37,9 @@ public class BroadcastRequest extends Request
     {
         RequestResponse response = new RequestResponse();
 
-        WifiManager wm = (WifiManager) params[0];
-        ConnectivityManager cm = (ConnectivityManager) params[1];
-        String ip = null, manualIp = (String) args[0];
+        String manualIp = args.length > 0 ? (String) args[0] : null;
         
-        for (int retries = 0; ip == null && retries < 5; retries++) {
+        for (int retries = 0; !broadcastResolver.packetIsValid() && retries < 5; retries++) {
             if (!cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
                 throw new ConnectionException("Not connected to wifi");
             }
@@ -59,26 +66,29 @@ public class BroadcastRequest extends Request
             Log.d("Broadcast", "Attempting to broadcast to " + broadcastIp);
             
             InetAddress host = InetAddress.getByName(broadcastIp);
-            DatagramPacket packet = new DatagramPacket(handshake, handshake.length, host, 2080);
+            DatagramPacket packet = new DatagramPacket(handshake, handshake.length, host, 1337);
             socket.send(packet);
             
             socket.setSoTimeout(1000);
             
             try {
+                byte[] buf = new byte[64];
+                packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
-                ip = packet.getAddress().getHostAddress();
+                broadcastResolver.setPacket(packet);
             } catch (SocketTimeoutException e) {
-                ip = null;
+                // Retry...
             }
             
             socket.close();
         }
         
-        if (ip == null) { // Tried max amount of times and still not determined IP address
+        if (broadcastResolver.resolveIp() == null) { // Tried max amount of times and still not determined IP address
             throw new TimeoutException("Maximum retries attempted");
         }
         
-        response.put("ip", ip);
+        response.put("ip", broadcastResolver.resolveIp());
+        response.put("ports", broadcastResolver.resolvePorts());
         
         return response;
     }

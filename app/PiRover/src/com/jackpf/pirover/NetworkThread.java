@@ -119,6 +119,8 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
             if (e == null) {
                 ui.update();
             } else {
+                e.printStackTrace();
+                
                 ui.error(e);
             }
         }

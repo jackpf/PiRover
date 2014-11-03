@@ -1,6 +1,6 @@
 package com.jackpf.pirover.Camera;
 
-public class ClientException extends Exception
+public class ClientException extends com.jackpf.pirover.Client.ClientException
 {
     private static final long serialVersionUID = 4535506108817453998L;
 
