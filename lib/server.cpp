@@ -12,7 +12,7 @@ bool Server::create(int port)
     timeout.tv_sec = 5;
     timeout.tv_usec = 0;
 
-    setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+    //setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
     setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout));
 
     memset(&sockAddress, '0', sizeof(sockAddress));
