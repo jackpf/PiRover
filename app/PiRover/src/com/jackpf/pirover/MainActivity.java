@@ -13,6 +13,7 @@ import android.view.View;
 import com.jackpf.pirover.NetworkThread.Callback;
 import com.jackpf.pirover.Broadcast.BroadcastResolver;
 import com.jackpf.pirover.Camera.ClientException;
+import com.jackpf.pirover.Client.Client;
 import com.jackpf.pirover.Controller.Controller;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
@@ -29,6 +30,11 @@ public class MainActivity extends Activity
      * Network thread instance
      */
     protected NetworkThread thread;
+    
+    /**
+     * Client instances
+     */
+    protected Client cameraClient, controlClient;
     
     /**
      * Network request instances
@@ -65,8 +71,11 @@ public class MainActivity extends Activity
         
         setContentView(R.layout.activity_main);
         
-        cameraRequest = new CameraRequest();
-        controller = new Controller();
+        cameraClient = new com.jackpf.pirover.Camera.Client();
+        controlClient = new com.jackpf.pirover.Controller.Client();
+        
+        cameraRequest = new CameraRequest(cameraClient);
+        controller = new Controller(controlClient);
 
         cameraUI = new CameraUI(this);
         controlUI = new ControllerUI(this, controller);
@@ -147,6 +156,8 @@ public class MainActivity extends Activity
         
         if (ip == null) {
             connect(null);
+        } else {
+            executeCameraRequest();
         }
     }
     
@@ -161,6 +172,9 @@ public class MainActivity extends Activity
         if (thread instanceof NetworkThread) {
             thread.cancel(true);
         }
+        
+        cameraClient.disconnect();
+        controlClient.disconnect();
     }
 
     /**

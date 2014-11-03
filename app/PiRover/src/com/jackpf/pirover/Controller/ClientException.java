@@ -1,6 +1,6 @@
 package com.jackpf.pirover.Controller;
 
-public class ClientException extends Exception
+public class ClientException extends com.jackpf.pirover.Client.ClientException
 {
     private static final long serialVersionUID = 4339739609713664573L;
 

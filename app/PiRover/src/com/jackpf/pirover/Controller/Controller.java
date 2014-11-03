@@ -9,6 +9,12 @@ public class Controller
     private int steeringPosition;
     private NetworkThread thread;
     private String ip, port;
+    private com.jackpf.pirover.Client.Client  client;
+    
+    public Controller(com.jackpf.pirover.Client.Client client)
+    {
+        this.client = client;
+    }
 
     public void setIp(String ip)
     {
@@ -33,7 +39,7 @@ public class Controller
             thread.cancel(true);
         }
         
-        thread = new NetworkThread(new ControlRequest(this));
+        thread = new NetworkThread(new ControlRequest(client, this));
         
         thread.execute(ip, port);
     }
