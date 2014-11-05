@@ -45,8 +45,8 @@ void GPIO::setup()
 
     // Get pin states
     for (size_t i = 0; i < sizeof(GPIO_PINS) / sizeof(int); i++) {
-        pins[i].mode = pinMode(GPIO_PINS[i]);
-        pins[i].value = read(GPIO_PINS[i]);
+        pins[GPIO_PINS[i]].mode = pinMode(GPIO_PINS[i]);
+        pins[GPIO_PINS[i]].value = read(GPIO_PINS[i]);
     }
 }
 
@@ -92,6 +92,8 @@ void GPIO::pinMode(int pin, direction d)
             }
         }
     }
+
+    pins[pin].mode = d;
 
     /**
      * The first 6 32 bit registers starting from the GPIO base address are the function select registers
@@ -152,8 +154,6 @@ void GPIO::pinMode(int pin, direction d)
             }
         } break;
     }
-
-    pins[pin].mode = d;
 }
 
 GPIO::direction GPIO::pinMode(int pin)
@@ -229,7 +229,7 @@ void *GPIO::_pwmThread(void *data)
 
         pthread_mutex_lock(&pwmThreadCancelMutex);
         if (pwmThreadCancelRequest[pin]) {
-            pwmThreadCancelRequest[pin] = false;printf("setting pwmThreadCancelRequest[%d] = false\n", pin);
+            pwmThreadCancelRequest[pin] = false;
             pthread_mutex_unlock(&pwmThreadCancelMutex);
             break;
         } else {
