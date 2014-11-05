@@ -1,6 +1,5 @@
 /**
  * Provides GPIO functionality
- * Code adapted from here: http://elinux.org/RPi_Low-level_peripherals
  * Accesses the physical GPIO memory space directly, therefore must be run as root!
  */
 
@@ -16,12 +15,12 @@
 /**
  * BCM2708 base address
  */
-#define BCM2708_PERI_BASE   0x20000000
+#define BCM2835_BASE        0x20000000
 
 /**
  * GPIO controller base address
  */
-#define GPIO_BASE           (BCM2708_PERI_BASE + 0x200000)
+#define GPIO_BASE           (BCM2835_BASE + 0x200000)
 
 /**
  * Pi memory page size
@@ -52,8 +51,14 @@
 const int GPIO_PINS[]       = {14, 15, 18, 23, 24, 25, 8,  7,
                                2,  3,  4,  17, 27, 22, 10, 9, 11};
 
+/**
+ * Max PWM value
+ */
 #define PWM_MAX             10
 
+/**
+ * PWM pulse time
+ */
 #define PULSE_TIME          10
 
 class GPIO
