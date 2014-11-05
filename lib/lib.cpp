@@ -32,8 +32,8 @@ namespace Lib
 
     const char *Args::get(int key)
     {
-        char *num = (char *) malloc(5 * sizeof(char));
-        sprintf(num, "%d", key);
+        char num[5];
+        snprintf(num, 5, "%d", key);
 
         return get(num);
     }
