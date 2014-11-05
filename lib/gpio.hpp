@@ -94,8 +94,15 @@ private:
      */
     static struct Pin pins[NUM_PINS];
 
+    /**
+     * Mutex lock for pwm thread cancel requests
+     */
     static pthread_mutex_t pwmThreadCancelMutex;
 
+    /**
+     * Array of cancel requests
+     * pwmThreadCancelRequest[pinNumber] = true will cause thread to be cancelled after its current loop
+     */
     static volatile bool pwmThreadCancelRequest[NUM_PINS];
 
     /**
