@@ -14,12 +14,6 @@
 #include <pthread.h>
 
 /**
- * IO access
- */
-static volatile unsigned int *gpio;
-static void *gpioMap;
-
-/**
  * BCM2708 base address
  */
 #define BCM2708_PERI_BASE   0x20000000
@@ -40,37 +34,12 @@ static void *gpioMap;
 #define BLOCK_SIZE          (4 * 1024)
 
 /**
- * GPIO setup macros
- * Always use INP_GPIO(x) before using OUT_GPIO(x) or SET_GPIO_ALT(x,y)
+ * GPIO register memory address offsets
  */
-#define INP_GPIO(g)         *(gpio + ((g) / 10)) &= ~(7 << (((g) % 10) * 3))
-#define OUT_GPIO(g)         *(gpio + ((g) / 10)) |=  (1 << (((g) % 10) * 3))
-#define SET_GPIO_ALT(g, a)  *(gpio + ((g) / 10)) |=  (((a) <= 3 ? (a) + 4 : (a) == 4 ? 3 : 2) << (((g) % 10) * 3))
-
-/**
- * Sets bits which are 1 ignores bits which are 0
- */
-#define GPIO_SET            *(gpio + 7)
-
-/**
- * Clears bits which are 1 ignores bits which are 0
- */
-#define GPIO_CLR            *(gpio + 10)
-
-/**
- * Returns 0 if LOW, (1<<g) if HIGH
- */
-#define GET_GPIO(g)         (*(gpio + 13) & (1 << g))
-
-/**
- * Pull up/pull down
- */
-#define GPIO_PULL           *(gpio + 37)
-
-/**
- * Pull up/pull down clock
- */
-#define GPIO_PULLCLK0       *(gpio + 38)
+#define REGISTER_FNSELECT   0
+#define REGISTER_SET        7
+#define REGISTER_CLEAR      10
+#define REGISTER_GET        13
 
 /**
  * Number of GPIO pins
@@ -101,7 +70,19 @@ public:
      */
     enum value {HIGH, LOW};
 
+    struct Pin {
+        enum direction mode;
+        enum value value;
+        pthread_t pwmThread;
+        int pwmValue;
+    };
+
 private:
+
+    /**
+     * IO access
+     */
+    static volatile unsigned int *gpio;
 
     /**
      * Set to true once setup has been called
@@ -109,14 +90,13 @@ private:
     static bool isSetup;
 
     /**
-     * Direction of pins
+     * Pin states
      */
-    static int pinDirections[NUM_PINS];
+    static struct Pin pins[NUM_PINS];
 
-    /**
-     * Pulse width modulation values
-     */
-    static int pwmValues[NUM_PINS];
+    static pthread_mutex_t pwmThreadCancelMutex;
+
+    static volatile bool pwmThreadCancelRequest[NUM_PINS];
 
     /**
      * Assert setup as been called
@@ -138,12 +118,20 @@ public:
     static void setup();
 
     /**
-     * Set the direction of a pin
+    * Set the direction of a pin
+    *
+    * @param pin   Pin number
+    * @param d     Direction of pin
+    */
+    static void pinMode(int pin, direction d);
+
+    /**
+     * Read the direction of a pin
      *
      * @param pin   Pin number
-     * @param d     Direction of pin
+     * @return      Direction of pin
      */
-    static void pinMode(int pin, direction d);
+    static direction pinMode(int pin);
 
     /**
      * Write to a pin
@@ -173,7 +161,7 @@ public:
      *
      * @param data  Pin number to run pwn on
      */
-    static void *pwmThread(void *data);
+    static void *_pwmThread(void *data);
 
     /**
      * Write a pwm value
