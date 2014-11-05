@@ -80,17 +80,7 @@ void GPIO::pinMode(int pin, direction d)
         pthread_mutex_lock(&pwmThreadCancelMutex);
         pwmThreadCancelRequest[pin] = true;
         pthread_mutex_unlock(&pwmThreadCancelMutex);
-
-        while (true) {
-            usleep(10);
-            pthread_mutex_lock(&pwmThreadCancelMutex);
-            if (!pwmThreadCancelRequest[pin]) {
-                pthread_mutex_unlock(&pwmThreadCancelMutex);
-                break;
-            } else {
-                pthread_mutex_unlock(&pwmThreadCancelMutex);
-            }
-        }
+        pthread_join(pins[pin].pwmThread, NULL);
     }
 
     pins[pin].mode = d;
@@ -236,6 +226,8 @@ void *GPIO::_pwmThread(void *data)
             pthread_mutex_unlock(&pwmThreadCancelMutex);
         }
     }
+
+    free((int *) data);
 
     return NULL;
 }
