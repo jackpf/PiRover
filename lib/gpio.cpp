@@ -82,7 +82,7 @@ void GPIO::pinMode(int pin, direction d)
         pthread_mutex_unlock(&pwmThreadCancelMutex);
 
         while (true) {
-            usleep(2000000);
+            usleep(10);
             pthread_mutex_lock(&pwmThreadCancelMutex);
             if (!pwmThreadCancelRequest[pin]) {
                 pthread_mutex_unlock(&pwmThreadCancelMutex);
