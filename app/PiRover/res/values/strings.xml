@@ -17,10 +17,11 @@
     <string name="camera_bandwidth">%d bytes/s</string>
     
     <string name="broadcast_loading">Loading</string>
-    <string name="broadcast_detecting">Detecting PiRover on network...</string>
+    <string name="broadcast_detecting">Detecting PiRover...</string>
     <string name="broadcast_timeout_title">Unable to detect PiRover</string>
     <string name="broadcast_timeout_message">Manual IP address entry</string>
     <string name="broadcast_disconnected_title">Connection error</string>
     <string name="broadcast_disconnected_message">Device is not on a wifi network</string>
+    <string name="broadcast_rescan">Scan again</string>
 
 </resources>
