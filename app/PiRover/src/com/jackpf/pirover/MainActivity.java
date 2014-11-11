@@ -84,6 +84,88 @@ public class MainActivity extends Activity
     }
     
     /**
+     * Activity resumed event
+     */
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        
+        if (ip == null) {
+            connect(null);
+        } else {
+            executeCameraRequest();
+        }
+    }
+    
+    /**
+     * Activity paused event
+     */
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        
+        if (thread instanceof NetworkThread) {
+            thread.cancel(true);
+        }
+        
+        cameraClient.disconnect();
+        controlClient.disconnect();
+    }
+
+    /**
+     * Menu create event
+     * 
+     * @param menu
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.main, menu);
+        
+        return true;
+    }
+
+    /**
+     * Menu item click event
+     * 
+     * @param item
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int id = item.getItemId();
+        
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_playback:
+                startPlaybackActivity();
+                return true;
+        }
+        
+        return super.onOptionsItemSelected(item);
+    }
+    
+    /**
+     * Toggle recording
+     */
+    public void toggleRecording()
+    {
+        ((CameraRequest) cameraRequest).getRecorder().toggleRecording();
+    }
+    
+    /**
+     * Launch playback activity
+     */
+    public void startPlaybackActivity()
+    {
+        Intent intent = new Intent(this, PlaybackActivity.class);
+        startActivity(intent);
+    }
+    
+    /**
      * Resolve IP and ports
      * 
      * @param manualIp
@@ -144,83 +226,5 @@ public class MainActivity extends Activity
         });
         
         thread.execute(ip, ports.get("camera"));
-    }
-    
-    /**
-     * Activity resumed event
-     */
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        
-        if (ip == null) {
-            connect(null);
-        } else {
-            executeCameraRequest();
-        }
-    }
-    
-    /**
-     * Activity paused event
-     */
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-        
-        if (thread instanceof NetworkThread) {
-            thread.cancel(true);
-        }
-        
-        cameraClient.disconnect();
-        controlClient.disconnect();
-    }
-
-    /**
-     * Menu create event
-     * 
-     * @param menu
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.main, menu);
-        
-        return true;
-    }
-
-    /**
-     * Menu item click event
-     * 
-     * @param item
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        int id = item.getItemId();
-        
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        
-        return super.onOptionsItemSelected(item);
-    }
-    
-    /**
-     * Toggle recording
-     */
-    public void toggleRecording()
-    {
-        ((CameraRequest) cameraRequest).getRecorder().toggleRecording();
-    }
-    
-    /**
-     * Launch playback activity
-     */
-    public void startPlaybackActivity()
-    {
-        Intent intent = new Intent(this, PlaybackActivity.class);
-        startActivity(intent);
     }
 }

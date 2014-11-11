@@ -36,10 +36,8 @@ public class AcceleratorListener implements View.OnTouchListener
             iv.setImageMatrix(matrix);
             
             controller.setAcceleratorPosition(acceleratorPosition.value);
-            
-            return true;
         }
         
-        return false;
+        return true;
     }
 }

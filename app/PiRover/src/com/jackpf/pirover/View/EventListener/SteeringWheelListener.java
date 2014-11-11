@@ -36,10 +36,8 @@ public class SteeringWheelListener implements View.OnTouchListener
             iv.setImageMatrix(matrix);
             
             controller.setSteeringPosition(steeringWheelPosition.value);
-            
-            return true;
         }
-
-        return false;
+        
+        return true;
     }
 }
