@@ -2,12 +2,8 @@ package com.jackpf.pirover.Request;
 
 import java.io.IOException;
 
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
-
 import com.jackpf.pirover.Camera.Client;
+import com.jackpf.pirover.Camera.Frame;
 import com.jackpf.pirover.Camera.Recorder;
 import com.jackpf.pirover.Client.ClientException;
 import com.jackpf.pirover.Model.Request;
@@ -48,17 +44,12 @@ public class CameraRequest extends Request
         RequestResponse response = new RequestResponse();
         
         byte[] image = client.getFrame();
-
-        Log.d("Camera", "Read " + image.length + " bytes");
         
         if (recorder.isRecording()) {
             recorder.record(Utils.intToByteArray(image.length), image);
         }
         
-        @SuppressWarnings("deprecation")
-        Drawable drawable = new BitmapDrawable(BitmapFactory.decodeByteArray(image, 0, image.length));
-        response.put("drawable", drawable);
-
+        response.put("drawable", new Frame(image).getDrawable());
         response.put("fpsCount", client.getStreamStats().getFps());
         response.put("bandwidth", client.getStreamStats().getBandwidth());
         response.put("recording", recorder.isRecording());
