@@ -16,6 +16,7 @@ import com.jackpf.pirover.Broadcast.ConnectionException;
 import com.jackpf.pirover.Broadcast.TimeoutException;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
+import com.jackpf.pirover.Service.Utils;
 
 public class BroadcastRequest extends Request
 {
@@ -44,7 +45,7 @@ public class BroadcastRequest extends Request
                 throw new ConnectionException("Not connected to wifi");
             }
             
-            byte[] handshake = stontba("PiRover");
+            byte[] handshake = Utils.stringToNullTerminatedByteArray("PiRover");
 
             DatagramSocket socket = new DatagramSocket(null);
             socket.setBroadcast(true);
@@ -91,18 +92,5 @@ public class BroadcastRequest extends Request
         response.put("ports", broadcastResolver.resolvePorts());
         
         return response;
-    }
-    
-    protected byte[] stontba(String s)
-    {
-        byte[] bytes = new byte[s.length() + 1];
-        
-        for (int i = 0; i < s.length(); i++) {
-            bytes[i] = (byte) s.charAt(i);
-        }
-        
-        bytes[s.length()] = '\0';
-        
-        return bytes;
     }
 }
