@@ -14,6 +14,9 @@ import com.jackpf.pirover.Model.UI;
 public class CameraUI extends UI
 {
     private TextView tvStatus;
+    private Button bRecording;
+    private ImageView ivCamera;
+    private TextView tvFpsCount, tvBandwidth;
     
     public CameraUI(Context context)
     {
@@ -22,7 +25,15 @@ public class CameraUI extends UI
     
     public void initialise()
     {
-        tvStatus = (TextView) activity.findViewById(R.id.camera_status);
+        /**
+         * Set views here so we don't have to repeatedly find them
+         * in update() which is called pretty rapidly
+         */
+        tvStatus    = (TextView) activity.findViewById(R.id.camera_status);
+        bRecording  = (Button) activity.findViewById(R.id.record);
+        ivCamera    = (ImageView) activity.findViewById(R.id.camera);
+        tvFpsCount  = (TextView) activity.findViewById(R.id.fps_counter);
+        tvBandwidth = (TextView) activity.findViewById(R.id.bandwidth);
     }
     
     public void preUpdate()
@@ -41,7 +52,6 @@ public class CameraUI extends UI
         }
         
         // Update recording colour
-        Button bRecording = (Button) activity.findViewById(R.id.record);
         if ((Boolean) vars.get("recording")) {
             bRecording.setTextColor(Color.RED);
         } else {
@@ -50,7 +60,6 @@ public class CameraUI extends UI
         
         // Update image
         Drawable drawable = (Drawable) vars.get("drawable");
-        ImageView ivCamera = (ImageView) activity.findViewById(R.id.camera);
         ivCamera.setImageDrawable(drawable);
 
         // Fps counter & bandwidth
@@ -61,7 +70,6 @@ public class CameraUI extends UI
     {
         // Fps counter
         if (fpsCount != null) {
-            TextView tvFpsCount = (TextView) activity.findViewById(R.id.fps_counter);
             tvFpsCount.setText(
                 String.format(
                     context.getString(R.string.camera_fps_count),
@@ -72,7 +80,6 @@ public class CameraUI extends UI
         
         // Bandwidth
         if (bandwidth != null) {
-            TextView tvBandwidth = (TextView) activity.findViewById(R.id.bandwidth);
             tvBandwidth.setText(
                 String.format(
                     context.getString(R.string.camera_bandwidth),
