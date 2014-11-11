@@ -23,6 +23,7 @@ public class CameraUI extends UI
         super(context);
     }
     
+    @Override
     public void initialise()
     {
         /**
@@ -35,7 +36,8 @@ public class CameraUI extends UI
         tvFpsCount  = (TextView) activity.findViewById(R.id.fps_counter);
         tvBandwidth = (TextView) activity.findViewById(R.id.bandwidth);
     }
-    
+
+    @Override
     public void preUpdate()
     {
         // Update state to connecting
@@ -43,7 +45,8 @@ public class CameraUI extends UI
             tvStatus.setText(context.getString(R.string.camera_state_connecting));
         }
     }
-    
+
+    @Override
     public void update()
     {
         // Update state to connected
@@ -88,7 +91,8 @@ public class CameraUI extends UI
             );
         }
     }
-    
+
+    @Override
     public void error(Exception e)
     {
         // Update state to unable to connect

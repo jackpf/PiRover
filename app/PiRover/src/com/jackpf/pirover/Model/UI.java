@@ -48,22 +48,34 @@ public abstract class UI
      * Initialise UI
      * Should be called in activity onCreate
      */
-    public abstract void initialise();
+    public void initialise()
+    {
+        
+    }
     
     /**
      * Called pre update from thread
      */
-    public abstract void preUpdate();
+    public void preUpdate()
+    {
+        
+    }
     
     /**
      * Update ui
      */
-    public abstract void update();
+    public void update()
+    {
+        
+    }
     
     /**
      * Render error
      * 
      * @param e
      */
-    public abstract void error(Exception e);
+    public void error(Exception e)
+    {
+        
+    }
 }

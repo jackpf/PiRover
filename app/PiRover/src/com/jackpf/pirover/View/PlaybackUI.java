@@ -15,17 +15,14 @@ public class PlaybackUI extends UI
     {
         super(context);
     }
-    
+
+    @Override
     public void initialise()
     {
         ivCamera = (ImageView) activity.findViewById(R.id.camera);
     }
-    
-    public void preUpdate()
-    {
-        
-    }
-    
+
+    @Override
     public void update()
     {
         // Update image
@@ -33,10 +30,5 @@ public class PlaybackUI extends UI
             Drawable drawable = (Drawable) vars.get("drawable");
             ivCamera.setImageDrawable(drawable);
         }
-    }
-    
-    public void error(Exception e)
-    {
-        
     }
 }
