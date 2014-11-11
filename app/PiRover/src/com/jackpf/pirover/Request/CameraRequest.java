@@ -43,13 +43,13 @@ public class CameraRequest extends Request
         
         RequestResponse response = new RequestResponse();
         
-        byte[] image = client.getFrame();
+        Frame image = client.getFrame();
         
         if (recorder.isRecording()) {
-            recorder.record(Utils.intToByteArray(image.length), image);
+            recorder.record(Utils.intToByteArray(image.getBytes().length), image.getBytes());
         }
         
-        response.put("drawable", new Frame(image).getDrawable());
+        response.put("drawable", image.getDrawable());
         response.put("fpsCount", client.getStreamStats().getFps());
         response.put("bandwidth", client.getStreamStats().getBandwidth());
         response.put("recording", recorder.isRecording());

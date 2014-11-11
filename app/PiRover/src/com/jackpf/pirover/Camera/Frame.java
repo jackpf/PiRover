@@ -13,6 +13,11 @@ public class Frame
         this.image = image;
     }
     
+    public byte[] getBytes()
+    {
+        return image;
+    }
+    
     @SuppressWarnings("deprecation")
     public Drawable getDrawable()
     {
