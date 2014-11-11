@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.jackpf.pirover.R;
 import com.jackpf.pirover.Camera.ClientException;
 import com.jackpf.pirover.Model.UI;
+import com.jackpf.pirover.View.EventListener.RecordButtonListener;
 
 public class CameraUI extends UI
 {
@@ -35,6 +36,8 @@ public class CameraUI extends UI
         ivCamera    = (ImageView) activity.findViewById(R.id.camera);
         tvFpsCount  = (TextView) activity.findViewById(R.id.fps_counter);
         tvBandwidth = (TextView) activity.findViewById(R.id.bandwidth);
+
+        ((Button) activity.findViewById(R.id.record)).setOnClickListener(new RecordButtonListener(activity));
     }
 
     @Override

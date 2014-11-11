@@ -130,11 +130,11 @@ public:
     static void setup();
 
     /**
-    * Set the direction of a pin
-    *
-    * @param pin   Pin number
-    * @param d     Direction of pin
-    */
+     * Set the direction of a pin
+     *
+     * @param pin   Pin number
+     * @param d     Direction of pin
+     */
     static void pinMode(int pin, direction d);
 
     /**

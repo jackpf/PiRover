@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.jackpf.pirover.NetworkThread.Callback;
 import com.jackpf.pirover.Broadcast.BroadcastResolver;
@@ -130,6 +129,7 @@ public class MainActivity extends Activity
         
         // Set repeating
         thread.setCallback(new Callback() {
+            @Override
             public void onPostExecute(RequestResponse vars, Exception e) {
                 int delay = !(e instanceof ClientException) ? 0 : 5000;
                 
@@ -208,21 +208,17 @@ public class MainActivity extends Activity
     }
     
     /**
-     * Record button click event
-     * 
-     * @param v
+     * Toggle recording
      */
-    public void onRecordClick(View v)
+    public void toggleRecording()
     {
         ((CameraRequest) cameraRequest).getRecorder().toggleRecording();
     }
     
     /**
-     * Playback button click event
-     * 
-     * @param v
+     * Launch playback activity
      */
-    public void onPlaybackClick(View v)
+    public void startPlaybackActivity()
     {
         Intent intent = new Intent(this, PlaybackActivity.class);
         startActivity(intent);

@@ -14,7 +14,8 @@
         android:layout_height="240sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
+        android:src="@drawable/abc_ab_bottom_solid_dark_holo"
+        android:contentDescription="@string/camera" />
 
     <ImageView
         android:id="@+id/steering_wheel"
@@ -24,7 +25,8 @@
         android:layout_below="@+id/fps_counter"
         android:layout_marginTop="28dp"
         android:scaleType="matrix"
-        android:src="@drawable/steering_wheel" />
+        android:src="@drawable/steering_wheel"
+        android:contentDescription="@string/controller_steering_wheel" />
 
     <TextView
         android:id="@+id/camera_status"
@@ -32,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/camera"
         android:layout_centerHorizontal="true"
-        android:text="Not connected" />
+        android:text="@string/camera_state_disconnected" />
 
     <Button
         android:id="@+id/record"
@@ -41,8 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/camera"
         android:layout_alignTop="@+id/camera"
-        android:onClick="onRecordClick"
-        android:text="R" />
+        android:text="@string/camera_record_button" />
 
     <ImageView
         android:id="@+id/accelerator"
@@ -51,7 +52,8 @@
         android:layout_alignLeft="@+id/record"
         android:layout_alignTop="@+id/steering_wheel"
         android:scaleType="matrix"
-        android:src="@drawable/accelerator" />
+        android:src="@drawable/accelerator"
+        android:contentDescription="@string/controller_accelerator" />
 
     <TextView
         android:id="@+id/bandwidth"
@@ -59,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/camera"
         android:layout_below="@+id/camera"
-        android:text="0 bytes/s" />
+        android:text="@string/camera_bandwidth_default" />
 
     <TextView
         android:id="@+id/fps_counter"
@@ -68,15 +70,6 @@
         android:layout_alignBaseline="@+id/camera_status"
         android:layout_alignBottom="@+id/camera_status"
         android:layout_alignLeft="@+id/camera"
-        android:text="0 FPS" />
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/accelerator"
-        android:layout_toLeftOf="@+id/accelerator"
-        android:text="Button"
-        android:onClick="onPlaybackClick" />
+        android:text="@string/camera_fps_count_default" />
 
 </RelativeLayout>
