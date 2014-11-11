@@ -4,11 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Environment;
-import android.util.Log;
 
 import com.jackpf.pirover.Camera.Client;
 import com.jackpf.pirover.Camera.ClientException;
@@ -41,7 +37,7 @@ public class PlaybackRequest extends Request
         
         Frame image = client.getFrame(is);
         
-        if (image != null) {
+        if (image.getBytes() != null) {
             response.put("drawable", image.getDrawable());
         } else {
             response.put("finished", true);
