@@ -96,11 +96,11 @@ public class MainActivity extends Activity
     {
         super.onResume();
         
-        if (ip == null || ports == null) {
+        /*if (ip == null || ports == null) {
             connect(null);
         } else {
             executeCameraRequest();
-        }
+        }*/
     }
     
     /**
@@ -192,10 +192,7 @@ public class MainActivity extends Activity
         cameraThread = new NetworkThread(
             cameraRequest,
             cameraUI
-        );
-        
-        // Set repeating
-        cameraThread.setCallback(new Callback() {
+        ).setCallback(new Callback() {
             @Override
             public void onPostExecute(RequestResponse vars, Exception e) {
                 int delay = !(e instanceof ClientException) ? 0 : 5000;

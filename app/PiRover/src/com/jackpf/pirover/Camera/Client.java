@@ -25,7 +25,7 @@ public class Client extends com.jackpf.pirover.Client.Client
         try {
             Frame frame = consumeFrameFromStream(socket.getInputStream());
             
-            if (frame.getBytes() == null) {
+            if (frame == null) {
                 throw new ClientException("Client not connected");
             }
             

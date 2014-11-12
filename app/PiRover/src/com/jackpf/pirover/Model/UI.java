@@ -30,6 +30,7 @@ public abstract class UI<ActivityType extends Activity>
      */
     public UI(ActivityType activity)
     {
+        this.context = (Context) activity;
         this.activity = activity;
     }
     

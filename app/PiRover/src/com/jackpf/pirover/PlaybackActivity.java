@@ -82,13 +82,10 @@ public class PlaybackActivity extends Activity
         thread = new NetworkThread(
             playbackRequest,
             playbackUI
-        );
-        
-        // Set repeating
-        thread.setCallback(new Callback() {
+        ).setCallback(new Callback() {
             public void onPostExecute(RequestResponse vars, Exception e) {
-                if ((vars.get("finished") == null || !(Boolean) vars.get("finished")) && e == null) {
-                    int fps = 11;
+                if (vars.get("drawable") != null && e == null) {
+                    int fps = (Integer) vars.get("fps");
                     int delay = 1000 / fps;
                     
                     final Handler handler = new Handler();

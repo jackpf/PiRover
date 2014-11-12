@@ -4,16 +4,15 @@ import java.io.IOException;
 
 import android.os.Environment;
 
-import com.jackpf.pirover.Camera.Client;
 import com.jackpf.pirover.Camera.ClientException;
 import com.jackpf.pirover.Camera.Frame;
-import com.jackpf.pirover.Camera.LocalClient;
+import com.jackpf.pirover.Camera.Video;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 
 public class PlaybackRequest extends Request
 {
-    private static Client client;
+    private static Video video;
     
     public PlaybackRequest(Object ...params)
     {
@@ -23,16 +22,18 @@ public class PlaybackRequest extends Request
     @Override
     public RequestResponse call(String ...args) throws ClientException, IOException
     {
-        if (client == null) {
-            client = new LocalClient(Environment.getExternalStorageDirectory() + "/PiRoverRecordings/record.pirover");
+        if (video == null) {
+            video = new Video(Environment.getExternalStorageDirectory() + "/PiRoverRecordings/record.pirover")
+                .load();
         }
         
         RequestResponse response = new RequestResponse();
         
-        Frame image = client.getFrame();
+        Frame frame = video.getFrame();
         
-        if (image.getBytes() != null) {
-            response.put("drawable", image.getDrawable());
+        if (frame != null) {
+            response.put("drawable", frame.getDrawable());
+            response.put("fps", 11); // TODO: Needs to be calculated
         } else {
             response.put("drawable", null);
         }

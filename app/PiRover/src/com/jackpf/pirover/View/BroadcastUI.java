@@ -32,8 +32,8 @@ public class BroadcastUI extends UI<MainActivity>
         
         dialog = new ProgressDialog(context);
         
-        dialog.setTitle(context.getString(R.string.broadcast_loading));
-        dialog.setMessage(context.getString(R.string.broadcast_detecting));
+        dialog.setTitle(context.getString(R.string.broadcast_loading_title));
+        dialog.setMessage(context.getString(R.string.broadcast_loading_text));
         dialog.setCancelable(false);
         
         dialog.show();
