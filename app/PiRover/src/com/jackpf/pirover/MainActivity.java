@@ -213,6 +213,9 @@ public class MainActivity extends Activity
         cameraThread.execute(ip, ports.get("camera"));
     }
     
+    /**
+     * Execute control request
+     */
     protected void executeControlRequest()
     {
         if (controlThread instanceof NetworkThread) {
