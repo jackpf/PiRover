@@ -58,7 +58,7 @@ public class MainActivity extends Activity
     /**
      * Resolved ports
      */
-    BroadcastResolver.PortMap ports;
+    static BroadcastResolver.PortMap ports;
     
     /**
      * Activity created event
@@ -91,7 +91,7 @@ public class MainActivity extends Activity
     {
         super.onResume();
         
-        if (ip == null) {
+        if (ip == null || ports == null) {
             connect(null);
         } else {
             executeCameraRequest();

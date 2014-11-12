@@ -17,6 +17,6 @@ public class RecordButtonListener implements View.OnClickListener
     @Override
     public void onClick(View v)
     {
-        ((MainActivity) activity).startPlaybackActivity();
+        ((MainActivity) activity).toggleRecording();
     }
 }

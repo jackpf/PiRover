@@ -4,17 +4,52 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import android.os.Environment;
+
+import com.jackpf.pirover.Service.Utils;
 
 public class Recorder
 {
     private boolean recording;
     private static BufferedOutputStream out;
+    private final String RECORD_DIR = "PiRoverRecordings", RECORD_EXT = "prr";
+    
+    private BufferedOutputStream createStream() throws IOException
+    {
+        String filename = String.format(
+            "%s/%s/%s.%s",
+            Environment.getExternalStorageDirectory(),
+            RECORD_DIR,
+            new SimpleDateFormat("dd-MM-yyyy HH:mm:ss.SSS", Locale.getDefault()).format(System.currentTimeMillis()),
+            RECORD_EXT
+        );
+        
+        File file = new File(filename);
+        
+        file.getParentFile().mkdir();
+        file.createNewFile();
+        
+        return new BufferedOutputStream(new FileOutputStream(file, true));
+    }
     
     public void toggleRecording()
     {
         recording = !recording;
+        
+        try {
+            if (recording) {
+                out = createStream(); // Create a new file to record to
+            } else {
+                out.close(); // Close file we're recording to
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            
+            recording = !recording; // Toggle again since we weren't successful!
+        }
     }
     
     public boolean isRecording()
@@ -22,21 +57,14 @@ public class Recorder
         return recording;
     }
     
-    public void record(byte[] szHeader, byte[] image) throws IOException
+    public void recordFrame(Frame frame) throws IOException
     {
-        if (!isRecording()) {
-            return;
+        if (!isRecording() || out == null) {
+            throw new IOException("No stream to record to");
         }
         
-        if (out == null) {
-            File file = new File(Environment.getExternalStorageDirectory() + "/PiRoverRecordings/record.pirover");
-            file.getParentFile().mkdir();
-            file.createNewFile();
-            out = new BufferedOutputStream(new FileOutputStream(file, true));
-        }
-        
-        out.write(szHeader);
-        out.write(image);
+        out.write(Utils.intToByteArray(frame.getBytes().length));
+        out.write(frame.getBytes());
         
         out.flush();
     }

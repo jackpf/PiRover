@@ -8,7 +8,6 @@ import com.jackpf.pirover.Camera.Recorder;
 import com.jackpf.pirover.Client.ClientException;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
-import com.jackpf.pirover.Service.Utils;
 
 public class CameraRequest extends Request
 {
@@ -46,7 +45,7 @@ public class CameraRequest extends Request
         Frame image = client.getFrame();
         
         if (recorder.isRecording()) {
-            recorder.record(Utils.intToByteArray(image.getBytes().length), image.getBytes());
+            recorder.recordFrame(image);
         }
         
         response.put("drawable", image.getDrawable());
