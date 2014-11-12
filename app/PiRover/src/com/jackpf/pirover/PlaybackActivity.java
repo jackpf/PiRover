@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.jackpf.pirover.NetworkThread.Callback;
+import com.jackpf.pirover.Camera.Player;
+import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Model.UI;
 import com.jackpf.pirover.Request.PlaybackRequest;
@@ -16,7 +19,8 @@ public class PlaybackActivity extends Activity
 {
     protected NetworkThread thread;
     protected UI<PlaybackActivity> playbackUI;
-    protected /*Request*/PlaybackRequest playbackRequest;
+    protected Request playbackRequest;
+    protected Player player;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -26,6 +30,7 @@ public class PlaybackActivity extends Activity
         setContentView(R.layout.activity_playback);
         
         playbackRequest = new PlaybackRequest();
+        player = new Player(true);
 
         playbackUI = new PlaybackUI(this);
         playbackUI.initialise();
@@ -84,7 +89,7 @@ public class PlaybackActivity extends Activity
             playbackUI
         ).setCallback(new Callback() {
             public void onPostExecute(RequestResponse vars, Exception e) {
-                if (vars.get("drawable") != null && e == null) {
+                if (player.isPlaying() && vars.get("drawable") != null && e == null) {
                     int fps = (Integer) vars.get("fps");
                     int delay = 1000 / fps;
                     
@@ -100,5 +105,14 @@ public class PlaybackActivity extends Activity
         });
         
         thread.execute();
+    }
+    
+    public void togglePlayback(View v)
+    {
+        player.toggleIsPlaying();
+        
+        if (player.isPlaying()) {
+            executePlaybackRequest(); // Restart thread if we're playing again
+        }
     }
 }

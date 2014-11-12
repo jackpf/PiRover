@@ -16,4 +16,27 @@
         android:layout_alignParentTop="true"
         android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
 
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/camera"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp"
+        android:text="Button"
+        android:onClick="togglePlayback" />
+
+    <ProgressBar
+        android:id="@+id/video_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="320sp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/camera"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="false"
+        android:indeterminateOnly="false"
+        android:max="100"
+        android:minHeight="10dp"
+        android:progress="0" />
+
 </RelativeLayout>
