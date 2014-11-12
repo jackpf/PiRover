@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.jackpf.pirover.NetworkThread.Callback;
 import com.jackpf.pirover.Broadcast.BroadcastResolver;
@@ -85,68 +84,6 @@ public class MainActivity extends Activity
     }
     
     /**
-     * Resolve IP and ports
-     * 
-     * @param manualIp
-     */
-    public void connect(String manualIp)
-    {
-        new NetworkThread(new BroadcastRequest(getSystemService(WIFI_SERVICE), getSystemService(Context.CONNECTIVITY_SERVICE)), new BroadcastUI(this))
-            .setCallback(new NetworkThread.Callback() {
-                @Override
-                public void onPostExecute(RequestResponse vars, Exception e) {
-                    if (vars.get("ip") != null && !(e instanceof Exception)) {
-                        ip = (String) vars.get("ip");
-                        Log.d("Broadcast", "Resolved IP: " + ip);
-                        
-                        ports = (BroadcastResolver.PortMap) vars.get("ports");
-                        Log.d("Broadcast", "Controller port: " + ports.get("control") + ", camera port: " + ports.get("camera"));
-                        
-                        // Start connecting to camera
-                        executeCameraRequest();
-                        
-                        // Set controller IP and port
-                        controller.setIp(ip);
-                        controller.setPort(ports.get("control"));
-                    }
-                }
-            })
-            .execute(manualIp);
-    }
-    
-    /**
-     * Continuously executes camera requests
-     */
-    protected void executeCameraRequest()
-    {
-        if (thread instanceof NetworkThread) {
-            thread.cancel(true);
-        }
-        
-        thread = new NetworkThread(
-            cameraRequest,
-            cameraUI
-        );
-        
-        // Set repeating
-        thread.setCallback(new Callback() {
-            public void onPostExecute(RequestResponse vars, Exception e) {
-                int delay = !(e instanceof ClientException) ? 0 : 5000;
-                
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        executeCameraRequest();
-                    }
-                }, delay);
-            }
-        });
-        
-        thread.execute(ip, ports.get("camera"));
-    }
-    
-    /**
      * Activity resumed event
      */
     @Override
@@ -200,31 +137,94 @@ public class MainActivity extends Activity
     {
         int id = item.getItemId();
         
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_playback:
+                startPlaybackActivity();
+                return true;
         }
         
         return super.onOptionsItemSelected(item);
     }
     
     /**
-     * Record button click event
-     * 
-     * @param v
+     * Toggle recording
      */
-    public void onRecordClick(View v)
+    public void toggleRecording()
     {
         ((CameraRequest) cameraRequest).getRecorder().toggleRecording();
     }
     
     /**
-     * Playback button click event
-     * 
-     * @param v
+     * Launch playback activity
      */
-    public void onPlaybackClick(View v)
+    public void startPlaybackActivity()
     {
         Intent intent = new Intent(this, PlaybackActivity.class);
         startActivity(intent);
+    }
+    
+    /**
+     * Resolve IP and ports
+     * 
+     * @param manualIp
+     */
+    public void connect(String manualIp)
+    {
+        new NetworkThread(new BroadcastRequest(getSystemService(WIFI_SERVICE), getSystemService(Context.CONNECTIVITY_SERVICE)), new BroadcastUI(this))
+            .setCallback(new NetworkThread.Callback() {
+                @Override
+                public void onPostExecute(RequestResponse vars, Exception e) {
+                    if (vars.get("ip") != null && !(e instanceof Exception)) {
+                        ip = (String) vars.get("ip");
+                        Log.d("Broadcast", "Resolved IP: " + ip);
+                        
+                        ports = (BroadcastResolver.PortMap) vars.get("ports");
+                        Log.d("Broadcast", "Controller port: " + ports.get("control") + ", camera port: " + ports.get("camera"));
+                        
+                        // Start connecting to camera
+                        executeCameraRequest();
+                        
+                        // Set controller IP and port
+                        controller.setIp(ip);
+                        controller.setPort(ports.get("control"));
+                    }
+                }
+            })
+            .execute(manualIp);
+    }
+    
+    /**
+     * Continuously executes camera requests
+     */
+    protected void executeCameraRequest()
+    {
+        if (thread instanceof NetworkThread) {
+            thread.cancel(true);
+        }
+        
+        thread = new NetworkThread(
+            cameraRequest,
+            cameraUI
+        );
+        
+        // Set repeating
+        thread.setCallback(new Callback() {
+            @Override
+            public void onPostExecute(RequestResponse vars, Exception e) {
+                int delay = !(e instanceof ClientException) ? 0 : 5000;
+                
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        executeCameraRequest();
+                    }
+                }, delay);
+            }
+        });
+        
+        thread.execute(ip, ports.get("camera"));
     }
 }

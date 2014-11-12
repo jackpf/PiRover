@@ -9,33 +9,26 @@ import com.jackpf.pirover.Model.UI;
 
 public class PlaybackUI extends UI
 {
+    private ImageView ivCamera;
+    
     public PlaybackUI(Context context)
     {
         super(context);
     }
-    
+
+    @Override
     public void initialise()
     {
+        ivCamera = (ImageView) activity.findViewById(R.id.camera);
+    }
 
-    }
-    
-    public void preUpdate()
-    {
-        
-    }
-    
+    @Override
     public void update()
     {
         // Update image
         if (vars.get("finished") == null || !(Boolean) vars.get("finished")) {
             Drawable drawable = (Drawable) vars.get("drawable");
-            ImageView ivCamera = (ImageView) activity.findViewById(R.id.camera);
             ivCamera.setImageDrawable(drawable);
         }
-    }
-    
-    public void error(Exception e)
-    {
-        
     }
 }

@@ -78,6 +78,11 @@ public class BroadcastUI extends UI
                         ((MainActivity) activity).connect(input.getText().toString());
                     }
                 })
+                .setNegativeButton(context.getString(R.string.broadcast_rescan), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        ((MainActivity) activity).connect(null);
+                    }
+                })
                 .setCancelable(false)
                 .show();
         }

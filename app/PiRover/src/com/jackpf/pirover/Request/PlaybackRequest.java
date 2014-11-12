@@ -4,14 +4,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Environment;
-import android.util.Log;
 
 import com.jackpf.pirover.Camera.Client;
 import com.jackpf.pirover.Camera.ClientException;
+import com.jackpf.pirover.Camera.Frame;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 
@@ -38,14 +35,10 @@ public class PlaybackRequest extends Request
         
         RequestResponse response = new RequestResponse();
         
-        byte[] image = client.getFrame(is);
+        Frame image = client.getFrame(is);
         
-        if (image != null) {
-            Log.d("Camera", "Read " + image.length + " bytes");
-
-            @SuppressWarnings("deprecation")
-            Drawable drawable = new BitmapDrawable(BitmapFactory.decodeByteArray(image, 0, image.length));
-            response.put("drawable", drawable);
+        if (image.getBytes() != null) {
+            response.put("drawable", image.getDrawable());
         } else {
             response.put("finished", true);
         }

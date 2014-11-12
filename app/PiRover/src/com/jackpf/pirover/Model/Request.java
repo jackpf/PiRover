@@ -1,7 +1,6 @@
 package com.jackpf.pirover.Model;
 
 
-
 /**
  * Request interface
  */

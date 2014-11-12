@@ -22,4 +22,17 @@ public class Utils
             (byte) (i >> 24)
         };  
     }
+    
+    public static byte[] stringToNullTerminatedByteArray(String s)
+    {
+        byte[] bytes = new byte[s.length() + 1];
+        
+        for (int i = 0; i < s.length(); i++) {
+            bytes[i] = (byte) s.charAt(i);
+        }
+        
+        bytes[s.length()] = '\0';
+        
+        return bytes;
+    }
 }
