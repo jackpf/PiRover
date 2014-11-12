@@ -63,6 +63,7 @@ public class MainActivity extends Activity
     
     /**
      * Activity created event
+     * Initialise clients, requests and UIs
      */
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -86,6 +87,7 @@ public class MainActivity extends Activity
     
     /**
      * Activity resumed event
+     * Attempt to (re)connect to the PiRover
      */
     @Override
     protected void onResume()
@@ -101,6 +103,7 @@ public class MainActivity extends Activity
     
     /**
      * Activity paused event
+     * Cancel any running threads and disconnect clients
      */
     @Override
     protected void onPause()
@@ -212,11 +215,21 @@ public class MainActivity extends Activity
         thread.execute(ip, ports.get("camera"));
     }
     
+    /**
+     * Set accelerator position
+     * 
+     * @param position
+     */
     public void setAcceleratorPosition(ControllerCalculator.Position position)
     {
         controller.setAcceleratorPosition(position.value);
     }
     
+    /**
+     * Set steering wheel position
+     * 
+     * @param position
+     */
     public void setSteeringWheelPosition(ControllerCalculator.Position position)
     {
         controller.setSteeringPosition(position.value);
