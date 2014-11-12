@@ -20,6 +20,7 @@ import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Model.UI;
 import com.jackpf.pirover.Request.BroadcastRequest;
 import com.jackpf.pirover.Request.CameraRequest;
+import com.jackpf.pirover.Request.ControlRequest;
 import com.jackpf.pirover.View.BroadcastUI;
 import com.jackpf.pirover.View.CameraUI;
 import com.jackpf.pirover.View.ControllerUI;
@@ -27,9 +28,9 @@ import com.jackpf.pirover.View.ControllerUI;
 public class MainActivity extends Activity
 {
     /**
-     * Network thread instance
+     * Network thread instances
      */
-    protected NetworkThread thread;
+    protected NetworkThread cameraThread, controlThread;
     
     /**
      * Client instances
@@ -74,9 +75,10 @@ public class MainActivity extends Activity
         
         cameraClient = new com.jackpf.pirover.Camera.Client();
         controlClient = new com.jackpf.pirover.Controller.Client();
-        
+
+        controller = new Controller();
         cameraRequest = new CameraRequest(cameraClient);
-        controller = new Controller(controlClient);
+        controlRequest = new ControlRequest(controlClient, controller);
 
         cameraUI = new CameraUI(this);
         controlUI = new ControllerUI(this);
@@ -110,8 +112,8 @@ public class MainActivity extends Activity
     {
         super.onPause();
         
-        if (thread instanceof NetworkThread) {
-            thread.cancel(true);
+        if (cameraThread instanceof NetworkThread) {
+            cameraThread.cancel(true);
         }
         
         cameraClient.disconnect();
@@ -172,10 +174,6 @@ public class MainActivity extends Activity
                         
                         // Start connecting to camera
                         executeCameraRequest();
-                        
-                        // Set controller IP and port
-                        controller.setIp(ip);
-                        controller.setPort(ports.get("control"));
                     }
                 }
             })
@@ -187,17 +185,17 @@ public class MainActivity extends Activity
      */
     protected void executeCameraRequest()
     {
-        if (thread instanceof NetworkThread) {
-            thread.cancel(true);
+        if (cameraThread instanceof NetworkThread) {
+            cameraThread.cancel(true);
         }
         
-        thread = new NetworkThread(
+        cameraThread = new NetworkThread(
             cameraRequest,
             cameraUI
         );
         
         // Set repeating
-        thread.setCallback(new Callback() {
+        cameraThread.setCallback(new Callback() {
             @Override
             public void onPostExecute(RequestResponse vars, Exception e) {
                 int delay = !(e instanceof ClientException) ? 0 : 5000;
@@ -212,7 +210,18 @@ public class MainActivity extends Activity
             }
         });
         
-        thread.execute(ip, ports.get("camera"));
+        cameraThread.execute(ip, ports.get("camera"));
+    }
+    
+    protected void executeControlRequest()
+    {
+        if (controlThread instanceof NetworkThread) {
+            controlThread.cancel(true);
+        }
+        
+        controlThread = new NetworkThread(controlRequest);
+        
+        controlThread.execute(ip, ports.get("control"));
     }
     
     /**
@@ -223,6 +232,10 @@ public class MainActivity extends Activity
     public void setAcceleratorPosition(ControllerCalculator.Position position)
     {
         controller.setAcceleratorPosition(position.value);
+        
+        if (controller.consumeUpdate()) {
+            executeControlRequest();
+        }
     }
     
     /**
@@ -233,6 +246,10 @@ public class MainActivity extends Activity
     public void setSteeringWheelPosition(ControllerCalculator.Position position)
     {
         controller.setSteeringPosition(position.value);
+        
+        if (controller.consumeUpdate()) {
+            executeControlRequest();
+        }
     }
     
     /**

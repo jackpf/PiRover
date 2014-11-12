@@ -1,47 +1,23 @@
 package com.jackpf.pirover.Controller;
 
-import com.jackpf.pirover.NetworkThread;
-import com.jackpf.pirover.Request.ControlRequest;
 
 public class Controller
 {
     private int acceleratorPosition;
     private int steeringPosition;
-    private NetworkThread thread;
-    private String ip, port;
-    private com.jackpf.pirover.Client.Client  client;
-    
-    public Controller(com.jackpf.pirover.Client.Client client)
-    {
-        this.client = client;
-    }
-
-    public void setIp(String ip)
-    {
-        this.ip = ip;
-    }
-    
-    public void setPort(String port)
-    {
-        this.port = port;
-    }
+    private boolean pendingUpdate;
     
     private void pendingUpdate(int a, int b)
     {
-        if (a != b) {
-            update();
-        }
+        pendingUpdate = pendingUpdate || a != b;
     }
     
-    private void update()
+    public boolean consumeUpdate()
     {
-        if (thread instanceof NetworkThread) {
-            thread.cancel(true);
-        }
+        boolean consumed = pendingUpdate;
+        pendingUpdate = false;
         
-        thread = new NetworkThread(new ControlRequest(client, this));
-        
-        thread.execute(ip, port);
+        return consumed;
     }
     
     public void setAcceleratorPosition(int acceleratorPosition)
