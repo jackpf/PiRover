@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef LIB_H
+#define LIB_H
+
 /**
  * Extra flag to specify that option is required
  */
@@ -95,3 +98,5 @@ namespace Lib
         int count();
     };
 }
+
+#endif
