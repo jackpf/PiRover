@@ -1,15 +1,14 @@
 package com.jackpf.pirover.View.EventListener;
 
-import android.app.Activity;
 import android.view.View;
 
 import com.jackpf.pirover.MainActivity;
 
 public class RecordButtonListener implements View.OnClickListener
 {
-    private Activity activity;
+    private MainActivity activity;
     
-    public RecordButtonListener(Activity activity)
+    public RecordButtonListener(MainActivity activity)
     {
         this.activity = activity;
     }
@@ -17,6 +16,6 @@ public class RecordButtonListener implements View.OnClickListener
     @Override
     public void onClick(View v)
     {
-        ((MainActivity) activity).toggleRecording();
+        activity.toggleRecording();
     }
 }

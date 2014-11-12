@@ -6,7 +6,7 @@ import android.content.Context;
 /**
  * UI interface
  */
-public abstract class UI
+public abstract class UI<ActivityType extends Activity>
 {
     /**
      * Parent context
@@ -16,7 +16,7 @@ public abstract class UI
     /**
      * Parent activity
      */
-    protected Activity activity;
+    protected ActivityType activity;
     
     /**
      * UI vars
@@ -28,10 +28,9 @@ public abstract class UI
      * 
      * @param context
      */
-    public UI(Context context)
+    public UI(ActivityType activity)
     {
-        this.context = context;
-        this.activity = (Activity) context;
+        this.activity = activity;
     }
     
     /**

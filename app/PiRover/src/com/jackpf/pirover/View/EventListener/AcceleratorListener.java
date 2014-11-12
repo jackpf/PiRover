@@ -6,16 +6,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.jackpf.pirover.Controller.Controller;
+import com.jackpf.pirover.MainActivity;
 import com.jackpf.pirover.Controller.ControllerCalculator;
 
 public class AcceleratorListener implements View.OnTouchListener
 {
-    private Controller controller;
+    private MainActivity activity;
     
-    public AcceleratorListener(Controller controller)
+    public AcceleratorListener(MainActivity activity)
     {
-        this.controller = controller;
+        this.activity = activity;
     }
     
     @Override
@@ -35,7 +35,7 @@ public class AcceleratorListener implements View.OnTouchListener
             matrix.postTranslate(0, acceleratorPosition.position);
             iv.setImageMatrix(matrix);
             
-            controller.setAcceleratorPosition(acceleratorPosition.value);
+            activity.setAcceleratorPosition(acceleratorPosition);
         }
         
         return true;

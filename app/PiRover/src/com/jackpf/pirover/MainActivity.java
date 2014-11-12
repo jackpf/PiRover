@@ -14,6 +14,7 @@ import com.jackpf.pirover.Broadcast.BroadcastResolver;
 import com.jackpf.pirover.Camera.ClientException;
 import com.jackpf.pirover.Client.Client;
 import com.jackpf.pirover.Controller.Controller;
+import com.jackpf.pirover.Controller.ControllerCalculator;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Model.UI;
@@ -43,7 +44,7 @@ public class MainActivity extends Activity
     /**
      * User interface instances
      */
-    protected UI cameraUI, controlUI;
+    protected UI<MainActivity> cameraUI, controlUI;
     
     /**
      * Controller instance
@@ -77,7 +78,7 @@ public class MainActivity extends Activity
         controller = new Controller(controlClient);
 
         cameraUI = new CameraUI(this);
-        controlUI = new ControllerUI(this, controller);
+        controlUI = new ControllerUI(this);
 
         cameraUI.initialise();
         controlUI.initialise();
@@ -149,23 +150,6 @@ public class MainActivity extends Activity
     }
     
     /**
-     * Toggle recording
-     */
-    public void toggleRecording()
-    {
-        ((CameraRequest) cameraRequest).getRecorder().toggleRecording();
-    }
-    
-    /**
-     * Launch playback activity
-     */
-    public void startPlaybackActivity()
-    {
-        Intent intent = new Intent(this, PlaybackActivity.class);
-        startActivity(intent);
-    }
-    
-    /**
      * Resolve IP and ports
      * 
      * @param manualIp
@@ -226,5 +210,32 @@ public class MainActivity extends Activity
         });
         
         thread.execute(ip, ports.get("camera"));
+    }
+    
+    public void setAcceleratorPosition(ControllerCalculator.Position position)
+    {
+        controller.setAcceleratorPosition(position.value);
+    }
+    
+    public void setSteeringWheelPosition(ControllerCalculator.Position position)
+    {
+        controller.setSteeringPosition(position.value);
+    }
+    
+    /**
+     * Toggle recording
+     */
+    public void toggleRecording()
+    {
+        ((CameraRequest) cameraRequest).getRecorder().toggleRecording();
+    }
+    
+    /**
+     * Launch playback activity
+     */
+    public void startPlaybackActivity()
+    {
+        Intent intent = new Intent(this, PlaybackActivity.class);
+        startActivity(intent);
     }
 }

@@ -15,7 +15,7 @@ import com.jackpf.pirover.View.PlaybackUI;
 public class PlaybackActivity extends Activity
 {
     protected NetworkThread thread;
-    protected UI playbackUI;
+    protected UI<PlaybackActivity> playbackUI;
     protected /*Request*/PlaybackRequest playbackRequest;
     
     @Override

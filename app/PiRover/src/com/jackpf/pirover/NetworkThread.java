@@ -20,7 +20,7 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
     /**
      * UI to pass data to
      */
-    private UI ui;
+    private UI<?> ui;
     
     /**
      * UI vars
@@ -53,7 +53,7 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
      * @param request
      * @param ui
      */
-    public NetworkThread(Request request, UI ui)
+    public NetworkThread(Request request, UI<?> ui)
     {
         this.request = request;
         this.ui = ui;

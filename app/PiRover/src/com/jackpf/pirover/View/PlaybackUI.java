@@ -1,19 +1,19 @@
 package com.jackpf.pirover.View;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
+import com.jackpf.pirover.PlaybackActivity;
 import com.jackpf.pirover.R;
 import com.jackpf.pirover.Model.UI;
 
-public class PlaybackUI extends UI
+public class PlaybackUI extends UI<PlaybackActivity>
 {
     private ImageView ivCamera;
     
-    public PlaybackUI(Context context)
+    public PlaybackUI(PlaybackActivity activity)
     {
-        super(context);
+        super(activity);
     }
 
     @Override
