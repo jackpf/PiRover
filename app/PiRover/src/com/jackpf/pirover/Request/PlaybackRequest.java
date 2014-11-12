@@ -34,7 +34,7 @@ public class PlaybackRequest extends Request
         if (image.getBytes() != null) {
             response.put("drawable", image.getDrawable());
         } else {
-            response.put("finished", true);
+            response.put("drawable", null);
         }
 
         return response;

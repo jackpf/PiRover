@@ -26,7 +26,7 @@ public class PlaybackUI extends UI
     public void update()
     {
         // Update image
-        if (vars.get("finished") == null || !(Boolean) vars.get("finished")) {
+        if (vars.get("drawable") != null) {
             Drawable drawable = (Drawable) vars.get("drawable");
             ivCamera.setImageDrawable(drawable);
         }
