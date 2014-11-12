@@ -8,8 +8,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define DEBUG 0
-
 class Broadcast
 {
 private:

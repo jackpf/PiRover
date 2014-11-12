@@ -40,26 +40,17 @@ int main(int argc, char **argv)
         int status;
 
         do {
-            //char *data = (char *) server.receive(conn);
-            //printf("Received data: %s\n", data);
+            vector<uchar> buf = cam.getFrame();
 
-            //if (strcmp(data, "frame") == 0) {
-                printf("Capturing frame\n");
-                vector<uchar> buf = cam.getFrame();
+            // Send image size
+            size_t sent = 0;
+            int sz[1] = {buf.size()};
+            status = server.send(conn, &sz, sizeof(int));
 
-                printf("Sending data\n");
-
-                // Send image size
-                size_t sent = 0;
-                int sz[1] = {buf.size()};
-                status = server.send(conn, &sz, sizeof(int));
-
-                // Send image data
-                do {
-                    sent += server.send(conn, &buf[sent], buf.size() - sent);
-                    printf("Sent %d bytes\n", sent);
-                } while (sent < buf.size());
-            //}
+            // Send image data
+            do {
+                sent += server.send(conn, &buf[sent], buf.size() - sent);
+            } while (sent < buf.size());
         } while (status >= 0);
 
         printf("Disconnecting camera\n");

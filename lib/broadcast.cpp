@@ -34,17 +34,14 @@ void Broadcast::listen(const char *handshake, const char *returnStr)
             char sendIP[INET_ADDRSTRLEN + 1];
             inet_ntop(AF_INET, &sendAddress.sin_addr.s_addr, sendIP, INET_ADDRSTRLEN);
 
-            if (DEBUG)
-                printf("Received: %s from %s\n", buf, sendIP);
+            printf("Received: %s from %s\n", buf, sendIP);
 
             if (strcmp(buf, handshake) == 0) {
-                if (DEBUG)
-                    printf("Correct handshake\n");
+                printf("Correct handshake\n");
 
                 sendto(sock, returnStr, strlen(returnStr) + 1, 0, (struct sockaddr *) &sendAddress, sizeof(sendAddress));
             } else {
-                if (DEBUG)
-                    printf("Incorrect handshake\n");
+                printf("Incorrect handshake\n");
             }
         } else {
             perror("Receive");
@@ -63,8 +60,7 @@ char *Broadcast::resolve(const char *handshake)
     int bytes;
 
     bytes = sendto(sock, handshake, strlen(handshake) + 1, 0, (struct sockaddr *) &sendAddress, sizeof sendAddress);
-    if (DEBUG)
-        printf("Broadcasted packet: '%s'\n", handshake);
+    printf("Broadcasted packet: '%s'\n", handshake);
 
     struct timeval tv;
     tv.tv_sec = 0;

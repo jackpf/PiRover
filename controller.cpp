@@ -43,8 +43,6 @@ int main(int argc, char **argv)
                 break;
             }
 
-            printf("Steering: %d, Accel: %d\n", steeringPosition, accelerationPosition);
-
             rover.calculateMotorValues(accelerationPosition, steeringPosition);
             rover.write();
         }
