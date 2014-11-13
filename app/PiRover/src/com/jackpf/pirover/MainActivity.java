@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.jackpf.pirover.NetworkThread.Callback;
+import com.jackpf.pirover.RequestThread.Callback;
 import com.jackpf.pirover.Broadcast.BroadcastResolver;
 import com.jackpf.pirover.Camera.ClientException;
 import com.jackpf.pirover.Client.Client;
@@ -30,7 +30,7 @@ public class MainActivity extends Activity
     /**
      * Network thread instances
      */
-    protected NetworkThread cameraThread, controlThread;
+    protected RequestThread cameraThread, controlThread;
     
     /**
      * Client instances
@@ -112,7 +112,7 @@ public class MainActivity extends Activity
     {
         super.onPause();
         
-        if (cameraThread instanceof NetworkThread) {
+        if (cameraThread instanceof RequestThread) {
             cameraThread.cancel(true);
         }
         
@@ -161,8 +161,8 @@ public class MainActivity extends Activity
      */
     public void connect(String manualIp)
     {
-        new NetworkThread(new BroadcastRequest(getSystemService(WIFI_SERVICE), getSystemService(Context.CONNECTIVITY_SERVICE)), new BroadcastUI(this))
-            .setCallback(new NetworkThread.Callback() {
+        new RequestThread(new BroadcastRequest(getSystemService(WIFI_SERVICE), getSystemService(Context.CONNECTIVITY_SERVICE)), new BroadcastUI(this))
+            .setCallback(new RequestThread.Callback() {
                 @Override
                 public void onPostExecute(RequestResponse vars, Exception e) {
                     if (vars.get("ip") != null && !(e instanceof Exception)) {
@@ -185,11 +185,11 @@ public class MainActivity extends Activity
      */
     protected void executeCameraRequest()
     {
-        if (cameraThread instanceof NetworkThread) {
+        if (cameraThread instanceof RequestThread) {
             cameraThread.cancel(true);
         }
         
-        cameraThread = new NetworkThread(
+        cameraThread = new RequestThread(
             cameraRequest,
             cameraUI
         ).setCallback(new Callback() {
@@ -215,11 +215,11 @@ public class MainActivity extends Activity
      */
     protected void executeControlRequest()
     {
-        if (controlThread instanceof NetworkThread) {
+        if (controlThread instanceof RequestThread) {
             controlThread.cancel(true);
         }
         
-        controlThread = new NetworkThread(controlRequest);
+        controlThread = new RequestThread(controlRequest);
         
         controlThread.execute(ip, ports.get("control"));
     }

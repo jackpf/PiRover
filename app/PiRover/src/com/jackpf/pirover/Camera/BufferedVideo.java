@@ -4,20 +4,20 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Video
+public class BufferedVideo
 {
     private List<Frame> frames = new ArrayList<Frame>();
     private LocalClient client;
     private int framePosition = 0;
     private String filename;
     
-    public Video(String filename) throws FileNotFoundException
+    public BufferedVideo(String filename) throws FileNotFoundException
     {
         client = new LocalClient(filename);
         this.filename = filename;
     }
     
-    public Video load()
+    public BufferedVideo load()
     {
         Frame frame;
         

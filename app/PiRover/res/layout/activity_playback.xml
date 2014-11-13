@@ -12,9 +12,9 @@
         android:id="@+id/camera"
         android:layout_width="320sp"
         android:layout_height="240sp"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/abc_ab_bottom_solid_dark_holo"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/black"
         android:contentDescription="@string/camera" />
 
     <Button

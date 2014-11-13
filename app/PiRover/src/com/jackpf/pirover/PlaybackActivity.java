@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.jackpf.pirover.NetworkThread.Callback;
+import com.jackpf.pirover.RequestThread.Callback;
 import com.jackpf.pirover.Camera.Player;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
@@ -17,7 +17,7 @@ import com.jackpf.pirover.View.PlaybackUI;
 
 public class PlaybackActivity extends Activity
 {
-    protected NetworkThread thread;
+    protected RequestThread thread;
     protected UI<PlaybackActivity> playbackUI;
     protected Request playbackRequest;
     protected Player player;
@@ -82,11 +82,11 @@ public class PlaybackActivity extends Activity
      */
     protected void executePlaybackRequest()
     {
-        if (thread instanceof NetworkThread) {
+        if (thread instanceof RequestThread) {
             thread.cancel(true);
         }
         
-        thread = new NetworkThread(
+        thread = new RequestThread(
             playbackRequest,
             playbackUI
         ).setCallback(new Callback() {

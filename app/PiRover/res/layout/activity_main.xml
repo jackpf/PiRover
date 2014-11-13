@@ -14,7 +14,7 @@
         android:layout_height="240sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/abc_ab_bottom_solid_dark_holo"
+        android:background="@android:color/black"
         android:contentDescription="@string/camera" />
 
     <ImageView

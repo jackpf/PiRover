@@ -2,15 +2,15 @@ package com.jackpf.pirover.Request;
 
 import java.io.IOException;
 
+import com.jackpf.pirover.Camera.BufferedVideo;
 import com.jackpf.pirover.Camera.ClientException;
 import com.jackpf.pirover.Camera.Frame;
-import com.jackpf.pirover.Camera.Video;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 
 public class PlaybackRequest extends Request
 {
-    private /*static*/ Video video;
+    private BufferedVideo video;
     
     public PlaybackRequest(Object ...params)
     {
@@ -21,7 +21,7 @@ public class PlaybackRequest extends Request
     public RequestResponse call(String ...args) throws ClientException, IOException
     {
         if (video == null) {
-            video = new Video(args[0])
+            video = new BufferedVideo(args[0])
                 .load();
         }
         
