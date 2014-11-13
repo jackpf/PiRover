@@ -17,16 +17,6 @@
         android:background="@android:color/black"
         android:contentDescription="@string/camera" />
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/camera"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="34dp"
-        android:text="Button"
-        android:onClick="togglePlayback" />
-
     <ProgressBar
         android:id="@+id/video_progress"
         style="?android:attr/progressBarStyleHorizontal"
@@ -39,5 +29,35 @@
         android:max="100"
         android:minHeight="10dp"
         android:progress="0" />
+
+    <Button
+        android:id="@+id/Button01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button1"
+        android:layout_alignBottom="@+id/button1"
+        android:layout_alignLeft="@+id/video_progress"
+        android:onClick="rewind"
+        android:text="Button" />
+
+    <Button
+        android:id="@+id/Button02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/Button01"
+        android:layout_alignBottom="@+id/Button01"
+        android:layout_centerHorizontal="true"
+        android:onClick="togglePlayback"
+        android:text="Button" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/video_progress"
+        android:layout_below="@+id/video_progress"
+        android:layout_marginTop="17dp"
+        android:onClick="fastForward"
+        android:text="Button" />
 
 </RelativeLayout>

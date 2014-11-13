@@ -2,6 +2,8 @@ package com.jackpf.pirover.View;
 
 import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -33,6 +35,17 @@ public class PlaybackUI extends UI<PlaybackActivity>
         dialog.setCancelable(false);
         
         dialog.show();
+        
+        pPlayback.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent e) {
+                v.performClick();
+                
+                activity.setPosition(e.getX() / v.getWidth());
+                
+                return false;
+            }
+        });
     }
 
     @Override

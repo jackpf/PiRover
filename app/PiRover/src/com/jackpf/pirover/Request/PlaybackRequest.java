@@ -15,14 +15,15 @@ public class PlaybackRequest extends Request
     public PlaybackRequest(Object ...params)
     {
         super(params);
+        
+        video = (BufferedVideo) params[0];
     }
 
     @Override
     public RequestResponse call(String ...args) throws ClientException, IOException
     {
-        if (video == null) {
-            video = new BufferedVideo(args[0])
-                .load();
+        if (!video.isLoaded()) {
+            video.load();
         }
         
         RequestResponse response = new RequestResponse();

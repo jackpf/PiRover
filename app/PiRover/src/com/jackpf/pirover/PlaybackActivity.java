@@ -1,5 +1,7 @@
 package com.jackpf.pirover;
 
+import java.io.FileNotFoundException;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,7 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.jackpf.pirover.RequestThread.Callback;
-import com.jackpf.pirover.Camera.Player;
+import com.jackpf.pirover.Camera.BufferedVideo;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Model.UI;
@@ -20,8 +22,7 @@ public class PlaybackActivity extends Activity
     protected RequestThread thread;
     protected UI<PlaybackActivity> playbackUI;
     protected Request playbackRequest;
-    protected Player player;
-    protected static String videoFilename;
+    protected BufferedVideo video;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,10 +31,13 @@ public class PlaybackActivity extends Activity
         
         setContentView(R.layout.activity_playback);
         
-        videoFilename = getIntent().getStringExtra("video");
+        try {
+            video = new BufferedVideo(getIntent().getStringExtra("video"));
+        } catch (FileNotFoundException e) {
+            finish();
+        }
         
-        playbackRequest = new PlaybackRequest();
-        player = new Player();
+        playbackRequest = new PlaybackRequest(video);
 
         playbackUI = new PlaybackUI(this);
         playbackUI.initialise();
@@ -44,7 +48,6 @@ public class PlaybackActivity extends Activity
     {
         super.onResume();
         
-        player.isPlaying(true);
         executePlaybackRequest();
     }
     
@@ -53,7 +56,7 @@ public class PlaybackActivity extends Activity
     {
         super.onPause();
 
-        player.isPlaying(false);
+        video.isPlaying(false);
     }
 
     @Override
@@ -91,7 +94,7 @@ public class PlaybackActivity extends Activity
             playbackUI
         ).setCallback(new Callback() {
             public void onPostExecute(RequestResponse vars, Exception e) {
-                if (player.isPlaying() && vars.get("drawable") != null && e == null) {
+                if (video.isPlaying() && vars.get("drawable") != null && e == null) {
                     int fps = (Integer) vars.get("fps");
                     int delay = 1000 / fps;
                     
@@ -106,15 +109,46 @@ public class PlaybackActivity extends Activity
             }
         });
         
-        thread.execute(videoFilename);
+        thread.execute();
     }
     
     public void togglePlayback(View v)
     {
-        player.toggleIsPlaying();
+        video.toggleIsPlaying();
         
-        if (player.isPlaying()) {
+        if (video.isPlaying()) {
+            // Stop any rewind/fastforward
+            video.setDirection(BufferedVideo.PLAY);
             executePlaybackRequest(); // Restart thread if we're playing again
+        }
+    }
+    
+    public void rewind(View v)
+    {
+        video.setDirection(BufferedVideo.REWIND);
+        if (!video.isPlaying()) { // If not playing, set to play and start playing again
+            video.isPlaying(true);
+            executePlaybackRequest();
+        }
+    }
+    
+    public void fastForward(View v)
+    {
+        video.setDirection(BufferedVideo.FASTFORWARD);
+        if (!video.isPlaying()) { // If not playing, set to play and start playing again
+            video.isPlaying(true);
+            executePlaybackRequest();
+        }
+    }
+    
+    public void setPosition(float ratio)
+    {
+        video.setFramePosition((int) Math.round(video.getFrameCount() * ratio));
+        
+        if (!video.isPlaying()) {
+            video.isPlaying(true);
+            executePlaybackRequest();
+            video.isPlaying(false);
         }
     }
 }
