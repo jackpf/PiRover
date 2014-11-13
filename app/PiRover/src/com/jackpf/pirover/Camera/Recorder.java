@@ -15,7 +15,7 @@ public class Recorder
 {
     private boolean recording;
     private static BufferedOutputStream out;
-    private final String RECORD_DIR = "PiRoverRecordings", RECORD_EXT = "prr";
+    public static final String RECORD_DIR = "PiRoverRecordings", RECORD_EXT = "prr";
     
     private BufferedOutputStream createStream() throws IOException
     {

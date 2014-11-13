@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jackpf.pirover.Camera.Recorder;
 import com.jackpf.pirover.Camera.Video;
 
 public class BrowseActivity extends Activity
@@ -35,12 +36,15 @@ public class BrowseActivity extends Activity
         ListView lvFiles = (ListView) findViewById(R.id.files);
         List<Video> files = new ArrayList<Video>();
         
-        for (File file : new File(Environment.getExternalStorageDirectory() + "/PiRoverRecordings/").listFiles()) {
-            if (file.isFile()) {
-                try {
-                    files.add(new Video(file.getPath()));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+        File dir = new File(Environment.getExternalStorageDirectory() + "/" + Recorder.RECORD_DIR);
+        if (dir.exists() && dir.isDirectory()) {
+            for (File file : dir.listFiles()) {
+                if (file.isFile() && file.getName().substring(file.getName().lastIndexOf('.') + 1).equals(Recorder.RECORD_EXT)) {
+                    try {
+                        files.add(new Video(file.getPath()));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
