@@ -48,7 +48,9 @@ public class BufferedVideo
     
     public Frame getFrame()
     {
+        // Reached the end or the start of the video?
         if (framePosition < 0 || framePosition >= frames.size()) {
+            isPlaying(false);
             return null;
         }
         
@@ -91,8 +93,8 @@ public class BufferedVideo
     
     public Frame getIcon()
     {
-        // Actually consumes the input stream, so can not be called if we've already loaded the stream
-        if (frames.size() > 0) {
+        // If the video is already loaded, just return the first frame
+        if (isLoaded()) {
             return frames.get(0);
         }
         
