@@ -6,10 +6,8 @@
     <string name="activity_playback_title">Playback</string>
     <string name="action_settings">Settings</string>
     <string name="action_playback">Playback</string>
-    
     <string name="dialog_positive">OK</string>
     <string name="dialog_negative">Cancel</string>
-    
     <string name="camera">Camera</string>
     <string name="camera_state_disconnected">Not connected</string>
     <string name="camera_state_connected">Connected</string>
@@ -20,7 +18,6 @@
     <string name="camera_bandwidth">%d bytes/s</string>
     <string name="camera_bandwidth_default">0 bytes/s</string>
     <string name="camera_record_button">R</string>
-    
     <string name="broadcast_loading_title">Loading</string>
     <string name="broadcast_loading_text">Detecting PiRover&#8230;</string>
     <string name="broadcast_timeout_title">Unable to detect PiRover</string>
@@ -28,11 +25,11 @@
     <string name="broadcast_disconnected_title">Connection error</string>
     <string name="broadcast_disconnected_message">Device is not on a wifi network</string>
     <string name="broadcast_rescan">Scan again</string>
-    
     <string name="controller_accelerator">Accelerator</string>
     <string name="controller_steering_wheel">Steering Wheel</string>
-    
     <string name="playback_loading_title">Loading</string>
     <string name="playback_loading_text">Buffering video</string>
+    <string name="title_activity_browse">BrowseActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

@@ -2,8 +2,6 @@ package com.jackpf.pirover.Request;
 
 import java.io.IOException;
 
-import android.os.Environment;
-
 import com.jackpf.pirover.Camera.ClientException;
 import com.jackpf.pirover.Camera.Frame;
 import com.jackpf.pirover.Camera.Video;
@@ -12,7 +10,7 @@ import com.jackpf.pirover.Model.RequestResponse;
 
 public class PlaybackRequest extends Request
 {
-    private static Video video;
+    private /*static*/ Video video;
     
     public PlaybackRequest(Object ...params)
     {
@@ -23,7 +21,7 @@ public class PlaybackRequest extends Request
     public RequestResponse call(String ...args) throws ClientException, IOException
     {
         if (video == null) {
-            video = new Video(Environment.getExternalStorageDirectory() + "/PiRoverRecordings/record.pirover")
+            video = new Video(args[0])
                 .load();
         }
         

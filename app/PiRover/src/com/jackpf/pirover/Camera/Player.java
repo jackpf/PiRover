@@ -4,7 +4,7 @@ public class Player
 {
     private boolean isPlaying;
     
-    public Player(boolean isPlaying)
+    public void isPlaying(boolean isPlaying)
     {
         this.isPlaying = isPlaying;
     }

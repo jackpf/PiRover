@@ -23,12 +23,17 @@
             android:label="@string/activity_main_title" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".PlaybackActivity"
             android:label="@string/activity_playback_title" >
+        </activity>
+        <activity
+            android:name=".BrowseActivity"
+            android:label="@string/title_activity_browse" >
         </activity>
     </application>
 

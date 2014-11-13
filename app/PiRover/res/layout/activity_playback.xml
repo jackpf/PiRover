@@ -14,7 +14,8 @@
         android:layout_height="240sp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
+        android:src="@drawable/abc_ab_bottom_solid_dark_holo"
+        android:contentDescription="@string/camera" />
 
     <Button
         android:id="@+id/button1"

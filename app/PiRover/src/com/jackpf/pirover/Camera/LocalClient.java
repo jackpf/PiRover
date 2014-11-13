@@ -10,7 +10,7 @@ public class LocalClient extends Client
     
     public LocalClient(String filename) throws FileNotFoundException
     {
-        this.is = new FileInputStream(filename);
+        is = new FileInputStream(filename);
     }
     
     public Frame getFrame() throws ClientException

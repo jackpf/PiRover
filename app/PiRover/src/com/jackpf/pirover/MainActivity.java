@@ -265,7 +265,7 @@ public class MainActivity extends Activity
      */
     public void startPlaybackActivity()
     {
-        Intent intent = new Intent(this, PlaybackActivity.class);
+        Intent intent = new Intent(this, BrowseActivity.class);
         startActivity(intent);
     }
 }

@@ -21,6 +21,7 @@ public class PlaybackActivity extends Activity
     protected UI<PlaybackActivity> playbackUI;
     protected Request playbackRequest;
     protected Player player;
+    protected static String videoFilename;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -29,8 +30,10 @@ public class PlaybackActivity extends Activity
         
         setContentView(R.layout.activity_playback);
         
+        videoFilename = getIntent().getStringExtra("video");
+        
         playbackRequest = new PlaybackRequest();
-        player = new Player(true);
+        player = new Player();
 
         playbackUI = new PlaybackUI(this);
         playbackUI.initialise();
@@ -41,6 +44,7 @@ public class PlaybackActivity extends Activity
     {
         super.onResume();
         
+        player.isPlaying(true);
         executePlaybackRequest();
     }
     
@@ -48,10 +52,8 @@ public class PlaybackActivity extends Activity
     protected void onPause()
     {
         super.onPause();
-        
-        if (thread instanceof NetworkThread) {
-            thread.cancel(true);
-        }
+
+        player.isPlaying(false);
     }
 
     @Override
@@ -104,7 +106,7 @@ public class PlaybackActivity extends Activity
             }
         });
         
-        thread.execute();
+        thread.execute(videoFilename);
     }
     
     public void togglePlayback(View v)
