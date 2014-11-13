@@ -6,27 +6,68 @@ import java.util.List;
 
 public class BufferedVideo
 {
+    /**
+     * Video frames
+     */
     private List<Frame> frames = new ArrayList<Frame>();
+    
+    /**
+     * Local client instance
+     */
     private LocalClient client;
+    
+    /**
+     * Filename
+     */
+    private String filename;
+    
+    /**
+     * Current frame position
+     */
     private int framePosition = 0;
     
+    /**
+     * Playback direction states
+     */
     public static final int FASTFORWARD = 1, REWIND = -1, PLAY = 0;
     
-    private String filename;
+    /**
+     * Is playing state
+     */
     private boolean isPlaying = true;
+    
+    /**
+     * Direction state
+     */
     private int direction = PLAY;
     
+    /**
+     * Constructor
+     * 
+     * @param filename
+     * @throws FileNotFoundException
+     */
     public BufferedVideo(String filename) throws FileNotFoundException
     {
         client = new LocalClient(filename);
         this.filename = filename;
     }
     
+    /**
+     * Has video been loaded
+     * 
+     * @return  True if loaded, false if not
+     */
     public boolean isLoaded()
     {
         return frames.size() > 0;
     }
     
+    /**
+     * Load video frames into memory
+     * 
+     * @return
+     */
     public BufferedVideo load()
     {
         Frame frame;
@@ -46,6 +87,12 @@ public class BufferedVideo
         return this;
     }
     
+    /**
+     * Get next frame based on current video state
+     * Also updates framePosition and frame states based on various factors
+     * 
+     * @return
+     */
     public Frame getFrame()
     {
         // Reached the end or the start of the video?
@@ -71,26 +118,12 @@ public class BufferedVideo
         return frame;
     }
     
-    public void setFramePosition(int framePosition)
-    {
-        this.framePosition = framePosition;
-    }
-    
-    public int getFramePosition()
-    {
-        return framePosition;
-    }
-    
-    public int getFrameCount()
-    {
-        return frames.size();
-    }
-    
-    public String getName()
-    {
-        return this.filename;
-    }
-    
+    /**
+     * Get first frame in video
+     * Will load the first frame if the video is not already loaded
+     * 
+     * @return
+     */
     public Frame getIcon()
     {
         // If the video is already loaded, just return the first frame
@@ -107,26 +140,89 @@ public class BufferedVideo
         }
     }
     
+    /**
+     * Get video filename
+     * 
+     * @return
+     */
+    public String getName()
+    {
+        return this.filename;
+    }
+    
+    /**
+     * Set frame position
+     * 
+     * @param framePosition
+     */
+    public void setFramePosition(int framePosition)
+    {
+        this.framePosition = framePosition;
+    }
+    
+    /**
+     * Get frame position
+     * 
+     * @return
+     */
+    public int getFramePosition()
+    {
+        return framePosition;
+    }
+    
+    /**
+     * Get frame count
+     * 
+     * @return
+     */
+    public int getFrameCount()
+    {
+        return frames.size();
+    }
+    
+    /**
+     * Set direction state
+     * 
+     * @param direction
+     */
     public void setDirection(int direction)
     {
         this.direction = direction;
     }
     
+    /**
+     * Get direction state
+     * 
+     * @return
+     */
     public int getDirection()
     {
         return this.direction;
     }
     
+    /**
+     * Set video playing state
+     * 
+     * @param isPlaying
+     */
     public void isPlaying(boolean isPlaying)
     {
         this.isPlaying = isPlaying;
     }
     
+    /**
+     * Toggle playing state
+     */
     public void toggleIsPlaying()
     {
         isPlaying = !isPlaying;
     }
     
+    /**
+     * Get playing state
+     * 
+     * @return
+     */
     public boolean isPlaying()
     {
         return isPlaying;
