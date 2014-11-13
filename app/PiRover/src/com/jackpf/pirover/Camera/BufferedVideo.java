@@ -34,7 +34,7 @@ public class BufferedVideo
     /**
      * Is playing state
      */
-    private boolean isPlaying = true;
+    private boolean isPlaying = false;
     
     /**
      * Direction state
@@ -83,6 +83,8 @@ public class BufferedVideo
                 frame = null;
             }
         } while (frame != null);
+        
+        isPlaying(true);
         
         return this;
     }

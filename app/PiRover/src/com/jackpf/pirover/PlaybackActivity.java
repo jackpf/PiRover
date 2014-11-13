@@ -145,6 +145,7 @@ public class PlaybackActivity extends Activity
     {
         video.setFramePosition((int) Math.round(video.getFrameCount() * ratio));
         
+        // Load 1 frame to update the view to the current position
         if (!video.isPlaying()) {
             video.isPlaying(true);
             executePlaybackRequest();
