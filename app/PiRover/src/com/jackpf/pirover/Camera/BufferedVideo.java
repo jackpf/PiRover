@@ -47,9 +47,9 @@ public class BufferedVideo
      * @param filename
      * @throws FileNotFoundException
      */
-    public BufferedVideo(String filename) throws FileNotFoundException
+    public BufferedVideo(FrameFactory frameFactory, String filename) throws FileNotFoundException
     {
-        client = new LocalClient(filename);
+        client = new LocalClient(frameFactory, filename);
         this.filename = filename;
     }
     

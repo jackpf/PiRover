@@ -8,8 +8,10 @@ public class LocalClient extends Client
 {
     private InputStream is;
     
-    public LocalClient(String filename) throws FileNotFoundException
+    public LocalClient(FrameFactory frameFactory, String filename) throws FileNotFoundException
     {
+        super(frameFactory);
+        
         is = new FileInputStream(filename);
     }
     

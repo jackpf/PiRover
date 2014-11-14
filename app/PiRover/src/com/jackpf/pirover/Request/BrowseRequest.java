@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.jackpf.pirover.Camera.BufferedVideo;
 import com.jackpf.pirover.Camera.ClientException;
+import com.jackpf.pirover.Camera.DrawableFrameFactory;
 import com.jackpf.pirover.Camera.Recorder;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
@@ -31,7 +32,7 @@ public class BrowseRequest extends Request
             for (File file : dir.listFiles()) {
                 if (file.isFile() && file.getName().substring(file.getName().lastIndexOf('.') + 1).equals(Recorder.RECORD_EXT)) {
                     try {
-                        files.add(new BufferedVideo(file.getPath()));
+                        files.add(new BufferedVideo(new DrawableFrameFactory(), file.getPath()));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }

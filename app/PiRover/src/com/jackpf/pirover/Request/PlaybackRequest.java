@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.jackpf.pirover.Camera.BufferedVideo;
 import com.jackpf.pirover.Camera.ClientException;
-import com.jackpf.pirover.Camera.Frame;
+import com.jackpf.pirover.Camera.DrawableFrame;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 
@@ -28,7 +28,7 @@ public class PlaybackRequest extends Request
         
         RequestResponse response = new RequestResponse();
         
-        Frame frame = video.getFrame();
+        DrawableFrame frame = (DrawableFrame) video.getFrame();
         
         if (frame != null) {
             response.put("drawable", frame.getDrawable());

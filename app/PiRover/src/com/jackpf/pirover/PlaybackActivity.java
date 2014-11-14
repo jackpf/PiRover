@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.jackpf.pirover.RequestThread.Callback;
 import com.jackpf.pirover.Camera.BufferedVideo;
+import com.jackpf.pirover.Camera.DrawableFrameFactory;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Model.UI;
@@ -32,7 +33,7 @@ public class PlaybackActivity extends Activity
         setContentView(R.layout.activity_playback);
         
         try {
-            video = new BufferedVideo(getIntent().getStringExtra("video"));
+            video = new BufferedVideo(new DrawableFrameFactory(), getIntent().getStringExtra("video"));
         } catch (FileNotFoundException e) {
             finish();
         }

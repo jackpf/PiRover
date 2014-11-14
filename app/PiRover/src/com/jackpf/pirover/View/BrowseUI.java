@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.jackpf.pirover.BrowseActivity;
 import com.jackpf.pirover.R;
 import com.jackpf.pirover.Camera.BufferedVideo;
+import com.jackpf.pirover.Camera.DrawableFrame;
 import com.jackpf.pirover.Model.UI;
 import com.jackpf.pirover.View.Helpers.ArrayAdapter;
 
@@ -33,8 +34,13 @@ public class BrowseUI extends UI<BrowseActivity>
         adapter.setCallback(adapter.new Callback() {
             @Override
             public void createView(View row, BufferedVideo video) {
+                DrawableFrame icon = (DrawableFrame) video.getIcon();
+                
+                if (icon != null) {
+                    ((ImageView) row.findViewById(R.id.video_icon)).setImageDrawable(((DrawableFrame) video.getIcon()).getDrawable());
+                }
+                
                 ((TextView) row.findViewById(R.id.video_name)).setText(video.getName());
-                ((ImageView) row.findViewById(R.id.video_icon)).setImageDrawable(video.getIcon().getDrawable());
             }
         });
         lvFiles.setAdapter(adapter);

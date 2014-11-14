@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import com.jackpf.pirover.RequestThread.Callback;
 import com.jackpf.pirover.Broadcast.BroadcastResolver;
 import com.jackpf.pirover.Camera.ClientException;
+import com.jackpf.pirover.Camera.DrawableFrameFactory;
 import com.jackpf.pirover.Client.Client;
 import com.jackpf.pirover.Controller.Controller;
 import com.jackpf.pirover.Controller.ControllerCalculator;
@@ -73,7 +74,7 @@ public class MainActivity extends Activity
         
         setContentView(R.layout.activity_main);
         
-        cameraClient = new com.jackpf.pirover.Camera.Client();
+        cameraClient = new com.jackpf.pirover.Camera.Client(new DrawableFrameFactory());
         controlClient = new com.jackpf.pirover.Controller.Client();
 
         controller = new Controller();
