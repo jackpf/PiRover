@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import com.jackpf.pirover.Camera.BufferedVideo;
@@ -29,7 +31,15 @@ public class BrowseRequest extends Request
         List<BufferedVideo> files = new ArrayList<BufferedVideo>();
         
         if (dir.exists() && dir.isDirectory()) {
-            for (File file : dir.listFiles()) {
+            File[] filesList = dir.listFiles();
+
+            Arrays.sort(filesList, new Comparator<File>() {
+                public int compare(File f1, File f2) {
+                    return -Long.compare(f1.lastModified(), f2.lastModified());
+                }
+            });
+            
+            for (File file : filesList) {
                 if (file.isFile() && file.getName().substring(file.getName().lastIndexOf('.') + 1).equals(Recorder.RECORD_EXT)) {
                     try {
                         files.add(new BufferedVideo(new DrawableFrameFactory(), file.getPath()));
