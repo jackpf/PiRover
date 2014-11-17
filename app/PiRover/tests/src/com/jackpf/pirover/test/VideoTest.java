@@ -8,6 +8,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.jackpf.pirover.MainActivity;
 import com.jackpf.pirover.Camera.BufferedVideo;
+import com.jackpf.pirover.Camera.DrawableFrameFactory;
 import com.jackpf.pirover.Camera.Recorder;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Request.PlaybackRequest;
@@ -41,7 +42,7 @@ public class VideoTest extends ActivityInstrumentationTestCase2<MainActivity>
             throw new Exception("Test file not present");
         }
         
-        BufferedVideo video = new BufferedVideo(filename);
+        BufferedVideo video = new BufferedVideo(new DrawableFrameFactory(), filename);
 
         assertFalse(video.isLoaded());
         assertEquals(video.getFrameCount(), 0);
@@ -64,7 +65,7 @@ public class VideoTest extends ActivityInstrumentationTestCase2<MainActivity>
             throw new Exception("Test file not present");
         }
         
-        BufferedVideo video = new BufferedVideo(filename);
+        BufferedVideo video = new BufferedVideo(new DrawableFrameFactory(), filename);
         
         RequestResponse params = new PlaybackRequest(video).call();
         
