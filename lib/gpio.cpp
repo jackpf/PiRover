@@ -166,9 +166,9 @@ void GPIO::write(int pin, value v)
      * The set and clear registers
      */
     if (v == HIGH) {
-        *(gpio + REGISTER_SET) = 1 << pin;
+        *(gpio + REGISTER_SET + (pin / 32)) = 1 << (pin % 32);
     } else if (v == LOW) {
-        *(gpio + REGISTER_CLEAR) = 1 << pin;
+        *(gpio + REGISTER_CLEAR + (pin / 32)) = 1 << (pin % 32);
     }
 }
 
@@ -177,7 +177,7 @@ GPIO::value GPIO::read(int pin)
     assertSetup();
     assertValidPin(pin);
 
-    return *(gpio + REGISTER_GET) & (1 << pin) ? HIGH : LOW;
+    return *(gpio + REGISTER_GET + (pin / 32)) & (1 << (pin % 32)) ? HIGH : LOW;
 }
 
 void GPIO::delay(unsigned int ms)
