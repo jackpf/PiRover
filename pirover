@@ -5,7 +5,7 @@
 #################################################
 
 # Base directory of PiRover source
-base_dir="/home/pi/workspace/PiRover"
+#base_dir="/home/pi/workspace/PiRover"
 
 # Redirect output to logs
 logging=false
@@ -22,7 +22,8 @@ blink_speed=100000
 
 #################################################
 
-bin_dir="$base_dir/bin"
+#bin_dir="$base_dir/bin"
+bin_dir="/usr/local/bin"
 log_dir="$base_dir/logs"
 
 declare -A processes=(
