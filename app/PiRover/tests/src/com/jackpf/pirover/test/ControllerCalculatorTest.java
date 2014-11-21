@@ -40,7 +40,7 @@ public class ControllerCalculatorTest extends ActivityInstrumentationTestCase2<M
         
         // 45 degree angle
         position = ControllerCalculator
-            .calculateSteeringPosition(384, 0, WIDTH, HEIGHT);
+            .calculateSteeringPosition(WIDTH, 0, WIDTH, HEIGHT);
         assertEquals(position.value, 5);
         assertEquals(position.position, 45);
         
@@ -61,5 +61,29 @@ public class ControllerCalculatorTest extends ActivityInstrumentationTestCase2<M
             .calculateSteeringPosition(WIDTH, HEIGHT / 2 + 100, WIDTH, HEIGHT);
         assertEquals(position.value, 10);
         assertEquals(position.position, 90);
+    }
+    
+    public void testAccelerator() throws Exception
+    {
+        ControllerCalculator.Position position;
+        final int WIDTH = 96, HEIGHT = 384, INTRINSIC_HEIGHT = 96;
+
+        // 0 acceleration
+        position = ControllerCalculator
+            .calculateAcceleratorPosition(HEIGHT, WIDTH, HEIGHT, INTRINSIC_HEIGHT);
+        assertEquals(position.value, 0);
+        assertEquals(position.position, HEIGHT - INTRINSIC_HEIGHT);
+
+        // Full acceleration
+        position = ControllerCalculator
+            .calculateAcceleratorPosition(0, WIDTH, HEIGHT, INTRINSIC_HEIGHT);
+        assertEquals(position.value, 10);
+        assertEquals(position.position, 0);
+
+        // Half acceleration
+        position = ControllerCalculator
+            .calculateAcceleratorPosition(HEIGHT / 2, WIDTH, HEIGHT, INTRINSIC_HEIGHT);
+        assertEquals(position.value, 5);
+        assertEquals(position.position, (HEIGHT - INTRINSIC_HEIGHT) / 2);
     }
 }
