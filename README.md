@@ -3,7 +3,7 @@ PiRover
 
 Raspberry Pi + Android app controlled robotic vehicle :D
 
-## Build instructions:
+## Build instructions (Raspberry Pi):
 
 Install OpenCV libraries:
 
@@ -20,7 +20,7 @@ cd build
 cmake ..
 make
 sudo make install
-ldconfig
+sudo ldconfig
 ```
 
 Build PiRover:
@@ -42,3 +42,7 @@ To stop PiRover:
 ```
 sudo service pirover stop
 ```
+
+## Build instructions (Android App):
+
+The Android app should be able to be built from eclipse with the Android Developer Tools plugin.
