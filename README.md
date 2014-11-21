@@ -2,3 +2,43 @@ PiRover
 =======
 
 Raspberry Pi + Android app controlled robotic vehicle :D
+
+## Build instructions:
+
+Install OpenCV libraries:
+
+```
+sudo apt-get install libopencv-core-dev
+```
+
+Install raspicam libraries:
+
+```
+cd PiRover/lib/raspicam-0.1.1
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+ldconfig
+```
+
+Build PiRover:
+```
+cd PiRover
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
+
+To start PiRover:
+```
+sudo service pirover start
+```
+
+To stop PiRover:
+```
+sudo service pirover stop
+```
