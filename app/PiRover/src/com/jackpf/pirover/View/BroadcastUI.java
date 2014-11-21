@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.text.InputType;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.jackpf.pirover.MainActivity;
 import com.jackpf.pirover.R;
@@ -47,16 +48,8 @@ public class BroadcastUI extends UI<MainActivity>
     public void error(Exception e)
     {
         if (e instanceof ConnectionException) {
-            alertDialog = new AlertDialog.Builder(context)
-                .setTitle(context.getString(R.string.broadcast_disconnected_title))
-                .setMessage(context.getString(R.string.broadcast_disconnected_message))
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) { 
-                        activity.finish();
-                    }
-                 })
-                .setCancelable(false)
-                .show();
+            dialog.dismiss();
+            Toast.makeText(activity, context.getString(R.string.broadcast_disconnected_message), Toast.LENGTH_SHORT).show();
         } else if (e instanceof TimeoutException || e instanceof IOException) {
             dialog.dismiss();
             
@@ -69,15 +62,15 @@ public class BroadcastUI extends UI<MainActivity>
                 .setView(input)
                 .setPositiveButton(context.getString(R.string.dialog_positive), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        ((MainActivity) activity).connect(input.getText().toString());
+                        activity.connect(input.getText().toString());
                     }
                 })
                 .setNegativeButton(context.getString(R.string.broadcast_rescan), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        ((MainActivity) activity).connect(null);
+                        activity.connect(null);
                     }
                 })
-                .setCancelable(false)
+                .setCancelable(true)
                 .show();
         }
     }

@@ -4,6 +4,12 @@
     tools:context="com.jackpf.pirover.MainActivity" >
 
     <item
+        android:id="@+id/action_reconnect"
+        android:orderInCategory="90"
+        android:title="@string/action_reconnect"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"

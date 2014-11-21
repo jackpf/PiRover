@@ -97,11 +97,11 @@ public class MainActivity extends Activity
     {
         super.onResume();
         
-        /*if (ip == null || ports == null) {
+        if (ip == null || ports == null) {
             connect(null);
         } else {
             executeCameraRequest();
-        }*/
+        }
     }
     
     /**
@@ -149,6 +149,9 @@ public class MainActivity extends Activity
                 return true;
             case R.id.action_playback:
                 startPlaybackActivity();
+                return true;
+            case R.id.action_reconnect:
+                connect(null);
                 return true;
         }
         
@@ -207,8 +210,9 @@ public class MainActivity extends Activity
                 }, delay);
             }
         });
-        
-        cameraThread.execute(ip, ports.get("camera"));
+        if (ip != null && ports != null) {
+            cameraThread.execute(ip, ports.get("camera"));
+        }
     }
     
     /**
@@ -222,7 +226,9 @@ public class MainActivity extends Activity
         
         controlThread = new RequestThread(controlRequest);
         
-        controlThread.execute(ip, ports.get("control"));
+        if (ip != null && ports != null) {
+            controlThread.execute(ip, ports.get("control"));
+        }
     }
     
     /**
