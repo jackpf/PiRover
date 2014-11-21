@@ -32,3 +32,10 @@ TEST(GPIO, PinModeWriteHighAndRead)
     GPIO::write(pin, GPIO::HIGH);
     EXPECT_EQ(GPIO::read(pin), GPIO::HIGH);
 }
+
+TEST(GPIO, WriteWithoutSetup)
+{
+    GPIO::setup();
+
+    EXPECT_DEATH(GPIO::pinMode(394, GPIO::OUT), "Pin 394 is not a valid GPIO pin");
+}

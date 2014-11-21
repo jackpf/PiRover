@@ -1,46 +1,42 @@
 package com.jackpf.pirover.Request;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
-import android.os.Environment;
-
-import com.jackpf.pirover.Camera.Client;
+import com.jackpf.pirover.Camera.BufferedVideo;
 import com.jackpf.pirover.Camera.ClientException;
-import com.jackpf.pirover.Camera.Frame;
+import com.jackpf.pirover.Camera.DrawableFrame;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 
 public class PlaybackRequest extends Request
 {
-    private static Client client;
-    private InputStream is;
+    private BufferedVideo video;
     
     public PlaybackRequest(Object ...params)
     {
         super(params);
+        
+        video = (BufferedVideo) params[0];
     }
 
     @Override
     public RequestResponse call(String ...args) throws ClientException, IOException
     {
-        if (client == null || !client.isConnected()) {
-            client = new Client();
-        }
-        
-        if (is == null) {
-            is = new FileInputStream(Environment.getExternalStorageDirectory() + "/PiRoverRecordings/record.pirover");
+        if (!video.isLoaded()) {
+            video.load();
         }
         
         RequestResponse response = new RequestResponse();
         
-        Frame image = client.getFrame(is);
+        DrawableFrame frame = (DrawableFrame) video.getFrame();
         
-        if (image.getBytes() != null) {
-            response.put("drawable", image.getDrawable());
+        if (frame != null) {
+            response.put("drawable", frame.getDrawable());
+            response.put("fps", 11); // TODO: Needs to be calculated
+            response.put("current_frame", video.getFramePosition());
+            response.put("frame_count", video.getFrameCount());
         } else {
-            response.put("finished", true);
+            response.put("drawable", null);
         }
 
         return response;

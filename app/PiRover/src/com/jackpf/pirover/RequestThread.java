@@ -1,5 +1,6 @@
 package com.jackpf.pirover;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 
 import com.jackpf.pirover.Model.Request;
@@ -10,7 +11,7 @@ import com.jackpf.pirover.Model.UI;
  * Network thread
  * Performs all api requests
  */
-public class NetworkThread extends AsyncTask<String, Void, Void>
+public class RequestThread extends AsyncTask<String, Void, Void>
 {
     /**
      * Api request to call
@@ -20,7 +21,7 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
     /**
      * UI to pass data to
      */
-    private UI ui;
+    private UI<? extends Activity> ui;
     
     /**
      * UI vars
@@ -42,7 +43,7 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
      * 
      * @param request
      */
-    public NetworkThread(Request request)
+    public RequestThread(Request request)
     {
         this.request = request;
     }
@@ -53,7 +54,7 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
      * @param request
      * @param ui
      */
-    public NetworkThread(Request request, UI ui)
+    public RequestThread(Request request, UI<? extends Activity> ui)
     {
         this.request = request;
         this.ui = ui;
@@ -65,7 +66,7 @@ public class NetworkThread extends AsyncTask<String, Void, Void>
      * @param callback
      * @return
      */
-    public NetworkThread setCallback(Callback callback)
+    public RequestThread setCallback(Callback callback)
     {
         this.callback = callback;
         

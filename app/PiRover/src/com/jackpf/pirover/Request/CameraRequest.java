@@ -3,12 +3,11 @@ package com.jackpf.pirover.Request;
 import java.io.IOException;
 
 import com.jackpf.pirover.Camera.Client;
-import com.jackpf.pirover.Camera.Frame;
+import com.jackpf.pirover.Camera.DrawableFrame;
 import com.jackpf.pirover.Camera.Recorder;
 import com.jackpf.pirover.Client.ClientException;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
-import com.jackpf.pirover.Service.Utils;
 
 public class CameraRequest extends Request
 {
@@ -43,10 +42,10 @@ public class CameraRequest extends Request
         
         RequestResponse response = new RequestResponse();
         
-        Frame image = client.getFrame();
+        DrawableFrame image = (DrawableFrame) client.getFrame();
         
         if (recorder.isRecording()) {
-            recorder.record(Utils.intToByteArray(image.getBytes().length), image.getBytes());
+            recorder.recordFrame(image);
         }
         
         response.put("drawable", image.getDrawable());

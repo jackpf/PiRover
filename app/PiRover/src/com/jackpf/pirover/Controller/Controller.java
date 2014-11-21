@@ -1,66 +1,84 @@
 package com.jackpf.pirover.Controller;
 
-import com.jackpf.pirover.NetworkThread;
-import com.jackpf.pirover.Request.ControlRequest;
 
 public class Controller
 {
+    /**
+     * Accelerator position
+     */
     private int acceleratorPosition;
+    
+    /**
+     * Steering wheel position
+     */
     private int steeringPosition;
-    private NetworkThread thread;
-    private String ip, port;
-    private com.jackpf.pirover.Client.Client  client;
     
-    public Controller(com.jackpf.pirover.Client.Client client)
-    {
-        this.client = client;
-    }
-
-    public void setIp(String ip)
-    {
-        this.ip = ip;
-    }
+    /**
+     * Is update pending?
+     */
+    private boolean pendingUpdate;
     
-    public void setPort(String port)
+    /**
+     * Set pending update if an update is already pending or if a new value is set
+     * 
+     * @param a
+     * @param b
+     */
+    private void setPendingUpdate(int a, int b)
     {
-        this.port = port;
+        pendingUpdate = pendingUpdate || a != b;
     }
     
-    private void pendingUpdate(int a, int b)
+    /**
+     * Check if an update is pending, and set pending updates to false
+     * 
+     * @return True if an update is pending, false otherwise
+     */
+    public boolean consumeUpdate()
     {
-        if (a != b) {
-            update();
-        }
-    }
-    
-    private void update()
-    {
-        if (thread instanceof NetworkThread) {
-            thread.cancel(true);
-        }
+        boolean consumed = pendingUpdate;
+        pendingUpdate = false;
         
-        thread = new NetworkThread(new ControlRequest(client, this));
-        
-        thread.execute(ip, port);
+        return consumed;
     }
     
+    /**
+     * Set accelerator position
+     * 
+     * @param acceleratorPosition
+     */
     public void setAcceleratorPosition(int acceleratorPosition)
     {
-        pendingUpdate(acceleratorPosition, this.acceleratorPosition);
+        setPendingUpdate(acceleratorPosition, this.acceleratorPosition);
         this.acceleratorPosition = acceleratorPosition;
     }
     
+    /**
+     * Get accelerator position
+     * 
+     * @return
+     */
     public int getAcceleratorPosition()
     {
         return this.acceleratorPosition;
     }
     
+    /**
+     * Set steering wheel position
+     * 
+     * @param steeringPosition
+     */
     public void setSteeringPosition(int steeringPosition)
     {
-        pendingUpdate(steeringPosition, this.steeringPosition);
+        setPendingUpdate(steeringPosition, this.steeringPosition);
         this.steeringPosition = steeringPosition;
     }
     
+    /**
+     * Get steering wheel position
+     * 
+     * @return
+     */
     public int getSteeringPosition()
     {
         return this.steeringPosition;

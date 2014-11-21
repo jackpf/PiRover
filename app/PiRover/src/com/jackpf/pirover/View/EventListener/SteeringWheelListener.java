@@ -6,16 +6,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.jackpf.pirover.Controller.Controller;
+import com.jackpf.pirover.MainActivity;
 import com.jackpf.pirover.Controller.ControllerCalculator;
 
 public class SteeringWheelListener implements View.OnTouchListener
 {
-    private Controller controller;
+    private MainActivity activity;
     
-    public SteeringWheelListener(Controller controller)
+    public SteeringWheelListener(MainActivity activity)
     {
-        this.controller = controller;
+        this.activity = activity;
     }
     
     @Override
@@ -35,7 +35,7 @@ public class SteeringWheelListener implements View.OnTouchListener
             matrix.postRotate((float) steeringWheelPosition.position, iv.getWidth() / 2, iv.getHeight() / 2);
             iv.setImageMatrix(matrix);
             
-            controller.setSteeringPosition(steeringWheelPosition.value);
+            activity.setSteeringWheelPosition(steeringWheelPosition);
         }
         
         return true;

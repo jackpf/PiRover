@@ -9,16 +9,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.jackpf.pirover.NetworkThread.Callback;
+import com.jackpf.pirover.RequestThread.Callback;
 import com.jackpf.pirover.Broadcast.BroadcastResolver;
 import com.jackpf.pirover.Camera.ClientException;
+import com.jackpf.pirover.Camera.DrawableFrameFactory;
 import com.jackpf.pirover.Client.Client;
 import com.jackpf.pirover.Controller.Controller;
+import com.jackpf.pirover.Controller.ControllerCalculator;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Model.UI;
 import com.jackpf.pirover.Request.BroadcastRequest;
 import com.jackpf.pirover.Request.CameraRequest;
+import com.jackpf.pirover.Request.ControlRequest;
 import com.jackpf.pirover.View.BroadcastUI;
 import com.jackpf.pirover.View.CameraUI;
 import com.jackpf.pirover.View.ControllerUI;
@@ -26,9 +29,9 @@ import com.jackpf.pirover.View.ControllerUI;
 public class MainActivity extends Activity
 {
     /**
-     * Network thread instance
+     * Network thread instances
      */
-    protected NetworkThread thread;
+    protected RequestThread cameraThread, controlThread;
     
     /**
      * Client instances
@@ -43,7 +46,7 @@ public class MainActivity extends Activity
     /**
      * User interface instances
      */
-    protected UI cameraUI, controlUI;
+    protected UI<MainActivity> cameraUI, controlUI;
     
     /**
      * Controller instance
@@ -58,10 +61,11 @@ public class MainActivity extends Activity
     /**
      * Resolved ports
      */
-    BroadcastResolver.PortMap ports;
+    static BroadcastResolver.PortMap ports;
     
     /**
      * Activity created event
+     * Initialise clients, requests and UIs
      */
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -70,14 +74,15 @@ public class MainActivity extends Activity
         
         setContentView(R.layout.activity_main);
         
-        cameraClient = new com.jackpf.pirover.Camera.Client();
+        cameraClient = new com.jackpf.pirover.Camera.Client(new DrawableFrameFactory());
         controlClient = new com.jackpf.pirover.Controller.Client();
-        
+
+        controller = new Controller();
         cameraRequest = new CameraRequest(cameraClient);
-        controller = new Controller(controlClient);
+        controlRequest = new ControlRequest(controlClient, controller);
 
         cameraUI = new CameraUI(this);
-        controlUI = new ControllerUI(this, controller);
+        controlUI = new ControllerUI(this);
 
         cameraUI.initialise();
         controlUI.initialise();
@@ -85,29 +90,31 @@ public class MainActivity extends Activity
     
     /**
      * Activity resumed event
+     * Attempt to (re)connect to the PiRover
      */
     @Override
     protected void onResume()
     {
         super.onResume();
         
-        if (ip == null) {
+        /*if (ip == null || ports == null) {
             connect(null);
         } else {
             executeCameraRequest();
-        }
+        }*/
     }
     
     /**
      * Activity paused event
+     * Cancel any running threads and disconnect clients
      */
     @Override
     protected void onPause()
     {
         super.onPause();
         
-        if (thread instanceof NetworkThread) {
-            thread.cancel(true);
+        if (cameraThread instanceof RequestThread) {
+            cameraThread.cancel(true);
         }
         
         cameraClient.disconnect();
@@ -149,31 +156,14 @@ public class MainActivity extends Activity
     }
     
     /**
-     * Toggle recording
-     */
-    public void toggleRecording()
-    {
-        ((CameraRequest) cameraRequest).getRecorder().toggleRecording();
-    }
-    
-    /**
-     * Launch playback activity
-     */
-    public void startPlaybackActivity()
-    {
-        Intent intent = new Intent(this, PlaybackActivity.class);
-        startActivity(intent);
-    }
-    
-    /**
      * Resolve IP and ports
      * 
      * @param manualIp
      */
     public void connect(String manualIp)
     {
-        new NetworkThread(new BroadcastRequest(getSystemService(WIFI_SERVICE), getSystemService(Context.CONNECTIVITY_SERVICE)), new BroadcastUI(this))
-            .setCallback(new NetworkThread.Callback() {
+        new RequestThread(new BroadcastRequest(getSystemService(WIFI_SERVICE), getSystemService(Context.CONNECTIVITY_SERVICE)), new BroadcastUI(this))
+            .setCallback(new RequestThread.Callback() {
                 @Override
                 public void onPostExecute(RequestResponse vars, Exception e) {
                     if (vars.get("ip") != null && !(e instanceof Exception)) {
@@ -185,10 +175,6 @@ public class MainActivity extends Activity
                         
                         // Start connecting to camera
                         executeCameraRequest();
-                        
-                        // Set controller IP and port
-                        controller.setIp(ip);
-                        controller.setPort(ports.get("control"));
                     }
                 }
             })
@@ -200,17 +186,14 @@ public class MainActivity extends Activity
      */
     protected void executeCameraRequest()
     {
-        if (thread instanceof NetworkThread) {
-            thread.cancel(true);
+        if (cameraThread instanceof RequestThread) {
+            cameraThread.cancel(true);
         }
         
-        thread = new NetworkThread(
+        cameraThread = new RequestThread(
             cameraRequest,
             cameraUI
-        );
-        
-        // Set repeating
-        thread.setCallback(new Callback() {
+        ).setCallback(new Callback() {
             @Override
             public void onPostExecute(RequestResponse vars, Exception e) {
                 int delay = !(e instanceof ClientException) ? 0 : 5000;
@@ -225,6 +208,65 @@ public class MainActivity extends Activity
             }
         });
         
-        thread.execute(ip, ports.get("camera"));
+        cameraThread.execute(ip, ports.get("camera"));
+    }
+    
+    /**
+     * Execute control request
+     */
+    protected void executeControlRequest()
+    {
+        if (controlThread instanceof RequestThread) {
+            controlThread.cancel(true);
+        }
+        
+        controlThread = new RequestThread(controlRequest);
+        
+        controlThread.execute(ip, ports.get("control"));
+    }
+    
+    /**
+     * Set accelerator position
+     * 
+     * @param position
+     */
+    public void setAcceleratorPosition(ControllerCalculator.Position position)
+    {
+        controller.setAcceleratorPosition(position.value);
+        
+        if (controller.consumeUpdate()) {
+            executeControlRequest();
+        }
+    }
+    
+    /**
+     * Set steering wheel position
+     * 
+     * @param position
+     */
+    public void setSteeringWheelPosition(ControllerCalculator.Position position)
+    {
+        controller.setSteeringPosition(position.value);
+        
+        if (controller.consumeUpdate()) {
+            executeControlRequest();
+        }
+    }
+    
+    /**
+     * Toggle recording
+     */
+    public void toggleRecording()
+    {
+        ((CameraRequest) cameraRequest).getRecorder().toggleRecording();
+    }
+    
+    /**
+     * Launch playback activity
+     */
+    public void startPlaybackActivity()
+    {
+        Intent intent = new Intent(this, BrowseActivity.class);
+        startActivity(intent);
     }
 }

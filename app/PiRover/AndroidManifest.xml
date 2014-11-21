@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="19"
         android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -20,15 +20,23 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/activity_main_title" >
+            android:label="@string/activity_main_title"
+    		android:configChanges="orientation|screenSize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".PlaybackActivity"
-            android:label="@string/activity_playback_title" >
+            android:label="@string/activity_playback_title"
+    		android:configChanges="orientation|screenSize" >
+        </activity>
+        <activity
+            android:name=".BrowseActivity"
+            android:label="@string/title_activity_browse"
+    		android:configChanges="orientation|screenSize" >
         </activity>
     </application>
 

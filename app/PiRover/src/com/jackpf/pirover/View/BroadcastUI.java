@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputType;
 import android.widget.EditText;
@@ -15,19 +14,14 @@ import com.jackpf.pirover.Broadcast.ConnectionException;
 import com.jackpf.pirover.Broadcast.TimeoutException;
 import com.jackpf.pirover.Model.UI;
 
-public class BroadcastUI extends UI
+public class BroadcastUI extends UI<MainActivity>
 {
     private static ProgressDialog dialog;
     private static AlertDialog alertDialog;
     
-    public BroadcastUI(Context context)
+    public BroadcastUI(MainActivity activity)
     {
-        super(context);
-    }
-    
-    public void initialise()
-    {
-
+        super(activity);
     }
     
     public void preUpdate()
@@ -38,8 +32,8 @@ public class BroadcastUI extends UI
         
         dialog = new ProgressDialog(context);
         
-        dialog.setTitle(context.getString(R.string.broadcast_loading));
-        dialog.setMessage(context.getString(R.string.broadcast_detecting));
+        dialog.setTitle(context.getString(R.string.broadcast_loading_title));
+        dialog.setMessage(context.getString(R.string.broadcast_loading_text));
         dialog.setCancelable(false);
         
         dialog.show();

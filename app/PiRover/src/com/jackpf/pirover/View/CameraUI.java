@@ -1,27 +1,27 @@
 package com.jackpf.pirover.View;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jackpf.pirover.MainActivity;
 import com.jackpf.pirover.R;
 import com.jackpf.pirover.Camera.ClientException;
 import com.jackpf.pirover.Model.UI;
 import com.jackpf.pirover.View.EventListener.RecordButtonListener;
 
-public class CameraUI extends UI
+public class CameraUI extends UI<MainActivity>
 {
     private TextView tvStatus;
     private Button bRecording;
     private ImageView ivCamera;
     private TextView tvFpsCount, tvBandwidth;
     
-    public CameraUI(Context context)
+    public CameraUI(MainActivity activity)
     {
-        super(context);
+        super(activity);
     }
     
     @Override

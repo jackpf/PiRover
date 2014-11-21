@@ -1,12 +1,18 @@
 package com.jackpf.pirover;
 
+import java.io.FileNotFoundException;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.jackpf.pirover.NetworkThread.Callback;
+import com.jackpf.pirover.RequestThread.Callback;
+import com.jackpf.pirover.Camera.BufferedVideo;
+import com.jackpf.pirover.Camera.DrawableFrameFactory;
+import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Model.UI;
 import com.jackpf.pirover.Request.PlaybackRequest;
@@ -14,9 +20,10 @@ import com.jackpf.pirover.View.PlaybackUI;
 
 public class PlaybackActivity extends Activity
 {
-    protected NetworkThread thread;
-    protected UI playbackUI;
-    protected /*Request*/PlaybackRequest playbackRequest;
+    protected RequestThread thread;
+    protected UI<PlaybackActivity> playbackUI;
+    protected Request playbackRequest;
+    protected BufferedVideo video;
     
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -25,7 +32,13 @@ public class PlaybackActivity extends Activity
         
         setContentView(R.layout.activity_playback);
         
-        playbackRequest = new PlaybackRequest();
+        try {
+            video = new BufferedVideo(new DrawableFrameFactory(), getIntent().getStringExtra("video"));
+        } catch (FileNotFoundException e) {
+            finish();
+        }
+        
+        playbackRequest = new PlaybackRequest(video);
 
         playbackUI = new PlaybackUI(this);
         playbackUI.initialise();
@@ -43,10 +56,8 @@ public class PlaybackActivity extends Activity
     protected void onPause()
     {
         super.onPause();
-        
-        if (thread instanceof NetworkThread) {
-            thread.cancel(true);
-        }
+
+        video.isPlaying(false);
     }
 
     @Override
@@ -75,20 +86,17 @@ public class PlaybackActivity extends Activity
      */
     protected void executePlaybackRequest()
     {
-        if (thread instanceof NetworkThread) {
+        if (thread instanceof RequestThread) {
             thread.cancel(true);
         }
         
-        thread = new NetworkThread(
+        thread = new RequestThread(
             playbackRequest,
             playbackUI
-        );
-        
-        // Set repeating
-        thread.setCallback(new Callback() {
+        ).setCallback(new Callback() {
             public void onPostExecute(RequestResponse vars, Exception e) {
-                if ((vars.get("finished") == null || !(Boolean) vars.get("finished")) && e == null) {
-                    int fps = 11;
+                if (video.isPlaying() && vars.get("drawable") != null && e == null) {
+                    int fps = (Integer) vars.get("fps");
                     int delay = 1000 / fps;
                     
                     final Handler handler = new Handler();
@@ -103,5 +111,46 @@ public class PlaybackActivity extends Activity
         });
         
         thread.execute();
+    }
+    
+    public void togglePlayback(View v)
+    {
+        video.toggleIsPlaying();
+        
+        if (video.isPlaying()) {
+            // Stop any rewind/fastforward
+            video.setDirection(BufferedVideo.PLAY);
+            executePlaybackRequest(); // Restart thread if we're playing again
+        }
+    }
+    
+    public void rewind(View v)
+    {
+        video.setDirection(BufferedVideo.REWIND);
+        if (!video.isPlaying()) { // If not playing, set to play and start playing again
+            video.isPlaying(true);
+            executePlaybackRequest();
+        }
+    }
+    
+    public void fastForward(View v)
+    {
+        video.setDirection(BufferedVideo.FASTFORWARD);
+        if (!video.isPlaying()) { // If not playing, set to play and start playing again
+            video.isPlaying(true);
+            executePlaybackRequest();
+        }
+    }
+    
+    public void setPosition(float ratio)
+    {
+        video.setFramePosition((int) Math.round(video.getFrameCount() * ratio));
+        
+        // Load 1 frame to update the view to the current position
+        if (!video.isPlaying()) {
+            video.isPlaying(true);
+            executePlaybackRequest();
+            video.isPlaying(false);
+        }
     }
 }

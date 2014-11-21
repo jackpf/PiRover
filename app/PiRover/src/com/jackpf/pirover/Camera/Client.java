@@ -8,6 +8,12 @@ import com.jackpf.pirover.Service.Utils;
 public class Client extends com.jackpf.pirover.Client.Client
 {
     private StreamStats streamStats;
+    private FrameFactory frameFactory;
+    
+    public Client(FrameFactory frameFactory)
+    {
+        this.frameFactory = frameFactory;
+    }
     
     public void connect(String host, int port) throws com.jackpf.pirover.Client.ClientException
     {
@@ -23,9 +29,9 @@ public class Client extends com.jackpf.pirover.Client.Client
         }
         
         try {
-            Frame frame = getFrame(socket.getInputStream());
+            Frame frame = consumeFrameFromStream(socket.getInputStream());
             
-            if (frame.getBytes() == null) {
+            if (frame == null) {
                 throw new ClientException("Client not connected");
             }
             
@@ -35,7 +41,7 @@ public class Client extends com.jackpf.pirover.Client.Client
         }
     }
     
-    public Frame getFrame(InputStream is) throws ClientException
+    protected Frame consumeFrameFromStream(InputStream is) throws ClientException
     {
         try {
             // The first 32 bit int (4 bytes) of the stream will be the size of the image
@@ -62,7 +68,7 @@ public class Client extends com.jackpf.pirover.Client.Client
                 streamStats.addFrame(bytesReadTotal);
             }
             
-            return new Frame(image);
+            return frameFactory.createFrame(image);
         } catch (IOException e) {
             throw new ClientException("Unable to capture frame", e);
         }
