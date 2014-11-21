@@ -3,6 +3,14 @@ PiRover
 
 Raspberry Pi + Android app controlled robotic vehicle :D
 
+## Checkout:
+
+Make sure to add the recursive flag to download the raspicam library also.
+
+```
+git clone --recursive http://github.com/jackpf/PiRover.git
+```
+
 ## Build instructions (Raspberry Pi):
 
 Install OpenCV libraries:
