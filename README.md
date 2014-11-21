@@ -14,7 +14,7 @@ sudo apt-get install libopencv-core-dev
 Install raspicam libraries:
 
 ```
-cd PiRover/lib/raspicam-0.1.1
+cd PiRover/lib/raspicam
 mkdir build
 cd build
 cmake ..

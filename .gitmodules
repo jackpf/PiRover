@@ -1,0 +1,3 @@
+[submodule "lib/raspicam"]
+	path = lib/raspicam
+	url = http://github.com/jackpf/raspicam.git
