@@ -22,3 +22,7 @@ add_executable(broadcast broadcast.cpp lib/lib.cpp lib/broadcast.cpp)
 install(TARGETS broadcast DESTINATION /usr/local/bin/)
 
 install(FILES pirover DESTINATION /etc/init.d PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ)
+execute_process(COMMAND update-rc.d pirover defaults
+                RESULT_VARIABLE Result
+                OUTPUT_VARIABLE Output
+                ERROR_VARIABLE Error)
