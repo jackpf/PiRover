@@ -88,7 +88,7 @@ public class VideoPlayer extends JFrame
                 repaint();
                 
                 try {
-                    Thread.sleep((int) Math.round(1000.0 / 11.0));
+                    Thread.sleep((int) Math.round(1000.0 / video.getFps()));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.jackpf.pirover.MainActivity;
 import com.jackpf.pirover.R;
-import com.jackpf.pirover.Camera.ClientException;
+import com.jackpf.pirover.Client.ClientException;
 import com.jackpf.pirover.Model.UI;
 import com.jackpf.pirover.View.EventListener.RecordButtonListener;
 

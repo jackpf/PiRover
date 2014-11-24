@@ -32,7 +32,7 @@ public class PlaybackRequest extends Request
         
         if (frame != null) {
             response.put("drawable", frame.getDrawable());
-            response.put("fps", 11); // TODO: Needs to be calculated
+            response.put("fps", video.getFps());
             response.put("current_frame", video.getFramePosition());
             response.put("frame_count", video.getFrameCount());
         } else {

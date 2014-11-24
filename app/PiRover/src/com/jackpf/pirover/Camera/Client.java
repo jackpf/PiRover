@@ -10,16 +10,15 @@ public class Client extends com.jackpf.pirover.Client.Client
     private StreamStats streamStats;
     private FrameFactory frameFactory;
     
-    public Client(FrameFactory frameFactory)
+    public Client(FrameFactory frameFactory, StreamStats streamStats)
     {
         this.frameFactory = frameFactory;
+        this.streamStats = streamStats;
     }
     
     public void connect(String host, int port) throws com.jackpf.pirover.Client.ClientException
     {
         super.connect(host, port);
-        
-        streamStats = new StreamStats();
     }
     
     public Frame getFrame() throws ClientException

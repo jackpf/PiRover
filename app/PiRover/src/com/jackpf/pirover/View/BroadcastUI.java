@@ -35,7 +35,7 @@ public class BroadcastUI extends UI<MainActivity>
         
         dialog.setTitle(context.getString(R.string.broadcast_loading_title));
         dialog.setMessage(context.getString(R.string.broadcast_loading_text));
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         
         dialog.show();
     }

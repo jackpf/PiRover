@@ -121,6 +121,16 @@ public class BufferedVideo
     }
     
     /**
+     * Get video fps
+     * 
+     * @return
+     */
+    public int getFps()
+    {
+        return client.getFps();
+    }
+    
+    /**
      * Get first frame in video
      * Will load the first frame if the video is not already loaded
      * 

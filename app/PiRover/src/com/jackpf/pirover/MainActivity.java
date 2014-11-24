@@ -13,6 +13,8 @@ import com.jackpf.pirover.RequestThread.Callback;
 import com.jackpf.pirover.Broadcast.BroadcastResolver;
 import com.jackpf.pirover.Camera.ClientException;
 import com.jackpf.pirover.Camera.DrawableFrameFactory;
+import com.jackpf.pirover.Camera.Recorder;
+import com.jackpf.pirover.Camera.StreamStats;
 import com.jackpf.pirover.Client.Client;
 import com.jackpf.pirover.Controller.Controller;
 import com.jackpf.pirover.Controller.ControllerCalculator;
@@ -54,6 +56,16 @@ public class MainActivity extends Activity
     protected Controller controller;
     
     /**
+     * Recorder instance
+     */
+    protected Recorder recorder;
+    
+    /**
+     * Stream stats instance
+     */
+    protected StreamStats streamStats;
+    
+    /**
      * Resolved IP address
      */
     protected static String ip;
@@ -73,16 +85,19 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.activity_main);
+
+        streamStats     = new StreamStats();
+        controller      = new Controller();
+        recorder        = new Recorder(streamStats);
         
-        cameraClient = new com.jackpf.pirover.Camera.Client(new DrawableFrameFactory());
-        controlClient = new com.jackpf.pirover.Controller.Client();
+        cameraClient    = new com.jackpf.pirover.Camera.Client(new DrawableFrameFactory(), streamStats);
+        controlClient   = new com.jackpf.pirover.Controller.Client();
+        
+        cameraRequest   = new CameraRequest(cameraClient, recorder);
+        controlRequest  = new ControlRequest(controlClient, controller);
 
-        controller = new Controller();
-        cameraRequest = new CameraRequest(cameraClient);
-        controlRequest = new ControlRequest(controlClient, controller);
-
-        cameraUI = new CameraUI(this);
-        controlUI = new ControllerUI(this);
+        cameraUI        = new CameraUI(this);
+        controlUI       = new ControllerUI(this);
 
         cameraUI.initialise();
         controlUI.initialise();
@@ -264,7 +279,7 @@ public class MainActivity extends Activity
      */
     public void toggleRecording()
     {
-        ((CameraRequest) cameraRequest).getRecorder().toggleRecording();
+        recorder.toggleRecording();
     }
     
     /**

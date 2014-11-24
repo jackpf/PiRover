@@ -19,7 +19,7 @@ public class CameraRequest extends Request
         super(params);
         
         client = (Client) params[0];
-        recorder = new Recorder();
+        recorder = (Recorder) params[1];
     }
 
     @Override

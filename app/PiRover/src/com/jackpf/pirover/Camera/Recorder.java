@@ -15,7 +15,14 @@ public class Recorder
 {
     private boolean recording;
     private static BufferedOutputStream out;
+    private StreamStats streamStats;
+    
     public static final String RECORD_DIR = "PiRoverRecordings", RECORD_EXT = "prr";
+    
+    public Recorder(StreamStats streamStats)
+    {
+        this.streamStats = streamStats;
+    }
     
     private BufferedOutputStream createStream() throws IOException
     {
@@ -63,6 +70,13 @@ public class Recorder
             throw new IOException("No stream to record to");
         }
         
+        /**
+         * Prr header format:
+         *  @param 1 byte:  The fps of the stream at current frame
+         *  @param 1 byte:  Frame size
+         *  @param x bytes: Image data
+         */
+        out.write(Utils.intToByteArray((int) Math.round(streamStats.getFps())));
         out.write(Utils.intToByteArray(frame.getBytes().length));
         out.write(frame.getBytes());
         
