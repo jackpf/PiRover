@@ -118,38 +118,35 @@ public class PlaybackActivity extends Activity
         thread.execute();
     }
     
-    public void togglePlayback(View v)
+    public void playbackControl(View v)
     {
-        boolean isPlaying = v.isSelected();
+        // State vars
+        ImageButton btnPlay = (ImageButton) findViewById(R.id.play);
+        int direction       = video.getDirection();
+        boolean isPlaying   = video.isPlaying();
+        
+        switch (v.getId()) {
+            case R.id.play:
+                direction = BufferedVideo.PLAY;
+                isPlaying = !isPlaying;
+            break;
+            case R.id.rewind:
+                direction = BufferedVideo.REWIND;
+                isPlaying = true;
+            break;
+            case R.id.fastforward:
+                direction = BufferedVideo.FASTFORWARD;
+                isPlaying = true;
+            break;
+        }
+        
+        video.setDirection(direction);
         video.isPlaying(isPlaying);
+        btnPlay.setSelected(!isPlaying);
         
         if (isPlaying) {
-            // Stop any rewind/fastforward
-            video.setDirection(BufferedVideo.PLAY);
-            executePlaybackRequest(); // Restart thread if we're playing again
-        }
-        
-        v.setSelected(!isPlaying);
-    }
-    
-    public void rewind(View v)
-    {
-        video.setDirection(BufferedVideo.REWIND);
-        if (!video.isPlaying()) { // If not playing, set to play and start playing again
-            video.isPlaying(true);
             executePlaybackRequest();
         }
-        ((ImageButton) findViewById(R.id.play)).setSelected(false); // Allow pause
-    }
-    
-    public void fastForward(View v)
-    {
-        video.setDirection(BufferedVideo.FASTFORWARD);
-        if (!video.isPlaying()) { // If not playing, set to play and start playing again
-            video.isPlaying(true);
-            executePlaybackRequest();
-        }
-        ((ImageButton) findViewById(R.id.play)).setSelected(false); // Allow pause
     }
     
     public void setPosition(float ratio)

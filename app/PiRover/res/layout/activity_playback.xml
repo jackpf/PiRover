@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/video_progress"
         android:layout_below="@+id/video_progress"
-        android:onClick="fastForward"
+        android:onClick="playbackControl"
         android:src="@drawable/media_fastforward"
         android:background="@null" />
 
@@ -47,7 +47,7 @@
         android:layout_alignLeft="@+id/video_progress"
         android:layout_below="@+id/video_progress"
         android:background="@null"
-        android:onClick="rewind"
+        android:onClick="playbackControl"
         android:src="@drawable/media_rewind" />
 
     <ImageButton
@@ -57,6 +57,6 @@
         android:layout_alignTop="@+id/fastforward"
         android:layout_centerHorizontal="true"
         android:background="@drawable/media_play_state"
-        android:onClick="togglePlayback" />
+        android:onClick="playbackControl" />
 
 </RelativeLayout>
