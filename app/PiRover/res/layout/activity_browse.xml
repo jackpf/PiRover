@@ -8,12 +8,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.jackpf.pirover.BrowseActivity" >
 
-    <ListView
+    <GridView
 		android:id="@+id/files"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:divider="@android:color/transparent"
-		android:choiceMode="singleChoice" 
-		android:cacheColorHint="@android:color/transparent" />
+		android:choiceMode="singleChoice"
+	    android:numColumns="2"
+	    android:horizontalSpacing="10dp"
+	    android:verticalSpacing="10dp"
+	    android:gravity="center"
+	    android:stretchMode="columnWidth" />
 
 </RelativeLayout>

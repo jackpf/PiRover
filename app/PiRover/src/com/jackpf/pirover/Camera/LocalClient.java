@@ -43,7 +43,7 @@ public class LocalClient extends Client
     }
     
     public int getFps()
-    {System.err.println(fpsSum+"/"+framesRead+" = "+Math.round(fpsSum / framesRead));
+    {
         return (int) Math.round(fpsSum / framesRead);
     }
 }

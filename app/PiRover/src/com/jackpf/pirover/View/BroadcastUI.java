@@ -30,12 +30,15 @@ public class BroadcastUI extends UI<MainActivity>
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
         
         dialog = new ProgressDialog(context);
         
         dialog.setTitle(context.getString(R.string.broadcast_loading_title));
         dialog.setMessage(context.getString(R.string.broadcast_loading_text));
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
         
         dialog.show();
     }
