@@ -113,7 +113,7 @@ public class MainActivity extends Activity
         super.onResume();
         
         if (ip == null || ports == null) {
-            connect(null);
+            //connect(null);
         } else {
             executeCameraRequest();
         }

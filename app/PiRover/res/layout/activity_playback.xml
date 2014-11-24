@@ -30,34 +30,33 @@
         android:minHeight="10dp"
         android:progress="0" />
 
-    <Button
-        android:id="@+id/Button01"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button1"
-        android:layout_alignBottom="@+id/button1"
-        android:layout_alignLeft="@+id/video_progress"
-        android:onClick="rewind"
-        android:text="Button" />
-
-    <Button
-        android:id="@+id/Button02"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/Button01"
-        android:layout_alignBottom="@+id/Button01"
-        android:layout_centerHorizontal="true"
-        android:onClick="togglePlayback"
-        android:text="Button" />
-
-    <Button
-        android:id="@+id/button1"
+    <ImageButton
+        android:id="@+id/fastforward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/video_progress"
         android:layout_below="@+id/video_progress"
-        android:layout_marginTop="17dp"
         android:onClick="fastForward"
-        android:text="Button" />
+        android:src="@drawable/media_fastforward"
+        android:background="@null" />
+
+    <ImageButton
+        android:id="@+id/rewind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/video_progress"
+        android:layout_below="@+id/video_progress"
+        android:background="@null"
+        android:onClick="rewind"
+        android:src="@drawable/media_rewind" />
+
+    <ImageButton
+        android:id="@+id/play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/fastforward"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/media_play_state"
+        android:onClick="togglePlayback" />
 
 </RelativeLayout>

@@ -5,7 +5,9 @@ import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
+import android.widget.VideoView;
 
 import com.jackpf.pirover.PlaybackActivity;
 import com.jackpf.pirover.R;

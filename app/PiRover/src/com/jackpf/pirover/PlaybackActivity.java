@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.jackpf.pirover.RequestThread.Callback;
 import com.jackpf.pirover.Camera.BufferedVideo;
@@ -106,6 +107,10 @@ public class PlaybackActivity extends Activity
                             executePlaybackRequest();
                         }
                     }, delay);
+                } else if (vars.get("drawable") == null) {
+                    // Video has finished
+                    ((ImageButton) findViewById(R.id.play)).setSelected(true);
+                    setPosition(0);
                 }
             }
         });
@@ -115,13 +120,16 @@ public class PlaybackActivity extends Activity
     
     public void togglePlayback(View v)
     {
-        video.toggleIsPlaying();
+        boolean isPlaying = v.isSelected();
+        video.isPlaying(isPlaying);
         
-        if (video.isPlaying()) {
+        if (isPlaying) {
             // Stop any rewind/fastforward
             video.setDirection(BufferedVideo.PLAY);
             executePlaybackRequest(); // Restart thread if we're playing again
         }
+        
+        v.setSelected(!isPlaying);
     }
     
     public void rewind(View v)
@@ -131,6 +139,7 @@ public class PlaybackActivity extends Activity
             video.isPlaying(true);
             executePlaybackRequest();
         }
+        ((ImageButton) findViewById(R.id.play)).setSelected(false); // Allow pause
     }
     
     public void fastForward(View v)
@@ -140,6 +149,7 @@ public class PlaybackActivity extends Activity
             video.isPlaying(true);
             executePlaybackRequest();
         }
+        ((ImageButton) findViewById(R.id.play)).setSelected(false); // Allow pause
     }
     
     public void setPosition(float ratio)

@@ -24,7 +24,7 @@ public class BufferedVideo
     /**
      * Current frame position
      */
-    private int framePosition = 0;
+    private int framePosition = -1;
     
     /**
      * Playback direction states
@@ -90,6 +90,16 @@ public class BufferedVideo
     }
     
     /**
+     * Resets video to original state
+     */
+    public void resetVideo()
+    {
+        isPlaying(false);
+        setFramePosition(-1);
+        setDirection(PLAY);
+    }
+    
+    /**
      * Get next frame based on current video state
      * Also updates framePosition and frame states based on various factors
      * 
@@ -97,27 +107,29 @@ public class BufferedVideo
      */
     public Frame getFrame()
     {
-        // Reached the end or the start of the video?
-        if (framePosition < 0 || framePosition >= frames.size()) {
-            isPlaying(false);
-            return null;
-        }
-        
-        Frame frame = frames.get(framePosition);
-
         switch (direction) {
             case PLAY:
                 framePosition++;
             break;
             case REWIND:
-                framePosition = framePosition - 10 >= 0 ? framePosition - 10 : 0;
+                framePosition = framePosition - 10 >= -1 ? framePosition - 10 : -1;
             break;
             case FASTFORWARD:
                 framePosition = framePosition + 10 < frames.size() ? framePosition + 10 : frames.size();
             break;
         }
         
-        return frame;
+        // Reached the end or the start of the video?
+        if (framePosition < 0 || framePosition >= frames.size()) {
+            resetVideo();
+            return null;
+        }
+        
+        if (framePosition > -1) {
+            return frames.get(framePosition);
+        } else {
+            return null;
+        }
     }
     
     /**
