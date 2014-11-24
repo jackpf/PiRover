@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory 
+        android:title="@string/pref_connection_title">
+        
+        <CheckBoxPreference
+            android:key="@string/pref_autoconnect_key"
+            android:title="@string/pref_autoconnect_title"
+            android:defaultValue="@string/pref_autoconnect_default"
+            android:summary="@string/pref_autoconnect_summary" />
+        
+    </PreferenceCategory>
+    
+    <PreferenceCategory 
+        android:title="@string/pref_controller_title">
+        
+        <CheckBoxPreference 
+		    android:key="@string/pref_gyroscope_key"
+		    android:title="@string/pref_gyroscope_title"
+		    android:defaultValue="@string/pref_gyroscope_default"
+		    android:summary="@string/pref_gyroscope_summary"
+		    android:inputType="number" />
+        
+    </PreferenceCategory>
+
+</PreferenceScreen>

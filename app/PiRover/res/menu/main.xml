@@ -4,9 +4,9 @@
     tools:context="com.jackpf.pirover.MainActivity" >
 
     <item
-        android:id="@+id/action_reconnect"
+        android:id="@+id/action_connect"
         android:orderInCategory="90"
-        android:title="@string/action_reconnect"
+        android:title="@string/action_connect"
         app:showAsAction="never"/>
 
     <item

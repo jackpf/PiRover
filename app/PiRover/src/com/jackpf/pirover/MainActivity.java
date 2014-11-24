@@ -3,8 +3,10 @@ package com.jackpf.pirover;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -76,6 +78,11 @@ public class MainActivity extends Activity
     static BroadcastResolver.PortMap ports;
     
     /**
+     * Prefs manager instance
+     */
+    private SharedPreferences prefs;
+    
+    /**
      * Activity created event
      * Initialise clients, requests and UIs
      */
@@ -101,6 +108,9 @@ public class MainActivity extends Activity
 
         cameraUI.initialise();
         controlUI.initialise();
+        
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
     
     /**
@@ -113,7 +123,12 @@ public class MainActivity extends Activity
         super.onResume();
         
         if (ip == null || ports == null) {
-            //connect(null);
+            if (prefs.getBoolean(
+                getString(R.string.pref_autoconnect_key),
+                Boolean.valueOf(getString(R.string.pref_autoconnect_default))
+            )) {
+                connect(null);
+            }
         } else {
             executeCameraRequest();
         }
@@ -161,11 +176,12 @@ public class MainActivity extends Activity
         
         switch (id) {
             case R.id.action_settings:
+                startActivity(SettingsActivity.class);
                 return true;
             case R.id.action_playback:
-                startPlaybackActivity();
+                startActivity(BrowseActivity.class);
                 return true;
-            case R.id.action_reconnect:
+            case R.id.action_connect:
                 connect(null);
                 return true;
         }
@@ -283,11 +299,11 @@ public class MainActivity extends Activity
     }
     
     /**
-     * Launch playback activity
+     * Launch blank activity
      */
-    public void startPlaybackActivity()
+    public void startActivity(Class<?> c)
     {
-        Intent intent = new Intent(this, BrowseActivity.class);
+        Intent intent = new Intent(this, c);
         startActivity(intent);
     }
 }

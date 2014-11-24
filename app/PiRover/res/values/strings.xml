@@ -2,11 +2,11 @@
 <resources>
 
     <string name="app_name">PiRover</string>
-    <string name="activity_main_title">Controller</string>
-    <string name="activity_playback_title">Playback</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_main">Controller</string>
     <string name="action_playback">Playback</string>
-    <string name="action_reconnect">Reconnect</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_browse">Browse</string>
+    <string name="action_connect">Connect</string>
     <string name="dialog_positive">OK</string>
     <string name="dialog_negative">Cancel</string>
     <string name="camera">Camera</string>
@@ -30,6 +30,16 @@
     <string name="controller_steering_wheel">Steering Wheel</string>
     <string name="playback_loading_title">Loading</string>
     <string name="playback_loading_text">Buffering video</string>
-    <string name="title_activity_browse">BrowseActivity</string>
+    
+    <string name="pref_connection_title">Connection</string>
+    <string name="pref_autoconnect_key">auto_connect</string>
+    <string name="pref_autoconnect_title">Auto connect</string>
+    <string name="pref_autoconnect_default">true</string>
+    <string name="pref_autoconnect_summary">Auto connect when the app starts</string>
+    <string name="pref_control_title">Controller</string>
+    <string name="pref_gyroscope_key">gyroscope</string>
+    <string name="pref_gyroscope_title">Gyroscope</string>
+    <string name="pref_gyroscope_default">false</string>
+    <string name="pref_gyroscope_summary">Enables gyroscope controls</string>
 
 </resources>
