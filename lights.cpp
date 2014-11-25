@@ -1,5 +1,6 @@
 #include "lib/lib.hpp"
 #include "lib/gpio.hpp"
+#include "lib/network.hpp"
 
 #define LIGHT 11
 
@@ -11,6 +12,8 @@ static struct argp_option options[] = {
 int main(int argc, char *argv[])
 {
     Lib::Args args(argc, argv, options, sizeof(options));
+
+    WLANStatus wlan;
 
     GPIO::setup();
 

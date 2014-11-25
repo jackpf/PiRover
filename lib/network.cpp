@@ -1,21 +1,21 @@
-#include "network.h"
+#include "network.hpp"
 
-WLAN::WLAN()
+WLANStatus::WLANStatus()
 {
-    sock = socket(AF_INET, SOCK_DGRAM, 0);
+    socket = ::socket(AF_INET, SOCK_DGRAM, 0);
 }
 
-bool WLAN::supportsWlan(struct ifaddrs *interface)
+bool WLANStatus::supportsWlan(struct ifaddrs *ifa)
 {
     struct iwreq wrq;
 
     memset(&wrq, 0, sizeof(struct iwreq));
-    strncpy(wrq.ifr_name, ifname, IFNAMSIZ);
+    strncpy(wrq.ifr_name, ifa->ifa_name, IFNAMSIZ);
 
-    return ioctl(skfd, SIOCGIWNAME, &wrq) == 0;
+    return ioctl(socket, SIOCGIWNAME, &wrq) == 0;
 }
 
-bool WLAN::findWlanInterface()
+bool WLANStatus::findWlanInterface()
 {
     struct ifaddrs *ifap, *ifa;
 
@@ -26,9 +26,9 @@ bool WLAN::findWlanInterface()
     for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
         if (ifa->ifa_addr != NULL
             && (ifa->ifa_addr->sa_family == AF_INET || ifa->ifa_addr->sa_family == AF_INET6)
-            && supports_wlan(ifa)) {
+            && supportsWlan(ifa)) {
             freeifaddrs(ifap);
-            interface = ifap;
+            interface = ifa;
             return true;
         }
     }
@@ -38,7 +38,7 @@ bool WLAN::findWlanInterface()
     return false;
 }
 
-bool WLAN::isConnected()
+bool WLANStatus::isConnected()
 {
     if (interface == NULL) {
         if (!findWlanInterface()) {
@@ -47,7 +47,7 @@ bool WLAN::isConnected()
     }
 
     char *ip = (char *) malloc(20);
-    struct sockaddr_in *sa = (struct sockaddr_in *) ifa->ifa_addr;
+    struct sockaddr_in *sa = (struct sockaddr_in *) interface->ifa_addr;
     ip = inet_ntoa(sa->sin_addr);
 
     bool isConnected = strlen(ip) > 0;
