@@ -27,10 +27,8 @@ int main(int argc, char **argv)
 
         int conn = server.listen();
 
-        printf("Client connected\n");
+        printf("Client connected\nSetting up camera\n");
 
-        printf("Setting up camera\n");
-    
         if (!cam.setup()) {
             printf("Unable to open camera\n");
             server.close(conn);
@@ -43,23 +41,23 @@ int main(int argc, char **argv)
             vector<uchar> buf = cam.getFrame();
 
             // Send image size
-            size_t sent = 0;
             int sz[1] = {buf.size()};
             status = server.send(conn, &sz, sizeof(int));
 
             // Send image data
+            size_t sent = 0;
             do {
                 sent += server.send(conn, &buf[sent], buf.size() - sent);
             } while (sent < buf.size());
         } while (status >= 0);
 
+        printf("Client disconnected\n");
+
+        server.close(conn);
+
         printf("Disconnecting camera\n");
 
         cam.close();
-
-        printf("Closing server\n");
-
-        server.close(conn);
     }
 
     return 0;

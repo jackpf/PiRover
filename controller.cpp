@@ -47,14 +47,14 @@ int main(int argc, char **argv)
             rover.write();
         }
 
+        printf("Client disconnected\n");
+
+        server.close(conn);
+
         printf("Resetting rover\n");
 
         rover.resetMotorValues();
         rover.write();
-
-        printf("Closing server\n");
-
-        server.close(conn);
     }
 
     return 0;
