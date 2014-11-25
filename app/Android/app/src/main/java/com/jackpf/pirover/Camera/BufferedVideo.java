@@ -115,21 +115,17 @@ public class BufferedVideo
                 framePosition = framePosition - 10 >= -1 ? framePosition - 10 : -1;
                 break;
             case FASTFORWARD:
-                framePosition = framePosition + 10 < frames.size() ? framePosition + 10 : frames.size();
+                framePosition = framePosition + 10 <= frames.size() ? framePosition + 10 : frames.size();
                 break;
         }
 
         // Reached the end or the start of the video?
         if (framePosition < 0 || framePosition >= frames.size()) {
-            resetVideo();
+            isPlaying(false);
             return null;
         }
 
-        if (framePosition > -1) {
-            return frames.get(framePosition);
-        } else {
-            return null;
-        }
+        return frames.get(framePosition);
     }
 
     /**

@@ -90,6 +90,8 @@ public class PlaybackActivity extends Activity
         if (thread instanceof RequestThread) {
             thread.cancel(true);
         }
+
+        final Handler handler = new Handler();
         
         thread = new RequestThread(
             playbackRequest,
@@ -99,8 +101,7 @@ public class PlaybackActivity extends Activity
                 if (video.isPlaying() && vars.get("drawable") != null && e == null) {
                     int fps = (Integer) vars.get("fps");
                     int delay = 1000 / fps;
-                    
-                    final Handler handler = new Handler();
+
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -110,7 +111,6 @@ public class PlaybackActivity extends Activity
                 } else if (vars.get("drawable") == null) {
                     // Video has finished
                     ((ImageButton) findViewById(R.id.play)).setSelected(true);
-                    setPosition(0);
                 }
             }
         });
@@ -151,8 +151,8 @@ public class PlaybackActivity extends Activity
     
     public void setPosition(float ratio)
     {
-        video.setFramePosition((int) Math.round(video.getFrameCount() * ratio));
-        
+        video.setFramePosition((int) Math.round((video.getFrameCount() - 1) * ratio));
+
         // Load 1 frame to update the view to the current position
         if (!video.isPlaying()) {
             video.isPlaying(true);

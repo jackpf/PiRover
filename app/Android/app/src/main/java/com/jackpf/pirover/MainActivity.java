@@ -223,6 +223,8 @@ public class MainActivity extends Activity
         if (cameraThread instanceof RequestThread) {
             cameraThread.cancel(true);
         }
+
+        final Handler handler = new Handler();
         
         cameraThread = new RequestThread(
             cameraRequest,
@@ -231,8 +233,7 @@ public class MainActivity extends Activity
             @Override
             public void onPostExecute(RequestResponse vars, Exception e) {
                 int delay = !(e instanceof ClientException) ? 0 : 5000;
-                
-                final Handler handler = new Handler();
+
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
