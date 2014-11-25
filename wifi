@@ -1,0 +1,45 @@
+#!/bin/bash
+
+#################################################
+# Script to add wifi network config
+#################################################
+
+echo "This script will create a file that will update your PiRover's wireless config the next time it boots."
+echo "Please plug your PiRover's memory card into your computer and make sure it is properly mounted."
+echo ""
+
+echo "Please enter your wireless network's SSID (name):"
+read ssid
+echo ""
+ssid=${ssid//\"/} # Remove quotes
+
+echo "Please enter your wireless network's psk (passphrase):"
+read psk
+echo ""
+psk=${psk//\"/} # Remove quotes
+
+echo "Please select your PiRover's mounted memory card by typing in the number of the correct partition:"
+
+declare -a mounts
+mount=$(mount)
+i=0
+while read -r line; do
+    lineParts=($line)
+
+    if [ "${lineParts:0:1}" = "/" ]; then
+        echo "$i) ${line}"
+        mounts[$i]=${lineParts[2]}
+        let i+=1
+    fi
+done <<< "$mount"
+
+read partition
+echo ""
+
+if [ "$partition" -ge 0 ] && [ "$partition" -lt "${#mounts[@]}" ]; then
+    echo -e "network={\n\tssid=\"$ssid\"\n\tpsk=\"$psk\"\n}\n" >> "${mounts[$partition]}/wpa.conf"
+    echo "Wrote data to ${mounts[$partition]}/wpa.conf"
+    echo "Next time your PiRover boots, it will attempt to connect to \"$ssid\""
+else
+    echo "Invalid selection"
+fi
