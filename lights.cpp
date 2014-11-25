@@ -5,11 +5,13 @@
 #define LIGHT 11
 
 static struct argp_option options[] = {
-    {"interval", 'i', "INTERVAL", 0, "Interval to check connection status"},
+    {"interval", 'i', "INTERVAL", 0, "Interval in seconds to check connection status"},
     {0}
 };
 
 bool isConnected = false;
+
+void *blinkThread(void *);
 
 int main(int argc, char *argv[])
 {
@@ -19,7 +21,7 @@ int main(int argc, char *argv[])
     pthread_create(&thread, NULL, blinkThread, NULL);
 
     WLANStatus wlan;
-    int t = atoi(args.get("interval", "30"));
+    int t = atoi(args.get("interval", "10"));
 
     while (true) {
         isConnected = wlan.isConnected();

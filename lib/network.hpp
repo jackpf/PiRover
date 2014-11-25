@@ -15,10 +15,9 @@ class WLANStatus
 {
 private:
     int socket;
-    struct ifaddrs *interface;
 
     bool supportsWlan(struct ifaddrs *ifa);
-    bool findWlanInterface();
+    struct ifaddrs *findWlanInterface();
 
 public:
     WLANStatus();
