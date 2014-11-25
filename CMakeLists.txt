@@ -15,7 +15,7 @@ target_link_libraries(controller pthread)
 add_executable(lights lights.cpp lib/lib.cpp lib/gpio.cpp)
 target_link_libraries(lights pthread)
 
-add_executable(broadcast broadcast.cpp lib/lib.cpp lib/broadcast.cpp)
+add_executable(broadcast broadcast.cpp lib/lib.cpp lib/broadcast.cpp lib/network.cpp)
 
 install(TARGETS camera controller lights broadcast DESTINATION /usr/local/bin/)
 install(FILES pirover DESTINATION /etc/init.d PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ)

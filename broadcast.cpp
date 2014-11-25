@@ -1,5 +1,6 @@
 #include "lib/lib.hpp"
 #include "lib/broadcast.hpp"
+#include "lib/network.hpp"
 
 #define PORT        2080
 #define HANDSHAKE   "PiRover"
@@ -16,6 +17,7 @@ int main(int argc, char *argv[])
     Lib::Args args(argc, argv, options, sizeof(options));
 
     Broadcast broadcaster(atoi(args.get("port")));
+    WLANSstatus wlan;
 
     if (args.count() > 0) { /* Broadcast as client */
         printf("Resolved IP: %s\n", broadcaster.resolve(args.get(0)));
