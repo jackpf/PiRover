@@ -9,38 +9,37 @@ static struct argp_option options[] = {
     {0}
 };
 
-bool connected = false;
+bool isConnected = false;
 
 int main(int argc, char *argv[])
 {
     Lib::Args args(argc, argv, options, sizeof(options));
 
-    WLANStatus wlan;
-    int t = atoi(args.get("interval", "30"));
-
     pthread_t thread;
     pthread_create(&thread, NULL, blinkThread, NULL);
 
+    WLANStatus wlan;
+    int t = atoi(args.get("interval", "30"));
+
     while (true) {
-        connected = wlan.isConnected();
+        isConnected = wlan.isConnected();
         sleep(t);
     }
 }
 
-void blinkThread(void *data)
+void *blinkThread(void *data)
 {
     GPIO::setup();
 
     GPIO::pinMode(LIGHT, GPIO::OUT);
 
-    int t = atoi(args.get("blink", ""));
-
     while (true) {
+        int t = isConnected ? 100000 : 1000000;
         GPIO::write(LIGHT, GPIO::HIGH);
         usleep(t);
         GPIO::write(LIGHT, GPIO::LOW);
         usleep(t);
     }
 
-    return 0;
+    return NULL;
 }

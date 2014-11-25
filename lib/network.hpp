@@ -17,11 +17,11 @@ private:
     int socket;
     struct ifaddrs *interface;
 
-    bool supportsWlan(struct ifaddrs *interface);
-    void findWlanInterface();
+    bool supportsWlan(struct ifaddrs *ifa);
+    bool findWlanInterface();
 
 public:
-    WLAN();
+    WLANStatus();
 
-    void isConnected();
+    bool isConnected();
 };
