@@ -59,14 +59,13 @@ public class PlaybackUI extends UI<PlaybackActivity>
         
         // Update image
         if (vars.get("drawable") != null) {
-            ivCamera.setImageDrawable((Drawable) vars.get("drawable"));
+            Drawable drawable = (Drawable) vars.get("drawable");
+            ivCamera.setImageDrawable(drawable);
 
             int currentFrame = (Integer) vars.get("current_frame");
             int frameCount = (Integer) vars.get("frame_count");
             int progress = (int) Math.round(currentFrame * 100.0 / frameCount);
             pPlayback.setProgress(progress);
-        } else {
-            pPlayback.setProgress(0); // Reset progress bar
         }
     }
 }

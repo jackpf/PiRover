@@ -65,7 +65,8 @@ public class CameraUI extends UI<MainActivity>
         }
         
         // Update image
-        ivCamera.setImageDrawable((Drawable) vars.get("drawable"));
+        Drawable drawable = (Drawable) vars.get("drawable");
+        ivCamera.setImageDrawable(drawable);
 
         // Fps counter & bandwidth
         displayStats((Double) vars.get("fpsCount"), (Double) vars.get("bandwidth"));
