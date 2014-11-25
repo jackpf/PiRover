@@ -2,6 +2,7 @@
 #include <map>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #ifndef LIB_H
 #define LIB_H
@@ -97,6 +98,12 @@ namespace Lib
          */
         int count();
     };
+
+    /**
+     * Print line
+     * Essentially printf() + \n
+     */
+    void println(const char *format, ...);
 }
 
 #endif
