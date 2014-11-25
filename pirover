@@ -4,9 +4,6 @@
 # Script to start and stop the PiRover controller
 #################################################
 
-# Base directory of PiRover source
-#base_dir="/home/pi/workspace/PiRover"
-
 # Redirect output to logs
 logging=false
 
@@ -22,9 +19,13 @@ blink_speed=100000
 
 #################################################
 
-#bin_dir="$base_dir/bin"
+# Update wpa_supplicant.conf with any new wifi networks
+wpa_config_update
+
+#################################################
+
 bin_dir="/usr/local/bin"
-log_dir="$base_dir/logs"
+log_dir="/var/log"
 
 declare -A processes=(
 	["controller"]="--port=$controller_port"
@@ -57,3 +58,26 @@ then
 else
     echo "Invalid command"
 fi
+
+function wpa_config_update {
+    new_conf=/boot/wpa.conf
+    conf=/etc/wpa_supplicant/wpa_supplicant.conf
+
+    if [ -f "$new_conf" ]; then
+        echo "Updating wpa_supplicant.conf with new info from wpa.conf..."
+        while read line
+        do
+            echo "$line"
+            echo "$line" >> "$conf"
+        done <"$new_conf"
+        echo "Done."
+        echo "Deleting $new_conf..."
+        rm -f "$new_conf"
+        echo "Restarting network interfaces..."
+        /etc/init.d/networking restart
+        echo "Done."
+
+    else
+        echo "No new wpa_supplicant.conf info."
+    fi
+}
