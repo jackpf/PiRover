@@ -1,1 +1,0 @@
-/usr/bin/gcc  -g    CMakeFiles/camcv.dir/RaspiCamControl.c.o CMakeFiles/camcv.dir/RaspiCLI.c.o CMakeFiles/camcv.dir/RaspiPreview.c.o CMakeFiles/camcv.dir/camcv.c.o  -o camcv -rdynamic /opt/vc/lib/libmmal_core.so /opt/vc/lib/libmmal_util.so /opt/vc/lib/libmmal_vc_client.so /opt/vc/lib/libvcos.so /opt/vc/lib/libbcm_host.so -Wl,-rpath,/opt/vc/lib 
