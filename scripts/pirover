@@ -14,9 +14,6 @@ broadcast_port=1337
 controller_port=1338
 camera_port=1339
 
-# LED blink speed
-blink_speed=100000
-
 #################################################
 
 # Update wpa_supplicant.conf with any new wifi networks
@@ -31,7 +28,7 @@ declare -A processes=(
 	["controller"]="--port=$controller_port"
 	["camera"]="--port=$camera_port"
 	["broadcast"]="--port=$broadcast_port --ctrlport=$controller_port --camport=$camera_port"
-	["lights"]="--blink=100000"
+	["lights"]=""
 )
 
 if [ "$1" = "start" ]
