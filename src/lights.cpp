@@ -4,6 +4,8 @@
 
 #define LIGHT 11
 
+using namespace Lib;
+
 static struct argp_option options[] = {
     {"interval", 'i', "INTERVAL", 0, "Interval in seconds to check connection status"},
     {0}
@@ -15,7 +17,7 @@ void *blinkThread(void *);
 
 int main(int argc, char *argv[])
 {
-    Lib::Args args(argc, argv, options, sizeof(options));
+    Args args(argc, argv, options, sizeof(options));
 
     pthread_t thread;
     pthread_create(&thread, NULL, blinkThread, NULL);
@@ -24,7 +26,16 @@ int main(int argc, char *argv[])
     int t = atoi(args.get("interval", "10"));
 
     while (true) {
-        isConnected = wlan.isConnected();
+        bool isConnectedTmp = wlan.isConnected();
+
+        if (isConnectedTmp && !isConnected) {
+            println("WLAN connected!");
+        } else if (!isConnectedTmp && isConnected) {
+            println("WLAN disconnected!");
+        }
+
+        isConnected = isConnectedTmp;
+
         sleep(t);
     }
 }
