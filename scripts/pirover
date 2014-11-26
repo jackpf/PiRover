@@ -47,10 +47,10 @@ bin_dir="/usr/local/bin"
 log_dir="/var/log"
 
 declare -A processes=(
-	["controller"]="--port=$controller_port"
-	["camera"]="--port=$camera_port"
-	["broadcast"]="--port=$broadcast_port --ctrlport=$controller_port --camport=$camera_port"
-	["lights"]=""
+    ["controller"]="--port=$controller_port"
+    ["camera"]="--port=$camera_port"
+    ["broadcast"]="--port=$broadcast_port --ctrlport=$controller_port --camport=$camera_port"
+    ["lights"]=""
 )
 
 if [ "$1" = "start" ]
@@ -58,25 +58,25 @@ then
     # Check for updates on start
     wpa_config_update
 
-	log_redir=$([ "$logging" == true ] && echo "&>$log_dir/$(date +"%d_%m_%y-%T").txt" || echo "")
+    log_redir=$([ "$logging" == true ] && echo "&>$log_dir/$(date +"%d_%m_%y-%T").txt" || echo "")
 
-	for process in "${!processes[@]}"
-	do
-		eval "$bin_dir/$process $log_redir ${processes[$process]} &"
-	done
+    for process in "${!processes[@]}"
+    do
+        eval "$bin_dir/$process $log_redir ${processes[$process]} &"
+    done
 elif [ "$1" = "stop" ]
 then
-	for process in "${!processes[@]}"
-	do
-		pid=$(pidof "$process")
-		if [ "$pid" -eq "$pid" ] 2>/dev/null # If is an actual PID
-		then
-			echo "Stopping $process"
-			kill -9 "$pid"
-		else
-			echo "$process is not running"
-		fi
-	done
+    for process in "${!processes[@]}"
+    do
+        pid=$(pidof "$process")
+        if [ "$pid" -eq "$pid" ] 2>/dev/null # If is an actual PID
+        then
+            echo "Stopping $process"
+            kill -9 "$pid"
+        else
+            echo "$process is not running"
+        fi
+    done
 else
     echo "Invalid command"
 fi
