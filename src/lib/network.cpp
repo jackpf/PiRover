@@ -24,13 +24,14 @@ struct ifaddrs *WLANStatus::findWlanInterface()
     for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
         if (ifa->ifa_addr != NULL && ifa->ifa_addr->sa_family == AF_INET && supportsWlan(ifa)) {
             memcpy(ifar, ifa, sizeof(struct ifaddrs));
-            break;
+            freeifaddrs(ifap);
+            return ifar;
         }
     }
 
     freeifaddrs(ifap);
 
-    return ifar;
+    return NULL;
 }
 
 bool WLANStatus::isConnected()
@@ -51,5 +52,5 @@ bool WLANStatus::isConnected()
 
     free(interface);
 
-    return strlen(ip) > 0;
+    return strlen(ip) > 0 && strcmp(ip, "0.0.0.0") != 0;
 }
