@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 #include <pthread.h>
-
-#include "../lib/broadcast.hpp"
+#include "broadcast.hpp"
 
 #define PORT 2080
 

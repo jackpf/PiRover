@@ -1,6 +1,5 @@
 #include "gtest/gtest.h"
-
-#include "../lib/gpio.hpp"
+#include "gpio.hpp"
 
 /**
  * Not the greatest tests since static methods will affect concurrent tests

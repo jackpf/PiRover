@@ -1,6 +1,5 @@
 #include "gtest/gtest.h"
-
-#include "../lib/picam.hpp"
+#include "picam.hpp"
 
 TEST(Camera, OpenCamera)
 {

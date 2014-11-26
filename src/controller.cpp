@@ -1,6 +1,6 @@
-#include "lib/lib.hpp"
-#include "lib/server.hpp"
-#include "lib/rover.hpp"
+#include "lib.hpp"
+#include "server.hpp"
+#include "rover.hpp"
 
 static struct argp_option options[] = {
     {"port", 'p', "PORT", OPTION_REQUIRED, "Port to listen to"},

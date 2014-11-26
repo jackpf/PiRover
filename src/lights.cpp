@@ -1,6 +1,6 @@
-#include "lib/lib.hpp"
-#include "lib/gpio.hpp"
-#include "lib/network.hpp"
+#include "lib.hpp"
+#include "gpio.hpp"
+#include "network.hpp"
 
 #define LIGHT 11
 

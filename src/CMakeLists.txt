@@ -1,17 +1,19 @@
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin/")
+
 # Build camera
-add_executable(camera camera.cpp lib/lib.cpp lib/server.cpp lib/picam.cpp)
+add_executable(camera camera.cpp ${LIB_DIR}/lib.cpp ${LIB_DIR}/server.cpp ${LIB_DIR}/picam.cpp)
 target_link_libraries(camera raspicam raspicam_cv opencv_core opencv_highgui)
 
 # Build controller
-add_executable(controller controller.cpp lib/lib.cpp lib/server.cpp lib/gpio.cpp lib/rover.cpp)
+add_executable(controller controller.cpp ${LIB_DIR}/lib.cpp ${LIB_DIR}/server.cpp ${LIB_DIR}/gpio.cpp ${LIB_DIR}/rover.cpp)
 target_link_libraries(controller pthread)
 
 # Build lights
-add_executable(lights lights.cpp lib/lib.cpp lib/gpio.cpp lib/network.cpp)
+add_executable(lights lights.cpp ${LIB_DIR}/lib.cpp ${LIB_DIR}/gpio.cpp ${LIB_DIR}/network.cpp)
 target_link_libraries(lights pthread)
 
 # Build broadcast
-add_executable(broadcast broadcast.cpp lib/lib.cpp lib/broadcast.cpp)
+add_executable(broadcast broadcast.cpp ${LIB_DIR}/lib.cpp ${LIB_DIR}/broadcast.cpp)
 
 # Install targets
 install(TARGETS camera controller lights broadcast DESTINATION /usr/local/bin/)

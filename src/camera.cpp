@@ -1,6 +1,6 @@
-#include "lib/lib.hpp"
-#include "lib/picam.hpp"
-#include "lib/server.hpp"
+#include "lib.hpp"
+#include "picam.hpp"
+#include "server.hpp"
 
 static struct argp_option options[] = {
     {"port", 'p', "PORT", OPTION_REQUIRED, "Port to listen to"},

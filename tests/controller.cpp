@@ -1,6 +1,5 @@
 #include "gtest/gtest.h"
-
-#include "../lib/rover.hpp"
+#include "rover.hpp"
 
 TEST(Controller, FullAccelerationFullRightSteering)
 {

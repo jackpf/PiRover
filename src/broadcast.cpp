@@ -1,5 +1,5 @@
-#include "lib/lib.hpp"
-#include "lib/broadcast.hpp"
+#include "lib.hpp"
+#include "broadcast.hpp"
 
 #define PORT        2080
 #define HANDSHAKE   "PiRover"
