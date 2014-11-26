@@ -17,20 +17,20 @@ bool WLANStatus::supportsWlan(struct ifaddrs *ifa)
 
 struct ifaddrs *WLANStatus::findWlanInterface()
 {
-    struct ifaddrs *ifap, *ifa;
+    struct ifaddrs *ifap, *ifa, *ifar = (struct ifaddrs *) malloc(sizeof(struct ifaddrs));
 
     getifaddrs(&ifap);
 
     for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
         if (ifa->ifa_addr != NULL && ifa->ifa_addr->sa_family == AF_INET && supportsWlan(ifa)) {
-            freeifaddrs(ifap);
-            return ifa;
+            memcpy(ifar, ifa, sizeof(struct ifaddrs));
+            break;
         }
     }
 
     freeifaddrs(ifap);
 
-    return NULL;
+    return ifar;
 }
 
 bool WLANStatus::isConnected()
@@ -40,15 +40,16 @@ bool WLANStatus::isConnected()
     if (interface == NULL) {
         return false;
     }
-    
+
     // Not sure if we really need to check this?
-    char *ip = (char *) malloc(20);
-    struct sockaddr_in *sa = (struct sockaddr_in *) interface->ifa_addr;
-    strncpy(ip, inet_ntoa(sa->sin_addr), 20);
+    struct sockaddr_in sa;
+    memset(&sa, 0, sizeof(sa));
+    memcpy(&sa, interface->ifa_addr, sizeof(struct sockaddr));
+    struct in_addr in = sa.sin_addr;
 
-    bool isConnected = strlen(ip) > 0;
+    char *ip = inet_ntoa(in);
 
-    free(ip);
+    free(interface);
 
-    return isConnected;
+    return strlen(ip) > 0;
 }
