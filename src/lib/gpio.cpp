@@ -53,7 +53,7 @@ void GPIO::setup()
 void GPIO::assertSetup()
 {
     if (!isSetup) {
-        fprintf(stderr, "GPIO setup has not been called\n");
+        Lib::println(stderr, "GPIO setup has not been called");
         exit(-1);
     }
 }
@@ -66,7 +66,7 @@ void GPIO::assertValidPin(int pin)
         }
     }
 
-    fprintf(stderr, "Pin %d is not a valid GPIO pin\n", pin);
+    Lib::println(stderr, "Pin %d is not a valid GPIO pin", pin);
     exit(-1);
 }
 
@@ -159,7 +159,7 @@ void GPIO::write(int pin, value v)
     assertValidPin(pin);
 
     if (pins[pin].mode != OUT && pins[pin].mode != PWM) {
-        fprintf(stderr, "Warning: pin %d is not set as output\n", pin);
+        Lib::println(stderr, "Warning: pin %d is not set as output", pin);
     }
 
     /**
@@ -238,7 +238,7 @@ void GPIO::pwmWrite(int pin, int value)
     assertValidPin(pin);
 
     if (pins[pin].mode != PWM) {
-        fprintf(stderr, "Warning: pin %d is not set as PWM output\n", pin);
+        Lib::println(stderr, "Warning: pin %d is not set as PWM output", pin);
     }
 
     if (value < 0) {

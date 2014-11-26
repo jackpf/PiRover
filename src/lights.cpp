@@ -6,7 +6,7 @@
 
 using namespace Lib;
 
-static struct argp_option options[] = {
+static Args::ArgumentOptions options[] = {
     {"interval", 'i', "INTERVAL", 0, "Interval in seconds to check connection status"},
     {0}
 };

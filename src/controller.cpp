@@ -2,25 +2,27 @@
 #include "server.hpp"
 #include "rover.hpp"
 
-static struct argp_option options[] = {
+using namespace Lib;
+
+static Args::ArgumentOptions options[] = {
     {"port", 'p', "PORT", OPTION_REQUIRED, "Port to listen to"},
     {0}
 };
  
 int main(int argc, char **argv)
 {
-    Lib::Args args(argc, argv, options, sizeof(options));
+    Args args(argc, argv, options, sizeof(options));
 
     Server server;
     Rover rover;
 
     // Setup rover
-    printf("Initialising rover\n");
+    println("Initialising rover");
 
     rover.setup();
 
     // Create server
-    printf("Creating server\n");
+    println("Creating server");
 
     if (!server.create(atoi(args.get("port")))) {
         perror("Could not create server");
@@ -28,11 +30,11 @@ int main(int argc, char **argv)
     }
 
     while (true) {
-        printf("Listening...\n");
+        println("Listening...");
 
         int conn = server.listen();
 
-        printf("Client connected\n");
+        println("Client connected");
 
         while (true) {
             int accelerationPosition, steeringPosition;
@@ -47,11 +49,11 @@ int main(int argc, char **argv)
             rover.write();
         }
 
-        printf("Client disconnected\n");
+        println("Client disconnected");
 
         server.close(conn);
 
-        printf("Resetting rover\n");
+        println("Resetting rover");
 
         rover.resetMotorValues();
         rover.write();

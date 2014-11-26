@@ -2,14 +2,16 @@
 #include "picam.hpp"
 #include "server.hpp"
 
-static struct argp_option options[] = {
+using namespace Lib;
+
+static Args::ArgumentOptions options[] = {
     {"port", 'p', "PORT", OPTION_REQUIRED, "Port to listen to"},
     {0}
 };
 
 int main(int argc, char **argv)
 {
-    Lib::Args args(argc, argv, options, sizeof(options));
+    Args args(argc, argv, options, sizeof(options));
 
     Server server;
     PiCam cam;
@@ -23,14 +25,14 @@ int main(int argc, char **argv)
     }
 
     while (true) {
-        printf("Listening...\n");
+        println("Listening...");
 
         int conn = server.listen();
 
-        printf("Client connected\nSetting up camera\n");
+        println("Client connected\nSetting up camera");
 
         if (!cam.setup()) {
-            printf("Unable to open camera\n");
+            println("Unable to open camera");
             server.close(conn);
             continue;
         }
@@ -51,11 +53,11 @@ int main(int argc, char **argv)
             } while (sent < buf.size());
         } while (status >= 0);
 
-        printf("Client disconnected\n");
+        println("Client disconnected");
 
         server.close(conn);
 
-        printf("Disconnecting camera\n");
+        println("Disconnecting camera");
 
         cam.close();
     }

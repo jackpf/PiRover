@@ -57,7 +57,8 @@ namespace Lib
                 for (int i = 0; i < numOptions; i++) {
                     if (options[i].flags & OPTION_REQUIRED && (*arguments)[options[i].name] == NULL) {
                         //argp_usage(state);
-                        printf(
+                        println(
+                            stderr,
                             "%1$s: required option missing -- '%2$c'\nTry `%1$s --help' or `%1$s --usage' for more information.\n",
                             state->argv[0],
                             options[i].key
@@ -89,6 +90,15 @@ namespace Lib
         va_list args;
         va_start(args, format);
         vprintf(format, args);
+        va_end(args);
+        printf("\n");
+    }
+
+    void println(FILE *file, const char *format, ...)
+    {
+        va_list args;
+        va_start(args, format);
+        vfprintf(file, format, args);
         va_end(args);
         printf("\n");
     }

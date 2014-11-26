@@ -11,6 +11,7 @@
 #include <string.h>
 #include <errno.h>
 #include <pthread.h>
+#include "lib.hpp"
 
 /**
  * BCM2708 base address

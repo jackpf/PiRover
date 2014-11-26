@@ -4,7 +4,9 @@
 #define PORT        2080
 #define HANDSHAKE   "PiRover"
 
-static struct argp_option options[] = {
+using namespace Lib;
+
+static Args::ArgumentOptions options[] = {
     {"port",        'p', "PORT", OPTION_REQUIRED, "Port to listen to"},
     {"ctrlport",    'x', "PORT", OPTION_REQUIRED, "Port controller server is listening to"},
     {"camport",     'c', "PORT", OPTION_REQUIRED, "Port camera server is listening to"},
@@ -13,15 +15,15 @@ static struct argp_option options[] = {
 
 int main(int argc, char *argv[])
 {
-    Lib::Args args(argc, argv, options, sizeof(options));
+    Args args(argc, argv, options, sizeof(options));
 
     Broadcast broadcaster(atoi(args.get("port")));
 
     if (args.count() > 0) { /* Broadcast as client */
-        printf("Resolved IP: %s\n", broadcaster.resolve(args.get(0)));
+        println("Resolved IP: %s", broadcaster.resolve(args.get(0)));
         exit(0);
     } else {
-        printf("Listening for broadcasts\n");
+        println("Listening for broadcasts");
 
         // Generate return string
         const char *format = "PiRover;control:%s;camera:%s;";

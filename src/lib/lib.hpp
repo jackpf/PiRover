@@ -24,6 +24,11 @@ namespace Lib
         typedef std::map<const char *, char *> Arguments;
 
         /**
+         * Argument options type
+         */
+        typedef struct argp_option ArgumentOptions;
+
+        /**
          * Arguments iterator type
          */
         typedef std::map<const char*, char*>::iterator ArgumentsIterator;
@@ -38,7 +43,7 @@ namespace Lib
         /**
          * Options to parse
          */
-        static struct argp_option *options;
+        static ArgumentOptions *options;
 
         /**
          * Number of options
@@ -60,7 +65,7 @@ namespace Lib
          * @param options       Options to parse
          * @param optionsLen    Length of options
          */
-        Args(int argc, char *argv[], struct argp_option *options, size_t optionsLen);
+        Args(int argc, char *argv[], ArgumentOptions *options, size_t optionsLen);
 
         /**
          * Internal options parser
@@ -104,6 +109,7 @@ namespace Lib
      * Essentially printf() + \n
      */
     void println(const char *format, ...);
+    void println(FILE *file, const char *format, ...);
 }
 
 #endif
