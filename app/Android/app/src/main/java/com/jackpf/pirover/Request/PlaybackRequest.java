@@ -1,12 +1,12 @@
 package com.jackpf.pirover.Request;
 
-import java.io.IOException;
-
 import com.jackpf.pirover.Camera.BufferedVideo;
 import com.jackpf.pirover.Camera.ClientException;
 import com.jackpf.pirover.Camera.DrawableFrame;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
+
+import java.io.IOException;
 
 public class PlaybackRequest extends Request
 {

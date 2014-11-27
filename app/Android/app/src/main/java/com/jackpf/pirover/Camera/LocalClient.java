@@ -1,32 +1,34 @@
 package com.jackpf.pirover.Camera;
 
+import com.jackpf.pirover.Service.Utils;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.jackpf.pirover.Service.Utils;
-
 public class LocalClient extends Client
 {
     private InputStream is;
-    private int fpsSum = 0, framesRead = 0;
-    
+    int fpsForLastFrame = -1;
+
     public LocalClient(FrameFactory frameFactory, String filename) throws FileNotFoundException
     {
         super(frameFactory, null);
-        
+
         is = new FileInputStream(filename);
     }
-    
+
     public Frame getFrame() throws ClientException
     {
-        framesRead++;
-        fpsSum += getFpsForFrame();
-        
+        int fpsForLastFrame = getFpsForFrame();
+        if (fpsForLastFrame != -1) {
+            this.fpsForLastFrame = fpsForLastFrame;
+        }
+
         return super.consumeFrameFromStream(is);
     }
-    
+
     protected int getFpsForFrame() throws ClientException
     {
         // Get the extra header information from the recorded stream
@@ -41,9 +43,17 @@ public class LocalClient extends Client
             throw new ClientException("Unable to capture frame", e);
         }
     }
-    
-    public int getFps()
+
+    public int getFpsForLastFrame() throws ClientException
     {
-        return (int) Math.round(fpsSum / framesRead);
+        int fps = fpsForLastFrame;
+
+        if (fps == -1) {
+            throw new ClientException("No fps data for frame");
+        }
+
+        fpsForLastFrame = -1;
+
+        return fps;
     }
 }

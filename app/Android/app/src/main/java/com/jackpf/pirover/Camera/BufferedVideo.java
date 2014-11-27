@@ -12,6 +12,11 @@ public class BufferedVideo
     private List<Frame> frames = new ArrayList<Frame>();
 
     /**
+     * Fps list
+     */
+    private List<Integer> fpsList = new ArrayList<Integer>();
+
+    /**
      * Local client instance
      */
     private LocalClient client;
@@ -40,6 +45,11 @@ public class BufferedVideo
      * Direction state
      */
     private int direction = PLAY;
+
+    /**
+     * Fps calculator strategy
+     */
+    private FpsCalculator.Strategy fpsCalculator = FpsCalculator.DEFAULT_STRATEGY;
 
     /**
      * Constructor
@@ -78,6 +88,7 @@ public class BufferedVideo
 
                 if (frame != null) {
                     frames.add(frame);
+                    fpsList.add(client.getFpsForLastFrame());
                 }
             } catch (ClientException e) {
                 frame = null;
@@ -129,13 +140,23 @@ public class BufferedVideo
     }
 
     /**
+     * Set fps calculator strategy
+     *
+     * @param fpsCalculator
+     */
+    public void setFpsCalculator(FpsCalculator.Strategy fpsCalculator)
+    {
+        this.fpsCalculator = fpsCalculator;
+    }
+
+    /**
      * Get video fps
      *
      * @return
      */
     public int getFps()
     {
-        return client.getFps();
+        return fpsCalculator.calculateFps(fpsList, framePosition);
     }
 
     /**
