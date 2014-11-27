@@ -4,12 +4,19 @@
 
     <PreferenceCategory 
         android:title="@string/pref_connection_title">
-        
+
         <CheckBoxPreference
             android:key="@string/pref_autoconnect_key"
             android:title="@string/pref_autoconnect_title"
             android:defaultValue="@string/pref_autoconnect_default"
             android:summary="@string/pref_autoconnect_summary" />
+
+        <EditTextPreference
+            android:key="@string/pref_broadcast_port_key"
+            android:title="@string/pref_broadcast_port_title"
+            android:defaultValue="@string/pref_broadcast_port_default"
+            android:summary="@string/pref_broadcast_port_summary"
+            android:inputType="number" />
         
     </PreferenceCategory>
     

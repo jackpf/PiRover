@@ -38,7 +38,8 @@ public class BroadcastRequest extends Request
     {
         RequestResponse response = new RequestResponse();
 
-        String manualIp = args.length > 0 ? (String) args[0] : null;
+        int port = Integer.parseInt(args[0]);
+        String manualIp = args.length > 1 ? args[1] : null;
         
         for (int retries = 0; !broadcastResolver.packetIsValid() && retries < 5; retries++) {
             if (!cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
@@ -67,7 +68,7 @@ public class BroadcastRequest extends Request
             Log.d("Broadcast", "Attempting to broadcast to " + broadcastIp);
             
             InetAddress host = InetAddress.getByName(broadcastIp);
-            DatagramPacket packet = new DatagramPacket(handshake, handshake.length, host, 1337);
+            DatagramPacket packet = new DatagramPacket(handshake, handshake.length, host, port);
             socket.send(packet);
             
             socket.setSoTimeout(1000);

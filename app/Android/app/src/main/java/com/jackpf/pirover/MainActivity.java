@@ -217,7 +217,7 @@ public class MainActivity extends Activity implements Observer
                     }
                 }
             })
-            .execute(manualIp);
+            .execute(prefs.getString(getString(R.string.pref_broadcast_port_key), getString(R.string.pref_broadcast_port_default)), manualIp);
     }
     
     /**
