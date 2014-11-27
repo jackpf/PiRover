@@ -1,8 +1,6 @@
 package com.jackpf.pirover;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,7 +9,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.jackpf.pirover.RequestThread.Callback;
 import com.jackpf.pirover.Broadcast.BroadcastResolver;
 import com.jackpf.pirover.Camera.ClientException;
 import com.jackpf.pirover.Camera.DrawableFrameFactory;
@@ -26,6 +23,7 @@ import com.jackpf.pirover.Model.UI;
 import com.jackpf.pirover.Request.BroadcastRequest;
 import com.jackpf.pirover.Request.CameraRequest;
 import com.jackpf.pirover.Request.ControlRequest;
+import com.jackpf.pirover.RequestThread.Callback;
 import com.jackpf.pirover.View.BroadcastUI;
 import com.jackpf.pirover.View.CameraUI;
 import com.jackpf.pirover.View.ControllerUI;
@@ -92,7 +90,7 @@ public class MainActivity extends Activity implements Observer
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState, false);
         
         setContentView(R.layout.activity_main);
 
@@ -180,9 +178,6 @@ public class MainActivity extends Activity implements Observer
         int id = item.getItemId();
         
         switch (id) {
-            case R.id.action_settings:
-                startActivity(SettingsActivity.class);
-                return true;
             case R.id.action_playback:
                 startActivity(BrowseActivity.class);
                 return true;
@@ -298,14 +293,5 @@ public class MainActivity extends Activity implements Observer
     public void toggleRecording()
     {
         recorder.toggleRecording();
-    }
-    
-    /**
-     * Launch blank activity
-     */
-    public void startActivity(Class<?> c)
-    {
-        Intent intent = new Intent(this, c);
-        startActivity(intent);
     }
 }

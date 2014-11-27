@@ -1,8 +1,5 @@
 package com.jackpf.pirover;
 
-import java.io.FileNotFoundException;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -10,14 +7,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.jackpf.pirover.RequestThread.Callback;
 import com.jackpf.pirover.Camera.BufferedVideo;
 import com.jackpf.pirover.Camera.DrawableFrameFactory;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Model.UI;
 import com.jackpf.pirover.Request.PlaybackRequest;
+import com.jackpf.pirover.RequestThread.Callback;
 import com.jackpf.pirover.View.PlaybackUI;
+
+import java.io.FileNotFoundException;
 
 public class PlaybackActivity extends Activity
 {
@@ -64,7 +63,7 @@ public class PlaybackActivity extends Activity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.playback, menu);
         
         return true;
     }
@@ -72,12 +71,6 @@ public class PlaybackActivity extends Activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        int id = item.getItemId();
-        
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        
         return super.onOptionsItemSelected(item);
     }
     
