@@ -13,6 +13,11 @@ public class FpsCalculator
     public static final Strategy DEFAULT_STRATEGY = new ReplicateStrategy();
 
     /**
+     * Consts
+     */
+    public static final int REPLICATE = 0, MEAN = 1, MEDIAN = 2, MODE = 3, SPECIFY = 4;
+
+    /**
      * Fps calculator strategy interface
      */
     public static interface Strategy

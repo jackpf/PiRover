@@ -45,5 +45,28 @@
     <string name="pref_gyroscope_title">Gyroscope</string>
     <string name="pref_gyroscope_default">false</string>
     <string name="pref_gyroscope_summary">Enables gyroscope controls</string>
+    <string name="pref_playback_title">Playback</string>
+    <string name="pref_fps_key">fps</string>
+    <string name="pref_fps_title">Playback fps</string>
+    <string name="pref_fps_default">0</string>
+    <string name="pref_fps_summary">Fps calculator strategy</string>
+    <string-array name="pref_fps_entries">
+        <item>Replicate</item>
+        <item>Mean</item>
+        <item>Median</item>
+        <item>Mode</item>
+        <item>User specified</item>
+    </string-array>
+    <string-array name="pref_fps_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <string name="pref_fps_specify_key">fps_specify</string>
+    <string name="pref_fps_specify_title">FPS to play videos at</string>
+    <string name="pref_fps_specify_default">11</string>
+    <string name="pref_fps_specify_summary">Only used when fps strategy is user specified</string>
 
 </resources>

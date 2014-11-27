@@ -1,10 +1,8 @@
 package com.jackpf.pirover;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -79,11 +77,6 @@ public class MainActivity extends Activity implements Observer
     static BroadcastResolver.PortMap ports;
     
     /**
-     * Prefs manager instance
-     */
-    private SharedPreferences prefs;
-    
-    /**
      * Activity created event
      * Initialise clients, requests and UIs
      */
@@ -111,9 +104,6 @@ public class MainActivity extends Activity implements Observer
 
         cameraUI.initialise();
         controlUI.initialise();
-        
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
     
     /**
@@ -126,7 +116,7 @@ public class MainActivity extends Activity implements Observer
         super.onResume();
         
         if (ip == null || ports == null) {
-            if (prefs.getBoolean(
+            if (preferences.getBoolean(
                 getString(R.string.pref_autoconnect_key),
                 Boolean.valueOf(getString(R.string.pref_autoconnect_default))
             )) {
@@ -212,7 +202,7 @@ public class MainActivity extends Activity implements Observer
                     }
                 }
             })
-            .execute(prefs.getString(getString(R.string.pref_broadcast_port_key), getString(R.string.pref_broadcast_port_default)), manualIp);
+            .execute(preferences.getString(getString(R.string.pref_broadcast_port_key), getString(R.string.pref_broadcast_port_default)), manualIp);
     }
     
     /**

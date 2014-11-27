@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 
 import com.jackpf.pirover.Camera.BufferedVideo;
 import com.jackpf.pirover.Camera.DrawableFrameFactory;
+import com.jackpf.pirover.Camera.FpsCalculator;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Model.UI;
@@ -34,6 +35,28 @@ public class PlaybackActivity extends Activity
         
         try {
             video = new BufferedVideo(new DrawableFrameFactory(), getIntent().getStringExtra("video"));
+
+            int fpsCalculatorStrategy = Integer.parseInt(
+                preferences.getString(getString(R.string.pref_fps_key), getString(R.string.pref_fps_default))
+            );
+
+            switch (fpsCalculatorStrategy) {
+                case FpsCalculator.REPLICATE:
+                    video.setFpsCalculator(new FpsCalculator.ReplicateStrategy());
+                    break;
+                case FpsCalculator.MEAN:
+                    video.setFpsCalculator(new FpsCalculator.SmoothMeanStrategy());
+                    break;
+                case FpsCalculator.MEDIAN:
+                    video.setFpsCalculator(new FpsCalculator.SmoothMedianStrategy());
+                    break;
+                case FpsCalculator.MODE:
+                    video.setFpsCalculator(new FpsCalculator.SmoothModalStrategy());
+                    break;
+                case FpsCalculator.SPECIFY:
+                    video.setFpsCalculator(new FpsCalculator.SpecifyStrategy(Integer.parseInt(preferences.getString(getString(R.string.pref_fps_specify_key), getString(R.string.pref_fps_specify_default)))));
+                    break;
+            }
         } catch (FileNotFoundException e) {
             finish();
         }
@@ -95,9 +118,11 @@ public class PlaybackActivity extends Activity
                     int fps = (Integer) vars.get("fps");
                     int delay = 1000 / fps;
 
-                    handler.postDelayed(new Runnable() {
+                    handler.postDelayed(new Runnable()
+                    {
                         @Override
-                        public void run() {
+                        public void run()
+                        {
                             executePlaybackRequest();
                         }
                     }, delay);

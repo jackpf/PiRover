@@ -32,4 +32,24 @@
         
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/pref_playback_title">
+
+        <ListPreference
+            android:key="@string/pref_fps_key"
+            android:title="@string/pref_fps_title"
+            android:entries="@array/pref_fps_entries"
+            android:entryValues="@array/pref_fps_values"
+            android:summary="@string/pref_fps_summary"
+            android:defaultValue="@string/pref_fps_default" />
+
+        <EditTextPreference
+            android:key="@string/pref_fps_specify_key"
+            android:title="@string/pref_fps_specify_title"
+            android:defaultValue="@string/pref_fps_specify_default"
+            android:summary="@string/pref_fps_specify_summary"
+            android:inputType="number" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
