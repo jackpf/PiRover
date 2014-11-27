@@ -1,7 +1,8 @@
 package com.jackpf.pirover.Controller;
 
+import java.util.Observable;
 
-public class Controller
+public class Controller extends Observable
 {
     /**
      * Accelerator position
@@ -14,43 +15,19 @@ public class Controller
     private int steeringPosition;
     
     /**
-     * Is update pending?
-     */
-    private boolean pendingUpdate;
-    
-    /**
-     * Set pending update if an update is already pending or if a new value is set
-     * 
-     * @param a
-     * @param b
-     */
-    private void setPendingUpdate(int a, int b)
-    {
-        pendingUpdate = pendingUpdate || a != b;
-    }
-    
-    /**
-     * Check if an update is pending, and set pending updates to false
-     * 
-     * @return True if an update is pending, false otherwise
-     */
-    public boolean consumeUpdate()
-    {
-        boolean consumed = pendingUpdate;
-        pendingUpdate = false;
-        
-        return consumed;
-    }
-    
-    /**
      * Set accelerator position
      * 
      * @param acceleratorPosition
      */
     public void setAcceleratorPosition(int acceleratorPosition)
     {
-        setPendingUpdate(acceleratorPosition, this.acceleratorPosition);
+        if (acceleratorPosition != this.acceleratorPosition) {
+            setChanged();
+        }
+
         this.acceleratorPosition = acceleratorPosition;
+
+        notifyObservers();
     }
     
     /**
@@ -70,8 +47,13 @@ public class Controller
      */
     public void setSteeringPosition(int steeringPosition)
     {
-        setPendingUpdate(steeringPosition, this.steeringPosition);
+        if (steeringPosition != this.steeringPosition) {
+            setChanged();
+        }
+
         this.steeringPosition = steeringPosition;
+
+        notifyObservers();
     }
     
     /**

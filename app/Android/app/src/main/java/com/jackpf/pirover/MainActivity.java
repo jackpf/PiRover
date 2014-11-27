@@ -30,7 +30,10 @@ import com.jackpf.pirover.View.BroadcastUI;
 import com.jackpf.pirover.View.CameraUI;
 import com.jackpf.pirover.View.ControllerUI;
 
-public class MainActivity extends Activity
+import java.util.Observable;
+import java.util.Observer;
+
+public class MainActivity extends Activity implements Observer
 {
     /**
      * Network thread instances
@@ -93,8 +96,10 @@ public class MainActivity extends Activity
         
         setContentView(R.layout.activity_main);
 
-        streamStats     = new StreamStats();
         controller      = new Controller();
+        controller.addObserver(this);
+
+        streamStats     = new StreamStats();
         recorder        = new Recorder(streamStats);
         
         cameraClient    = new com.jackpf.pirover.Camera.Client(new DrawableFrameFactory(), streamStats);
@@ -242,24 +247,28 @@ public class MainActivity extends Activity
                 }, delay);
             }
         });
+
         if (ip != null && ports != null) {
             cameraThread.execute(ip, ports.get("camera"));
         }
     }
     
     /**
-     * Execute control request
+     * Execute control request listener
      */
-    protected void executeControlRequest()
+    @Override
+    public void update(Observable observer, Object data)
     {
-        if (controlThread instanceof RequestThread) {
-            controlThread.cancel(true);
-        }
-        
-        controlThread = new RequestThread(controlRequest);
-        
-        if (ip != null && ports != null) {
-            controlThread.execute(ip, ports.get("control"));
+        if (observer instanceof Controller) {
+            if (controlThread instanceof RequestThread) {
+                controlThread.cancel(true);
+            }
+
+            controlThread = new RequestThread(controlRequest);
+
+            if (ip != null && ports != null) {
+                controlThread.execute(ip, ports.get("control"));
+            }
         }
     }
     
@@ -271,10 +280,6 @@ public class MainActivity extends Activity
     public void setAcceleratorPosition(ControllerCalculator.Position position)
     {
         controller.setAcceleratorPosition(position.value);
-        
-        if (controller.consumeUpdate()) {
-            executeControlRequest();
-        }
     }
     
     /**
@@ -285,10 +290,6 @@ public class MainActivity extends Activity
     public void setSteeringWheelPosition(ControllerCalculator.Position position)
     {
         controller.setSteeringPosition(position.value);
-        
-        if (controller.consumeUpdate()) {
-            executeControlRequest();
-        }
     }
     
     /**
