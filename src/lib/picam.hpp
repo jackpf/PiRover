@@ -15,6 +15,8 @@ class PiCam
 {
 private:
     RaspiCam_Cv camera;
+    Mat image;
+    vector<uchar> buf;
 
 public:
     bool setup();

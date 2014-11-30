@@ -10,6 +10,8 @@ bool PiCam::setup()
         return false;
     }
 
+    Mat image(CAM_WIDTH, CAM_HEIGHT, CAM_RGB ? CV_8UC3 : CV_8UC1);
+
     return true;
 }
 
@@ -22,9 +24,6 @@ void PiCam::close()
 
 vector<uchar> PiCam::getFrame()
 {
-    Mat image(CAM_WIDTH, CAM_HEIGHT, CAM_RGB ? CV_8UC3 : CV_8UC1);
-    vector<uchar> buf;
-
     camera.grab();
     camera.retrieve(image);
     imencode(".jpg", image, buf);

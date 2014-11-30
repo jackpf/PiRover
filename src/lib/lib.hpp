@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
-#include <sys/time.h.h>
+#include <sys/time.h>
 
 #ifndef LIB_H
 #define LIB_H
