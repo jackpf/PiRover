@@ -15,3 +15,7 @@ target_link_libraries(gpio_test pthread gtest gtest_main)
 # Build broadcast
 add_executable(broadcast_test broadcast.cpp ${LIB_DIR}/lib.cpp ${LIB_DIR}/broadcast.cpp)
 target_link_libraries(broadcast_test pthread gtest gtest_main)
+
+# Build rover
+add_executable(rover_test rover.cpp ${LIB_DIR}/lib.cpp ${LIB_DIR}/gpio.cpp ${LIB_DIR}/rover.cpp)
+target_link_libraries(rover_test pthread gtest gtest_main)

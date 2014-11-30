@@ -3,7 +3,7 @@
 volatile unsigned int *GPIO::gpio                       = NULL;
 bool GPIO::isSetup                                      = false;
 GPIO::Pin GPIO::pins[NUM_PINS]                          = {{}};
-pthread_mutex_t GPIO::pwmThreadCancelMutex              = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t GPIO::pwmThreadCancelMutex[NUM_PINS]    = {PTHREAD_MUTEX_INITIALIZER};
 volatile bool GPIO::pwmThreadCancelRequest[NUM_PINS]    = {false};
 
 void GPIO::setup()
@@ -77,9 +77,9 @@ void GPIO::pinMode(int pin, direction d)
 
     // If switching mode from PWM make sure the PWM thread is cancelled
     if (pins[pin].mode == PWM) {
-        pthread_mutex_lock(&pwmThreadCancelMutex);
+        pthread_mutex_lock(&pwmThreadCancelMutex[pin]);
         pwmThreadCancelRequest[pin] = true;
-        pthread_mutex_unlock(&pwmThreadCancelMutex);
+        pthread_mutex_unlock(&pwmThreadCancelMutex[pin]);
         pthread_join(pins[pin].pwmThread, NULL);
     }
 
@@ -206,6 +206,7 @@ void *GPIO::_pwmThread(void *data)
     while (true) {
         mark  = pins[pin].pwmValue;
         space = 10 - mark;
+        printf("pin %d, mark: %d, space: %d\n", pin, mark, space);
 
         if (mark != 0) {
             write(pin, HIGH);
@@ -217,13 +218,13 @@ void *GPIO::_pwmThread(void *data)
             delay(space * PULSE_TIME);
         }
 
-        pthread_mutex_lock(&pwmThreadCancelMutex);
+        pthread_mutex_lock(&pwmThreadCancelMutex[pin]);
         if (pwmThreadCancelRequest[pin]) {
             pwmThreadCancelRequest[pin] = false;
-            pthread_mutex_unlock(&pwmThreadCancelMutex);
+            pthread_mutex_unlock(&pwmThreadCancelMutex[pin]);
             break;
         } else {
-            pthread_mutex_unlock(&pwmThreadCancelMutex);
+            pthread_mutex_unlock(&pwmThreadCancelMutex[pin]);
         }
     }
 

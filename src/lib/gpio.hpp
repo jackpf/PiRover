@@ -76,6 +76,9 @@ public:
      */
     enum value {HIGH, LOW};
 
+    /**
+     * Pin structure
+     */
     struct Pin {
         enum direction mode;
         enum value value;
@@ -103,7 +106,7 @@ private:
     /**
      * Mutex lock for pwm thread cancel requests
      */
-    static pthread_mutex_t pwmThreadCancelMutex;
+    static pthread_mutex_t pwmThreadCancelMutex[NUM_PINS];
 
     /**
      * Array of cancel requests
