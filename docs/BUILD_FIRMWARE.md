@@ -33,5 +33,5 @@ sudo ldconfig
 The PiRover software should now start at boot. To start and stop the services run:
 
 ```
-sudo service pirover start|stop
+sudo service pirover start|stop|restart
 ```

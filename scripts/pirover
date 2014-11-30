@@ -53,19 +53,16 @@ declare -A processes=(
     ["lights"]=""
 )
 
-if [ "$1" = "start" ]
-then
-    # Check for updates on start
-    wpa_config_update
-
+function start {
     log_redir=$([ "$logging" == true ] && echo "&>$log_dir/$(date +"%d_%m_%y-%T").txt" || echo "")
 
     for process in "${!processes[@]}"
     do
         eval "$bin_dir/$process $log_redir ${processes[$process]} &"
     done
-elif [ "$1" = "stop" ]
-then
+}
+
+function stop {
     for process in "${!processes[@]}"
     do
         pid=$(pidof "$process")
@@ -77,6 +74,18 @@ then
             echo "$process is not running"
         fi
     done
+}
+
+if [ "$1" = "start" ]; then
+    # Check for updates on start
+    wpa_config_update
+
+    start
+elif [ "$1" = "stop" ]; then
+    stop
+elif [ "$1" = "restart" ]; then
+    stop
+    start
 else
     echo "Invalid command"
 fi
