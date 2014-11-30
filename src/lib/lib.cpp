@@ -102,4 +102,11 @@ namespace Lib
         va_end(args);
         printf("\n");
     }
+
+    long getTimestamp()
+    {
+        struct timeval tv;
+        gettimeofday(&tv,NULL);
+        return 1000000 * tv.tv_sec + tv.tv_usec;
+    }
 }

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#include <sys/time.h.h>
 
 #ifndef LIB_H
 #define LIB_H
@@ -110,6 +111,11 @@ namespace Lib
      */
     void println(const char *format, ...);
     void println(FILE *file, const char *format, ...);
+
+    /**
+     * Get timestamp in microseconds
+     */
+    long getTimestamp();
 }
 
 #endif
