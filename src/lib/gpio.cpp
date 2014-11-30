@@ -206,7 +206,6 @@ void *GPIO::_pwmThread(void *data)
     while (true) {
         mark  = pins[pin].pwmValue;
         space = 10 - mark;
-        printf("pin %d, mark: %d, space: %d\n", pin, mark, space);
 
         if (mark != 0) {
             write(pin, HIGH);
