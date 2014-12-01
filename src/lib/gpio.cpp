@@ -243,9 +243,10 @@ void GPIO::pwmWrite(int pin, double value)
     }
 
     if (value < 0.0) {
-        Lib::println(stderr, "Warning: incorrect pwm value of %f", value);
+        Lib::println(stderr, "Warning: invalid pwm value of %f", value);
         value = 0.0;
     } else if (value > PWM_MAX) {
+        Lib::println(stderr, "Warning: invalid pwm value of %f", value);
         value = PWM_MAX;
     }
 
