@@ -210,12 +210,12 @@ void *GPIO::_pwmThread(void *data)
 
         if (mark != 0) {
             write(pin, HIGH);
-            delay(round(mark * PULSE_TIME));
+            delay(round(mark * PWM_FREQUENCY));
         }
 
         if (space != 0) {
             write(pin, LOW);
-            delay(round(space * PULSE_TIME));
+            delay(round(space * PWM_FREQUENCY));
         }
 
         pthread_mutex_lock(&pwmThreadCancelMutex[pin]);
@@ -243,6 +243,7 @@ void GPIO::pwmWrite(int pin, double value)
     }
 
     if (value < 0.0) {
+        Lib::println(stderr, "Warning: incorrect pwm value of %f", value);
         value = 0.0;
     } else if (value > PWM_MAX) {
         value = PWM_MAX;

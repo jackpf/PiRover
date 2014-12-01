@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "rover.hpp"
 
-TEST(Rover, MoveForward)
+TEST(PWM, DigitalOn)
 {
     GPIO::setup();
 
@@ -25,19 +25,26 @@ TEST(Rover, MoveForward)
     sleep(1);
 }
 
-TEST(Rover, PWM)
+TEST(PWM, PWMRange)
 {
     GPIO::pinMode(PIN_LEFT_A, GPIO::PWM);
     GPIO::pinMode(PIN_LEFT_B, GPIO::PWM);
     GPIO::pinMode(PIN_RIGHT_A, GPIO::PWM);
     GPIO::pinMode(PIN_RIGHT_B, GPIO::PWM);
 
-    GPIO::pwmWrite(PIN_LEFT_A, 5);
-    GPIO::pwmWrite(PIN_LEFT_B, 0);
-    GPIO::pwmWrite(PIN_RIGHT_A, 5);
-    GPIO::pwmWrite(PIN_RIGHT_B, 0);
+    for (double i = PWM_MAX; i >= 0.0; i -= 0.1) {
+        double mark, space;
+        mark = i;
+        space = PWM_MAX - mark;
+        printf("[     INFO ] Setting pwm to %f (mark: %f, space: %f)\n", i, round(mark * PWM_FREQUENCY), round(space * PWM_FREQUENCY));
 
-    sleep(1);
+        GPIO::pwmWrite(PIN_LEFT_A, i);
+        GPIO::pwmWrite(PIN_LEFT_B, 0);
+        GPIO::pwmWrite(PIN_RIGHT_A, i);
+        GPIO::pwmWrite(PIN_RIGHT_B, 0);
+
+        sleep(1);
+    }
 
     GPIO::pwmWrite(PIN_LEFT_A, 0);
     GPIO::pwmWrite(PIN_LEFT_B, 0);
@@ -45,12 +52,4 @@ TEST(Rover, PWM)
     GPIO::pwmWrite(PIN_RIGHT_B, 0);
 
     sleep(1);
-}
-
-TEST(Rover, Stop)
-{
-    GPIO::write(PIN_LEFT_A, GPIO::LOW);
-    GPIO::write(PIN_LEFT_B, GPIO::LOW);
-    GPIO::write(PIN_RIGHT_A, GPIO::LOW);
-    GPIO::write(PIN_RIGHT_B, GPIO::LOW);
 }

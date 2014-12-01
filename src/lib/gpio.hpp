@@ -61,7 +61,7 @@ const int GPIO_PINS[]       = {14, 15, 18, 23, 24, 25, 8,  7,
 /**
  * PWM pulse time
  */
-#define PULSE_TIME          10
+#define PWM_FREQUENCY       500
 
 class GPIO
 {
