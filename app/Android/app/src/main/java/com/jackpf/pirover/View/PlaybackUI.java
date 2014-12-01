@@ -5,13 +5,11 @@ import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.ProgressBar;
-import android.widget.VideoView;
 
+import com.jackpf.pirover.Model.UI;
 import com.jackpf.pirover.PlaybackActivity;
 import com.jackpf.pirover.R;
-import com.jackpf.pirover.Model.UI;
 
 public class PlaybackUI extends UI<PlaybackActivity>
 {
@@ -65,7 +63,7 @@ public class PlaybackUI extends UI<PlaybackActivity>
 
         int currentFrame = (Integer) vars.get("current_frame");
         int frameCount = (Integer) vars.get("frame_count");
-        int progress = (int) Math.round(currentFrame * 100.0 / (frameCount - 1));
+        int progress = (int) Math.round(currentFrame * 100.0 / frameCount);
         pPlayback.setProgress(progress);
     }
 }

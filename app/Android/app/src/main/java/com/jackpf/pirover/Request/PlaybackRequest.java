@@ -23,7 +23,7 @@ public class PlaybackRequest extends Request
     public RequestResponse call(String ...args) throws ClientException, IOException
     {
         if (!video.isLoaded()) {
-            video.load();
+            video.load().isPlaying(true);
         }
         
         RequestResponse response = new RequestResponse();

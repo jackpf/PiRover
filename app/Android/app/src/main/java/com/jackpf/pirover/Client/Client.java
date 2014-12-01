@@ -13,7 +13,7 @@ public abstract class Client
             if (isConnected()) {
                 disconnect();
             }
-            
+
             socket = new Socket(host, port);
         } catch (IOException e) {
             throw new ClientException("Unable to connect to server", e);

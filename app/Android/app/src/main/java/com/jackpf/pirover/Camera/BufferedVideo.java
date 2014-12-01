@@ -37,6 +37,11 @@ public class BufferedVideo
     public static final int FASTFORWARD = 1, REWIND = -1, PLAY = 0;
 
     /**
+     * Frames to skip when fast forwarding or rewinding
+     */
+    public static final int SKIP_FRAMES = 10;
+
+    /**
      * Is playing state
      */
     private boolean isPlaying = false;
@@ -95,8 +100,6 @@ public class BufferedVideo
             }
         } while (frame != null);
 
-        isPlaying(true);
-
         return this;
     }
 
@@ -123,10 +126,10 @@ public class BufferedVideo
                 framePosition++;
                 break;
             case REWIND:
-                framePosition = framePosition - 10 >= -1 ? framePosition - 10 : -1;
+                framePosition = framePosition - SKIP_FRAMES >= -1 ? framePosition - SKIP_FRAMES : -1;
                 break;
             case FASTFORWARD:
-                framePosition = framePosition + 10 <= frames.size() ? framePosition + 10 : frames.size();
+                framePosition = framePosition + SKIP_FRAMES <= frames.size() ? framePosition + SKIP_FRAMES : frames.size();
                 break;
         }
 
