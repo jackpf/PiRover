@@ -11,6 +11,7 @@
 #include <string.h>
 #include <errno.h>
 #include <pthread.h>
+#include <math.h>
 #include "lib.hpp"
 
 /**
@@ -55,7 +56,7 @@ const int GPIO_PINS[]       = {14, 15, 18, 23, 24, 25, 8,  7,
 /**
  * Max PWM value
  */
-#define PWM_MAX             10
+#define PWM_MAX             1.0
 
 /**
  * PWM pulse time
@@ -80,7 +81,7 @@ public:
         enum direction mode;
         enum value value;
         pthread_t pwmThread;
-        int pwmValue;
+        double pwmValue;
     };
 
 private:
@@ -180,9 +181,9 @@ public:
      * Write a pwm value
      *
      * @param pin   Pin number to write to
-     * @param value Pwm frequency (ratio out of PWM_MAX)
+     * @param value Pwm duty cycle value
      */
-    static void pwmWrite(int pin, int value);
+    static void pwmWrite(int pin, double value);
 
     /**
      * Read pwm value of a pin
