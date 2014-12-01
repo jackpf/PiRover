@@ -197,24 +197,25 @@ void GPIO::delay(unsigned int ms)
 
 void *GPIO::_pwmThread(void *data)
 {
-    int pin = *((int *) data), mark, space;
+    int pin = *((int *) data);
+    double mark, space;
 
     if (pins[pin].pwmValue == -1) {
-        pins[pin].pwmValue = 0;
+        pins[pin].pwmValue = 0.0;
     }
 
     while (true) {
         mark  = pins[pin].pwmValue;
-        space = 10 - mark;
+        space = PWM_MAX - mark;
 
         if (mark != 0) {
             write(pin, HIGH);
-            delay(mark * PULSE_TIME);
+            delay(round(mark * PULSE_TIME));
         }
 
         if (space != 0) {
             write(pin, LOW);
-            delay(space * PULSE_TIME);
+            delay(round(space * PULSE_TIME));
         }
 
         pthread_mutex_lock(&pwmThreadCancelMutex[pin]);
@@ -232,7 +233,7 @@ void *GPIO::_pwmThread(void *data)
     return NULL;
 }
 
-void GPIO::pwmWrite(int pin, int value)
+void GPIO::pwmWrite(int pin, double value)
 {
     assertSetup();
     assertValidPin(pin);
@@ -241,8 +242,8 @@ void GPIO::pwmWrite(int pin, int value)
         Lib::println(stderr, "Warning: pin %d is not set as PWM output", pin);
     }
 
-    if (value < 0) {
-        value = 0;
+    if (value < 0.0) {
+        value = 0.0;
     } else if (value > PWM_MAX) {
         value = PWM_MAX;
     }

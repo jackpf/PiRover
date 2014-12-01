@@ -31,19 +31,19 @@ Rover::MotorValues Rover::calculateMotorValues(int acceleration, int steering)
     }
 
     if (left > 0) {
-        motors.left.motorA = left;
-        motors.left.motorB = 0;
+        motors.left.motorA = left / 10.0;
+        motors.left.motorB = 0.0;
     } else if (left < 0) {
-        motors.left.motorA = 0;
-        motors.left.motorB = -left;
+        motors.left.motorA = 0.0;
+        motors.left.motorB = -left / 10.0;
     }
 
     if (right > 0) {
-        motors.right.motorA = right;
-        motors.right.motorB = 0;
+        motors.right.motorA = right / 10.0;
+        motors.right.motorB = 0.0;
     } else if (right < 0) {
-        motors.right.motorA = 0;
-        motors.right.motorB = -right;
+        motors.right.motorA = 0.0;
+        motors.right.motorB = -right / 10.0;
     }
 
     return motors;

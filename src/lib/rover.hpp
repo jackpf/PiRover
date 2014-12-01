@@ -21,8 +21,8 @@ public:
      * Motor values
      */
     typedef struct {
-        int motorA;
-        int motorB;
+        double motorA;
+        double motorB;
     } Motor;
 
     typedef struct {
