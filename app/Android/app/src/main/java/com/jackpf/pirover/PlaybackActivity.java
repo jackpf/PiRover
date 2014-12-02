@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 
 import com.jackpf.pirover.Camera.BufferedVideo;
 import com.jackpf.pirover.Camera.DrawableFrameFactory;
@@ -15,6 +14,7 @@ import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Model.UI;
 import com.jackpf.pirover.Request.PlaybackRequest;
 import com.jackpf.pirover.RequestThread.Callback;
+import com.jackpf.pirover.View.EventListener.PlaybackControlObserver;
 import com.jackpf.pirover.View.PlaybackUI;
 
 import java.io.FileNotFoundException;
@@ -65,6 +65,8 @@ public class PlaybackActivity extends Activity
 
         playbackUI = new PlaybackUI(this);
         playbackUI.initialise();
+
+        video.addObserver(new PlaybackControlObserver(this));
     }
     
     @Override
@@ -118,17 +120,12 @@ public class PlaybackActivity extends Activity
                     int fps = (Integer) vars.get("fps");
                     int delay = 1000 / fps;
 
-                    handler.postDelayed(new Runnable()
-                    {
+                    handler.postDelayed(new Runnable() {
                         @Override
-                        public void run()
-                        {
+                        public void run() {
                             executePlaybackRequest();
                         }
                     }, delay);
-                } else if (vars.get("drawable") == null) {
-                    // Video has finished
-                    ((ImageButton) findViewById(R.id.play)).setSelected(true);
                 }
             }
         });
@@ -139,7 +136,6 @@ public class PlaybackActivity extends Activity
     public void playbackControl(View v)
     {
         // State vars
-        ImageButton btnPlay = (ImageButton) findViewById(R.id.play);
         int direction       = video.getDirection();
         boolean isPlaying   = video.isPlaying();
         
@@ -160,7 +156,6 @@ public class PlaybackActivity extends Activity
         
         video.setDirection(direction);
         video.isPlaying(isPlaying);
-        btnPlay.setSelected(!isPlaying);
         
         if (isPlaying) {
             executePlaybackRequest();

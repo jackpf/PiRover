@@ -3,8 +3,9 @@ package com.jackpf.pirover.Camera;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
-public class BufferedVideo
+public class BufferedVideo extends Observable
 {
     /**
      * Video frames
@@ -123,13 +124,13 @@ public class BufferedVideo
     {
         switch (direction) {
             case PLAY:
-                framePosition++;
+                setFramePosition(framePosition + 1);
                 break;
             case REWIND:
-                framePosition = framePosition - SKIP_FRAMES >= -1 ? framePosition - SKIP_FRAMES : -1;
+                setFramePosition(framePosition - SKIP_FRAMES >= -1 ? framePosition - SKIP_FRAMES : -1);
                 break;
             case FASTFORWARD:
-                framePosition = framePosition + SKIP_FRAMES <= frames.size() ? framePosition + SKIP_FRAMES : frames.size();
+                setFramePosition(framePosition + SKIP_FRAMES <= frames.size() ? framePosition + SKIP_FRAMES : frames.size());
                 break;
         }
 
@@ -202,6 +203,9 @@ public class BufferedVideo
     public void setFramePosition(int framePosition)
     {
         this.framePosition = framePosition;
+
+        setChanged();
+        notifyObservers();
     }
 
     /**
@@ -232,6 +236,9 @@ public class BufferedVideo
     public void setDirection(int direction)
     {
         this.direction = direction;
+
+        setChanged();
+        notifyObservers();
     }
 
     /**
@@ -252,6 +259,9 @@ public class BufferedVideo
     public void isPlaying(boolean isPlaying)
     {
         this.isPlaying = isPlaying;
+
+        setChanged();
+        notifyObservers();
     }
 
     /**
@@ -260,6 +270,9 @@ public class BufferedVideo
     public void toggleIsPlaying()
     {
         isPlaying = !isPlaying;
+
+        setChanged();
+        notifyObservers();
     }
 
     /**
