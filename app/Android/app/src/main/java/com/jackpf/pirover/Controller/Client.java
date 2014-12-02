@@ -21,8 +21,8 @@ public class Client extends com.jackpf.pirover.Client.Client
     {
         OutputStream os = new DataOutputStream(socket.getOutputStream());
 
-        os.write(Utils.intToByteArray(controller.getAcceleratorPosition()));
-        os.write(Utils.intToByteArray(controller.getSteeringPosition()));
+        os.write(Utils.intToByteArray(controller.getAcceleration()));
+        os.write(Utils.intToByteArray(controller.getSteering()));
         
         os.flush();
     }

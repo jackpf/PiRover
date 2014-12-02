@@ -5,64 +5,64 @@ import java.util.Observable;
 public class Controller extends Observable
 {
     /**
-     * Accelerator position
+     * Acceleration
      */
-    private int acceleratorPosition;
+    private int acceleration;
     
     /**
-     * Steering wheel position
+     * Steering
      */
-    private int steeringPosition;
+    private int steering;
     
     /**
-     * Set accelerator position
+     * Set acceleration
      * 
-     * @param acceleratorPosition
+     * @param acceleration
      */
-    public void setAcceleratorPosition(int acceleratorPosition)
+    public void setAcceleration(int acceleration)
     {
-        if (acceleratorPosition != this.acceleratorPosition) {
+        if (acceleration != this.acceleration) {
             setChanged();
         }
 
-        this.acceleratorPosition = acceleratorPosition;
+        this.acceleration = acceleration;
 
         notifyObservers();
     }
     
     /**
-     * Get accelerator position
+     * Get acceleration
      * 
      * @return
      */
-    public int getAcceleratorPosition()
+    public int getAcceleration()
     {
-        return this.acceleratorPosition;
+        return this.acceleration;
     }
     
     /**
-     * Set steering wheel position
+     * Set steering
      * 
-     * @param steeringPosition
+     * @param steering
      */
-    public void setSteeringPosition(int steeringPosition)
+    public void setSteering(int steering)
     {
-        if (steeringPosition != this.steeringPosition) {
+        if (steering != this.steering) {
             setChanged();
         }
 
-        this.steeringPosition = steeringPosition;
+        this.steering = steering;
 
         notifyObservers();
     }
     
     /**
-     * Get steering wheel position
+     * Get steering
      * 
      * @return
      */
-    public int getSteeringPosition()
+    public int getSteering()
     {
-        return this.steeringPosition;
+        return this.steering;
     }
 }

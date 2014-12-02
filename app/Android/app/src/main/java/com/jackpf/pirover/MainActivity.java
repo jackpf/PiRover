@@ -1,6 +1,8 @@
 package com.jackpf.pirover;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -13,8 +15,8 @@ import com.jackpf.pirover.Camera.DrawableFrameFactory;
 import com.jackpf.pirover.Camera.Recorder;
 import com.jackpf.pirover.Camera.StreamStats;
 import com.jackpf.pirover.Client.Client;
+import com.jackpf.pirover.Controller.AccelerometerController;
 import com.jackpf.pirover.Controller.Controller;
-import com.jackpf.pirover.Controller.ControllerCalculator;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Model.UI;
@@ -99,11 +101,28 @@ public class MainActivity extends Activity implements Observer
         cameraRequest   = new CameraRequest(cameraClient, recorder);
         controlRequest  = new ControlRequest(controlClient, controller);
 
-        cameraUI        = new CameraUI(this);
-        controlUI       = new ControllerUI(this);
+        cameraUI        = new CameraUI(this, recorder);
+        controlUI       = new ControllerUI(this, controller);
 
         cameraUI.initialise();
         controlUI.initialise();
+
+        if (preferences.getBoolean(getString(R.string.pref_gyroscope_key), Boolean.valueOf(getString(R.string.pref_gyroscope_default)))) {
+            SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+            AccelerometerController accelerometerController = new AccelerometerController(controller);
+
+            sensorManager.registerListener(
+                accelerometerController,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL
+            );
+
+            sensorManager.registerListener(
+                accelerometerController,
+                sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
+                SensorManager.SENSOR_DELAY_NORMAL
+            );
+        }
     }
     
     /**
@@ -255,33 +274,5 @@ public class MainActivity extends Activity implements Observer
                 controlThread.execute(ip, ports.get("control"));
             }
         }
-    }
-    
-    /**
-     * Set accelerator position
-     * 
-     * @param position
-     */
-    public void setAcceleratorPosition(ControllerCalculator.Position position)
-    {
-        controller.setAcceleratorPosition(position.value);
-    }
-    
-    /**
-     * Set steering wheel position
-     * 
-     * @param position
-     */
-    public void setSteeringWheelPosition(ControllerCalculator.Position position)
-    {
-        controller.setSteeringPosition(position.value);
-    }
-    
-    /**
-     * Toggle recording
-     */
-    public void toggleRecording()
-    {
-        recorder.toggleRecording();
     }
 }

@@ -12,13 +12,13 @@ import java.util.Observer;
 
 public class PlaybackControlObserver implements Observer
 {
-    private PlaybackActivity activity;
     private ImageButton btnPlay;
+    private ProgressBar pPlayback;
 
     public PlaybackControlObserver(PlaybackActivity activity)
     {
-        this.activity = activity;
         btnPlay = (ImageButton) activity.findViewById(R.id.play);
+        pPlayback = (ProgressBar) activity.findViewById(R.id.video_progress);
     }
 
     @Override
@@ -28,7 +28,6 @@ public class PlaybackControlObserver implements Observer
         btnPlay.setSelected(!video.isPlaying());
 
         int progress = (int) Math.round(video.getFramePosition() * 100.0 / video.getFrameCount());
-        ProgressBar pPlayback = (ProgressBar) activity.findViewById(R.id.video_progress);
         pPlayback.setProgress(progress);
     }
 }

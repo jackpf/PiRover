@@ -1,21 +1,25 @@
 package com.jackpf.pirover.View.EventListener;
 
 import android.graphics.Matrix;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.jackpf.pirover.MainActivity;
+import com.jackpf.pirover.Controller.Controller;
 import com.jackpf.pirover.Controller.ControllerCalculator;
 
-public class SteeringWheelListener implements View.OnTouchListener
+import java.util.Observable;
+import java.util.Observer;
+
+public class SteeringWheelListener implements View.OnTouchListener, Observer
 {
-    private MainActivity activity;
+    private Controller controller;
+    private ImageView iv;
     
-    public SteeringWheelListener(MainActivity activity)
+    public SteeringWheelListener(Controller controller, ImageView iv)
     {
-        this.activity = activity;
+        this.controller = controller;
+        this.iv = iv;
     }
     
     @Override
@@ -24,20 +28,20 @@ public class SteeringWheelListener implements View.OnTouchListener
         v.performClick();
         
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            ImageView iv = (ImageView) v;
-            
-            ControllerCalculator.Position steeringWheelPosition
-                = ControllerCalculator.calculateSteeringPosition(event.getX(), event.getY(), iv.getWidth(), iv.getHeight());
-            
-            Log.d("Touch", "position: " + steeringWheelPosition.position  + ", value: " + steeringWheelPosition.value);
-            
-            Matrix matrix = new Matrix();
-            matrix.postRotate((float) steeringWheelPosition.position, iv.getWidth() / 2, iv.getHeight() / 2);
-            iv.setImageMatrix(matrix);
-            
-            activity.setSteeringWheelPosition(steeringWheelPosition);
+            controller.setSteering(
+                ControllerCalculator
+                    .calculateSteeringValue(event.getX(), event.getY(), iv.getWidth(), iv.getHeight())
+            );
         }
-        
+
         return true;
+    }
+
+    @Override
+    public void update(Observable observable, Object data)
+    {
+        Matrix matrix = new Matrix();
+        matrix.postRotate((float) (controller.getSteering() * 9.0), iv.getWidth() / 2, iv.getHeight() / 2);
+        iv.setImageMatrix(matrix);
     }
 }

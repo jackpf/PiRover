@@ -47,12 +47,12 @@ public class ControllerTest extends ActivityInstrumentationTestCase2<MainActivit
         
         assertFalse(observer.hasBeenNotified);
         
-        controller.setSteeringPosition(10);
+        controller.setSteering(10);
 
         assertTrue(observer.hasBeenNotified);
         observer.hasBeenNotified = false;
         
-        controller.setSteeringPosition(10);
+        controller.setSteering(10);
 
         assertFalse(observer.hasBeenNotified);
     }

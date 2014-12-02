@@ -3,29 +3,36 @@ package com.jackpf.pirover.View;
 import android.graphics.Matrix;
 import android.widget.ImageView;
 
+import com.jackpf.pirover.Controller.Controller;
 import com.jackpf.pirover.MainActivity;
-import com.jackpf.pirover.R;
 import com.jackpf.pirover.Model.UI;
+import com.jackpf.pirover.R;
 import com.jackpf.pirover.View.EventListener.AcceleratorListener;
 import com.jackpf.pirover.View.EventListener.SteeringWheelListener;
 
 public class ControllerUI extends UI<MainActivity>
 {
-    public ControllerUI(MainActivity activity)
+    private Controller controller;
+
+    public ControllerUI(MainActivity activity, Controller controller)
     {
         super(activity);
+
+        this.controller = controller;
     }
     
     @Override
     public void initialise()
     {
-        // Set steering wheel touch listener
-        ((ImageView) activity.findViewById(R.id.steering_wheel))
-            .setOnTouchListener(new SteeringWheelListener(activity));
+        // Set steering wheel touch listener and controller observer
+        ImageView ivSteeringWheel = (ImageView) activity.findViewById(R.id.steering_wheel);
+        ivSteeringWheel.setOnTouchListener(new SteeringWheelListener(controller, ivSteeringWheel));
+        controller.addObserver(new SteeringWheelListener(controller, ivSteeringWheel));
         
         // Set accelerator touch listener
-        ((ImageView) activity.findViewById(R.id.accelerator))
-            .setOnTouchListener(new AcceleratorListener(activity));
+        ImageView ivAccelerator = (ImageView) activity.findViewById(R.id.accelerator);
+        ivAccelerator.setOnTouchListener(new AcceleratorListener(controller, ivAccelerator));
+        controller.addObserver(new AcceleratorListener(controller, ivAccelerator));
         
         /* Initially translate to the bottom
            ivAccelerator.getHeight() seems to return 0 at this point

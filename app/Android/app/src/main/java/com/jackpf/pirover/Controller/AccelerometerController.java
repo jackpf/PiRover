@@ -1,12 +1,10 @@
-package com.jackpf.pirover;
+package com.jackpf.pirover.Controller;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
-
-import com.jackpf.pirover.Controller.Controller;
 
 public class AccelerometerController implements SensorEventListener
 {
@@ -59,8 +57,8 @@ public class AccelerometerController implements SensorEventListener
                 }
                 roll = (int) Math.round((double) (roll + Math.abs(rollRange[0])) / (rollRange[1] - rollRange[0]) * 20.0) - 10;
 
-                controller.setAcceleratorPosition(pitch);
-                controller.setSteeringPosition(roll);
+                controller.setAcceleration(pitch);
+                controller.setSteering(roll);
             } else {
                 Log.e(getClass().getName(), "SensorManager.getRotationMatrix failed");
             }

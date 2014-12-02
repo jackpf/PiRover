@@ -1,21 +1,25 @@
 package com.jackpf.pirover.View.EventListener;
 
 import android.graphics.Matrix;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.jackpf.pirover.MainActivity;
+import com.jackpf.pirover.Controller.Controller;
 import com.jackpf.pirover.Controller.ControllerCalculator;
 
-public class AcceleratorListener implements View.OnTouchListener
+import java.util.Observable;
+import java.util.Observer;
+
+public class AcceleratorListener implements View.OnTouchListener, Observer
 {
-    private MainActivity activity;
-    
-    public AcceleratorListener(MainActivity activity)
+    private Controller controller;
+    private ImageView iv;
+
+    public AcceleratorListener(Controller controller, ImageView iv)
     {
-        this.activity = activity;
+        this.controller = controller;
+        this.iv = iv;
     }
     
     @Override
@@ -26,18 +30,24 @@ public class AcceleratorListener implements View.OnTouchListener
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
             ImageView iv = (ImageView) v;
             
-            ControllerCalculator.Position acceleratorPosition
-                = ControllerCalculator.calculateAcceleratorPosition(event.getY(), iv.getWidth(), iv.getHeight(), iv.getDrawable().getIntrinsicHeight());
-        
-            Log.d("Touch", "position: " + acceleratorPosition.position + ", value: " + acceleratorPosition.value);
-            
-            Matrix matrix = new Matrix();
-            matrix.postTranslate(0, acceleratorPosition.position);
-            iv.setImageMatrix(matrix);
-            
-            activity.setAcceleratorPosition(acceleratorPosition);
+            controller.setAcceleration(
+                ControllerCalculator
+                    .calculateAcceleratorValue(event.getY(), iv.getWidth(), iv.getHeight(), iv.getDrawable().getIntrinsicHeight())
+            );
         }
         
         return true;
+    }
+
+    @Override
+    public void update(Observable observable, Object data)
+    {
+        Matrix matrix = new Matrix();
+        matrix.postTranslate(0, ControllerCalculator.calculateAcceleratorPosition(
+            controller.getAcceleration(),
+            iv.getHeight(),
+            iv.getDrawable().getIntrinsicHeight()
+        ));
+        iv.setImageMatrix(matrix);
     }
 }
