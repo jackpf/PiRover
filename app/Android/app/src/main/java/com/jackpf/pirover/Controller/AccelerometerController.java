@@ -38,7 +38,7 @@ public class AccelerometerController implements SensorEventListener
      * Roll range
      * Range of rotation around the x axis in degrees for acceleration
      */
-    final int rollRange[] = {-45, 45};
+    private final int rollRange[] = {-45, 45};
 
     /**
      * Controller instance
