@@ -41,7 +41,11 @@ public class SteeringWheelListener implements View.OnTouchListener, Observer
     public void update(Observable observable, Object data)
     {
         Matrix matrix = new Matrix();
-        matrix.postRotate((float) (controller.getSteering() * 9.0), iv.getWidth() / 2, iv.getHeight() / 2);
+        matrix.postRotate(
+            ControllerCalculator.calculateSteeringPosition(controller.getSteering()),
+            iv.getWidth() / 2,
+            iv.getHeight() / 2
+        );
         iv.setImageMatrix(matrix);
     }
 }

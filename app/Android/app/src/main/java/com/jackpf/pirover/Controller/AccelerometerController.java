@@ -8,13 +8,48 @@ import android.util.Log;
 
 public class AccelerometerController implements SensorEventListener
 {
-    float gravity[] = new float[3], geomagnetic[] = new float[3];
-    boolean gravityObtained = false, geomagneticObtained = false;
+    /**
+     * Gravity vector
+     */
+    private float gravity[] = new float[3];
 
-    final int pitchRange[] = {-70, -30}, rollRange[] = {-45, 45};
+    /**
+     * Geomagnetic vector
+     */
+    private float geomagnetic[] = new float[3];
 
+    /**
+     * Gravity vector initialised
+     */
+    private boolean gravityInitialised = false;
+
+    /**
+     * Geomagnetic vector initialised
+     */
+    private boolean geomagneticInitialised = false;
+
+    /**
+     * Pitch range
+     * Range of rotation around the z axis in degrees for steering
+     */
+    private final int pitchRange[] = {-70, -30};
+
+    /**
+     * Roll range
+     * Range of rotation around the x axis in degrees for acceleration
+     */
+    final int rollRange[] = {-45, 45};
+
+    /**
+     * Controller instance
+     */
     private Controller controller;
 
+    /**
+     * Constructor
+     *
+     * @param controller
+     */
     public AccelerometerController(Controller controller)
     {
         this.controller = controller;
@@ -26,15 +61,15 @@ public class AccelerometerController implements SensorEventListener
         switch (event.sensor.getType()) {
             case Sensor.TYPE_ACCELEROMETER:
                 System.arraycopy(event.values, 0, gravity, 0, 3);
-                gravityObtained = true;
+                gravityInitialised = true;
             break;
             case Sensor.TYPE_MAGNETIC_FIELD:
                 System.arraycopy(event.values, 0, geomagnetic, 0, 3);
-                geomagneticObtained = true;
+                geomagneticInitialised = true;
             break;
         }
 
-        if (gravityObtained && geomagneticObtained) {
+        if (gravityInitialised && geomagneticInitialised) {
             float r[] = new float[9], v[] = new float[3];
 
             if (SensorManager.getRotationMatrix(r, null, gravity, geomagnetic)) {
@@ -55,7 +90,7 @@ public class AccelerometerController implements SensorEventListener
                 } else if (roll > rollRange[1]) {
                     roll = rollRange[1];
                 }
-                roll = (int) Math.round((double) (roll + Math.abs(rollRange[0])) / (rollRange[1] - rollRange[0]) * 20.0) - 10;
+                roll = (int) Math.round((double) (roll + Math.abs(rollRange[0])) / (rollRange[1] - rollRange[0]) * 20.0) - 10 /* double the range but keeping the accuracy */;
 
                 controller.setAcceleration(pitch);
                 controller.setSteering(roll);
