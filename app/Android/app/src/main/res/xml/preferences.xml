@@ -22,13 +22,18 @@
     
     <PreferenceCategory 
         android:title="@string/pref_control_title">
-        
-        <CheckBoxPreference 
-		    android:key="@string/pref_gyroscope_key"
-		    android:title="@string/pref_gyroscope_title"
-		    android:defaultValue="@string/pref_gyroscope_default"
-		    android:summary="@string/pref_gyroscope_summary"
-		    android:inputType="number" />
+
+        <CheckBoxPreference
+            android:key="@string/pref_gyroscope_key"
+            android:title="@string/pref_gyroscope_title"
+            android:defaultValue="@string/pref_gyroscope_default"
+            android:summary="@string/pref_gyroscope_summary" />
+
+        <CheckBoxPreference
+            android:key="@string/pref_gyroscope_smoothing_key"
+            android:title="@string/pref_gyroscope_smoothing_title"
+            android:defaultValue="@string/pref_gyroscope_smoothing_default"
+            android:summary="@string/pref_gyroscope_smoothing_summary" />
         
     </PreferenceCategory>
 

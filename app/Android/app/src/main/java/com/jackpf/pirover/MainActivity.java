@@ -109,7 +109,11 @@ public class MainActivity extends Activity implements Observer
 
         if (preferences.getBoolean(getString(R.string.pref_gyroscope_key), Boolean.valueOf(getString(R.string.pref_gyroscope_default)))) {
             SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-            AccelerometerController accelerometerController = new AccelerometerController(controller);
+            AccelerometerController accelerometerController =
+                new AccelerometerController(controller, preferences.getBoolean(
+                    getString(R.string.pref_gyroscope_smoothing_key),
+                    Boolean.valueOf(getString(R.string.pref_gyroscope_smoothing_default))
+                ));
 
             sensorManager.registerListener(
                 accelerometerController,

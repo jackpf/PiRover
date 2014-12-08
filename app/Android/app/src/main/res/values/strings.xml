@@ -45,6 +45,10 @@
     <string name="pref_gyroscope_title">Gyroscope</string>
     <string name="pref_gyroscope_default">false</string>
     <string name="pref_gyroscope_summary">Enables gyroscope controls</string>
+    <string name="pref_gyroscope_smoothing_key">gyroscope_smoothing</string>
+    <string name="pref_gyroscope_smoothing_title">Gyroscope smoothing</string>
+    <string name="pref_gyroscope_smoothing_default">true</string>
+    <string name="pref_gyroscope_smoothing_summary">Averages gyroscope readings; causes slight lag</string>
     <string name="pref_playback_title">Playback</string>
     <string name="pref_fps_key">fps</string>
     <string name="pref_fps_title">Playback fps</string>

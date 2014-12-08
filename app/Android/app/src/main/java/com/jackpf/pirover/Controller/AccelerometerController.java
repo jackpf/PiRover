@@ -29,14 +29,19 @@ public class AccelerometerController implements SensorEventListener
     private boolean geomagneticInitialised = false;
 
     /**
-     * Pitch range
-     * Range of rotation around the z axis in degrees for steering
+     * Implement smoothing of accelerometer values
      */
-    private final int pitchRange[] = {-70, -30};
+    private final boolean smoothValues;
+
+    /**
+     * Pitch range
+     * Range of rotation around the x axis in degrees for acceleration
+     */
+    private final int pitchRange[] = {-60, -20};
 
     /**
      * Roll range
-     * Range of rotation around the x axis in degrees for acceleration
+     * Range of rotation around the z axis in degrees for steering
      */
     private final int rollRange[] = {-45, 45};
 
@@ -46,31 +51,64 @@ public class AccelerometerController implements SensorEventListener
     private Controller controller;
 
     /**
+     * Number of samples to average over
+     */
+    private final int AVERAGE_BUFFER_LENGTH = 2;
+
+    /**
+     * Rolling average array
+     */
+    private float rollingAverage[][] = new float[3][AVERAGE_BUFFER_LENGTH];
+
+    /**
+     * Index in rolling average array
+     */
+    private int rollPosition = 0;
+
+    /**
      * Constructor
      *
      * @param controller
      */
-    public AccelerometerController(Controller controller)
+    public AccelerometerController(Controller controller, boolean smoothValues)
     {
         this.controller = controller;
+        this.smoothValues = smoothValues;
     }
 
     @Override
     public void onSensorChanged(SensorEvent event)
     {
         switch (event.sensor.getType()) {
-            case Sensor.TYPE_ACCELEROMETER:
-                System.arraycopy(event.values, 0, gravity, 0, 3);
-                gravityInitialised = true;
-            break;
             case Sensor.TYPE_MAGNETIC_FIELD:
                 System.arraycopy(event.values, 0, geomagnetic, 0, 3);
                 geomagneticInitialised = true;
+            break;
+            case Sensor.TYPE_ACCELEROMETER:
+                System.arraycopy(event.values, 0, gravity, 0, 3);
+                rollingAverage[0][rollPosition] = event.values[0];
+                rollingAverage[1][rollPosition] = event.values[1];
+                rollingAverage[2][rollPosition] = event.values[2];
+
+                if (rollPosition + 1 == AVERAGE_BUFFER_LENGTH - 1) {
+                    gravityInitialised = true;
+                }
+                rollPosition = (rollPosition + 1) % (AVERAGE_BUFFER_LENGTH - 1);
             break;
         }
 
         if (gravityInitialised && geomagneticInitialised) {
             float r[] = new float[9], v[] = new float[3];
+
+            if (smoothValues) {
+                for (int i = 0; i < rollingAverage.length; i++) {
+                    float sum = 0;
+                    for (float value : rollingAverage[i]) {
+                        sum += value;
+                    }
+                    gravity[i] = sum / AVERAGE_BUFFER_LENGTH;
+                }
+            }
 
             if (SensorManager.getRotationMatrix(r, null, gravity, geomagnetic)) {
                 SensorManager.getOrientation(r, v);
