@@ -1,5 +1,6 @@
 package com.jackpf.pirover.Camera;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,28 @@ public class BufferedVideo extends Observable
      * Fps calculator strategy
      */
     private FpsCalculator.Strategy fpsCalculator = FpsCalculator.DEFAULT_STRATEGY;
+
+    /**
+     * File info
+     */
+    private Info info;
+
+    /**
+     * Info class
+     */
+    public class Info
+    {
+        public final String filename;
+        public final long lastModified;
+        public final double size;
+
+        public Info(File file)
+        {
+            filename = file.getName();
+            lastModified = file.lastModified();
+            size = file.length() / (1024.0 * 1024.0);
+        }
+    }
 
     /**
      * Constructor
@@ -283,5 +306,19 @@ public class BufferedVideo extends Observable
     public boolean isPlaying()
     {
         return isPlaying;
+    }
+
+    /**
+     * Get video info
+     *
+     * @return
+     */
+    public Info getInfo()
+    {
+        if (info == null) {
+            info = new Info(new File(filename));
+        }
+
+        return info;
     }
 }

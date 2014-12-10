@@ -34,6 +34,7 @@ public class PlaybackRequest extends Request
         response.put("fps", video.getFps());
         response.put("current_frame", video.getFramePosition());
         response.put("frame_count", video.getFrameCount());
+        response.put("info", video.getInfo());
 
         return response;
     }

@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.jackpf.pirover.PlaybackAction" >
+    tools:context="com.jackpf.pirover.PlaybackAction">
 
     <ImageView
         android:id="@+id/camera"
@@ -58,5 +58,60 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/media_play_state"
         android:onClick="playbackControl" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/filename"
+        android:id="@+id/filename_key"
+        android:layout_below="@+id/rewind"
+        android:layout_alignStart="@+id/rewind" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/filename_value"
+        android:layout_alignTop="@+id/filename_key"
+        android:layout_toEndOf="@+id/filename_key"
+        android:layout_marginLeft="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/size"
+        android:id="@+id/size_key"
+        android:layout_below="@+id/filename_key"
+        android:layout_alignStart="@+id/filename_key" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/size_value"
+        android:layout_toEndOf="@+id/size_key"
+        android:layout_alignTop="@+id/size_key"
+        android:layout_alignStart="@+id/filename_value" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/date"
+        android:id="@+id/date_key"
+        android:layout_below="@+id/size_key"
+        android:layout_alignStart="@+id/size_key" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/date_value"
+        android:layout_toEndOf="@+id/size_value"
+        android:layout_alignTop="@+id/date_key"
+        android:layout_alignStart="@+id/size_value"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fps"
+        android:layout_alignTop="@+id/filename_value"
+        android:layout_alignEnd="@+id/video_progress" />
 
 </RelativeLayout>

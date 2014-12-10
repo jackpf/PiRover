@@ -72,5 +72,9 @@
     <string name="pref_fps_specify_title">FPS to play videos at</string>
     <string name="pref_fps_specify_default">11</string>
     <string name="pref_fps_specify_summary">Only used when fps strategy is user specified</string>
+    <string name="filename">Filename</string>
+    <string name="size">Size</string>
+    <string name="file_size">%fMB</string>
+    <string name="date">Date</string>
 
 </resources>
