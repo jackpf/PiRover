@@ -77,6 +77,12 @@ public class MainActivity extends Activity implements Observer
      * Resolved ports
      */
     static BroadcastResolver.PortMap ports;
+
+    /**
+     * Accelerometer controller instance
+     * Not set if turned off in preferences
+     */
+    private AccelerometerController accelerometerController;
     
     /**
      * Activity created event
@@ -108,24 +114,11 @@ public class MainActivity extends Activity implements Observer
         controlUI.initialise();
 
         if (preferences.getBoolean(getString(R.string.pref_gyroscope_key), Boolean.valueOf(getString(R.string.pref_gyroscope_default)))) {
-            SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-            AccelerometerController accelerometerController =
+            accelerometerController =
                 new AccelerometerController(controller, preferences.getBoolean(
                     getString(R.string.pref_gyroscope_smoothing_key),
                     Boolean.valueOf(getString(R.string.pref_gyroscope_smoothing_default))
                 ));
-
-            sensorManager.registerListener(
-                accelerometerController,
-                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_NORMAL
-            );
-
-            sensorManager.registerListener(
-                accelerometerController,
-                sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
-                SensorManager.SENSOR_DELAY_NORMAL
-            );
         }
     }
     
@@ -148,6 +141,22 @@ public class MainActivity extends Activity implements Observer
         } else {
             executeCameraRequest();
         }
+
+        if (accelerometerController != null) {
+            SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
+            sensorManager.registerListener(
+                accelerometerController,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL
+            );
+
+            sensorManager.registerListener(
+                accelerometerController,
+                sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
+                SensorManager.SENSOR_DELAY_NORMAL
+            );
+        }
     }
     
     /**
@@ -165,6 +174,11 @@ public class MainActivity extends Activity implements Observer
         
         cameraClient.disconnect();
         controlClient.disconnect();
+
+        if (accelerometerController != null) {
+            ((SensorManager) getSystemService(Context.SENSOR_SERVICE))
+                .unregisterListener(accelerometerController);
+        }
     }
 
     /**

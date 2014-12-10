@@ -37,7 +37,7 @@ public class AccelerometerController implements SensorEventListener
      * Pitch range
      * Range of rotation around the x axis in degrees for acceleration
      */
-    private final int pitchRange[] = {-60, -20};
+    private final int pitchRange[] = {-60, -30};
 
     /**
      * Roll range
@@ -69,6 +69,7 @@ public class AccelerometerController implements SensorEventListener
      * Constructor
      *
      * @param controller
+     * @param smoothValues  Whether to smooth sensor values
      */
     public AccelerometerController(Controller controller, boolean smoothValues)
     {
