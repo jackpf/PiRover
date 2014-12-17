@@ -19,7 +19,6 @@ import com.jackpf.pirover.Controller.AccelerometerController;
 import com.jackpf.pirover.Controller.Controller;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
-import com.jackpf.pirover.Model.UI;
 import com.jackpf.pirover.Request.BroadcastRequest;
 import com.jackpf.pirover.Request.CameraRequest;
 import com.jackpf.pirover.Request.ControlRequest;
@@ -47,11 +46,6 @@ public class MainActivity extends Activity implements Observer
      * Network request instances
      */
     protected Request cameraRequest, controlRequest;
-    
-    /**
-     * User interface instances
-     */
-    protected UI<MainActivity> cameraUI, controlUI;
     
     /**
      * Controller instance
@@ -107,11 +101,7 @@ public class MainActivity extends Activity implements Observer
         cameraRequest   = new CameraRequest(cameraClient, recorder);
         controlRequest  = new ControlRequest(controlClient, controller);
 
-        cameraUI        = new CameraUI(this, recorder);
-        controlUI       = new ControllerUI(this, controller);
-
-        cameraUI.initialise();
-        controlUI.initialise();
+        initialiseUI(new CameraUI(this, recorder), new ControllerUI(this, controller), new BroadcastUI(this));
 
         if (preferences.getBoolean(getString(R.string.pref_gyroscope_key), Boolean.valueOf(getString(R.string.pref_gyroscope_default)))) {
             accelerometerController =
@@ -223,7 +213,7 @@ public class MainActivity extends Activity implements Observer
      */
     public void connect(String manualIp)
     {
-        new RequestThread(new BroadcastRequest(getSystemService(WIFI_SERVICE), getSystemService(Context.CONNECTIVITY_SERVICE)), new BroadcastUI(this))
+        new RequestThread(new BroadcastRequest(getSystemService(WIFI_SERVICE), getSystemService(Context.CONNECTIVITY_SERVICE)), getUI(BroadcastUI.class))
             .setCallback(new RequestThread.Callback() {
                 @Override
                 public void onPostExecute(RequestResponse vars, Exception e) {
@@ -255,7 +245,7 @@ public class MainActivity extends Activity implements Observer
         
         cameraThread = new RequestThread(
             cameraRequest,
-            cameraUI
+            getUI(CameraUI.class)
         ).setCallback(new Callback() {
             @Override
             public void onPostExecute(RequestResponse vars, Exception e) {

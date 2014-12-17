@@ -11,7 +11,6 @@ import com.jackpf.pirover.Camera.DrawableFrameFactory;
 import com.jackpf.pirover.Camera.FpsCalculator;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
-import com.jackpf.pirover.Model.UI;
 import com.jackpf.pirover.Request.PlaybackRequest;
 import com.jackpf.pirover.RequestThread.Callback;
 import com.jackpf.pirover.View.EventListener.PlaybackControlObserver;
@@ -22,7 +21,6 @@ import java.io.FileNotFoundException;
 public class PlaybackActivity extends Activity
 {
     protected RequestThread thread;
-    protected UI<PlaybackActivity> playbackUI;
     protected Request playbackRequest;
     protected BufferedVideo video;
     
@@ -63,8 +61,7 @@ public class PlaybackActivity extends Activity
         
         playbackRequest = new PlaybackRequest(video);
 
-        playbackUI = new PlaybackUI(this);
-        playbackUI.initialise();
+        initialiseUI(new PlaybackUI(this));
 
         video.addObserver(new PlaybackControlObserver(this));
     }
@@ -113,7 +110,7 @@ public class PlaybackActivity extends Activity
         
         thread = new RequestThread(
             playbackRequest,
-            playbackUI
+            getUI(PlaybackUI.class)
         ).setCallback(new Callback() {
             public void onPostExecute(RequestResponse vars, Exception e) {
                 if (video.isPlaying() && vars.get("drawable") != null && e == null) {
