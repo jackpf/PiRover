@@ -1,7 +1,5 @@
 package com.jackpf.pirover.View;
 
-import java.io.IOException;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -9,11 +7,13 @@ import android.text.InputType;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.jackpf.pirover.MainActivity;
-import com.jackpf.pirover.R;
 import com.jackpf.pirover.Broadcast.ConnectionException;
 import com.jackpf.pirover.Broadcast.TimeoutException;
+import com.jackpf.pirover.MainActivity;
 import com.jackpf.pirover.Model.UI;
+import com.jackpf.pirover.R;
+
+import java.io.IOException;
 
 public class BroadcastUI extends UI<MainActivity>
 {
@@ -24,7 +24,8 @@ public class BroadcastUI extends UI<MainActivity>
     {
         super(activity);
     }
-    
+
+    @Override
     public void preUpdate()
     {
         if (alertDialog != null && alertDialog.isShowing()) {
@@ -42,12 +43,14 @@ public class BroadcastUI extends UI<MainActivity>
         
         dialog.show();
     }
-    
+
+    @Override
     public void update()
     {
         dialog.dismiss();
     }
-    
+
+    @Override
     public void error(Exception e)
     {
         if (e instanceof ConnectionException) {
