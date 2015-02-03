@@ -15,6 +15,10 @@ target_link_libraries(lights pthread)
 # Build broadcast
 add_executable(broadcast broadcast.cpp ${LIB_DIR}/lib.cpp ${LIB_DIR}/broadcast.cpp)
 
+# Build launcher
+add_executable(launcher lib/launcher.cpp ${LIB_DIR}/lib.cpp)
+target_link_libraries(launcher usb)
+
 # Install targets
 install(TARGETS camera controller lights broadcast DESTINATION /usr/local/bin/)
 install(FILES ${PROJECT_SOURCE_DIR}/scripts/pirover DESTINATION /etc/init.d PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ)
