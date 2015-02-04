@@ -1,12 +1,12 @@
 package com.jackpf.pirover.Request;
 
-import java.io.IOException;
-
 import com.jackpf.pirover.Client.ClientException;
 import com.jackpf.pirover.Controller.Client;
 import com.jackpf.pirover.Controller.Controller;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
+
+import java.io.IOException;
 
 public class ControlRequest extends Request
 {
