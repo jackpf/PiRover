@@ -1,10 +1,12 @@
 package com.jackpf.pirover.Controller;
 
+import com.jackpf.pirover.Service.Utils;
+
+import org.apache.commons.lang.ArrayUtils;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-
-import com.jackpf.pirover.Service.Utils;
 
 public class Client extends com.jackpf.pirover.Client.Client
 {
@@ -21,8 +23,12 @@ public class Client extends com.jackpf.pirover.Client.Client
     {
         OutputStream os = new DataOutputStream(socket.getOutputStream());
 
-        os.write(Utils.intToByteArray(controller.getAcceleration()));
-        os.write(Utils.intToByteArray(controller.getSteering()));
+        byte[] buf = ArrayUtils.addAll(
+            Utils.intToByteArray(controller.getAcceleration()),
+            Utils.intToByteArray(controller.getSteering())
+        );
+
+        os.write(buf);
         
         os.flush();
     }

@@ -99,6 +99,9 @@ public class RequestThread extends AsyncTask<String, Void, Void>
             // Just set the vars to the response
             vars = request.call(params);
         } catch (Exception e) {
+            // Always trace exceptions!
+            e.printStackTrace();
+
             this.e = e;
         }
 
@@ -120,8 +123,6 @@ public class RequestThread extends AsyncTask<String, Void, Void>
             if (e == null) {
                 ui.update();
             } else {
-                e.printStackTrace();
-                
                 ui.error(e);
             }
         }
