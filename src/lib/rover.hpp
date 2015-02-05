@@ -1,3 +1,6 @@
+#ifndef H_ROVER
+#define H_ROVER
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -39,7 +42,7 @@ public:
     /**
      * Initialise rover
      */
-    void setup();
+    void init();
 
     /**
      * Reset motor values back to 0
@@ -70,3 +73,5 @@ public:
      */
     MotorValues getMotorValues();
 };
+
+#endif

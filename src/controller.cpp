@@ -1,6 +1,7 @@
 #include "lib.hpp"
 #include "server.hpp"
-#include "rover.hpp"
+#include "controllers/handler.hpp"
+#include "controllers/rover_controller.hpp"
 
 using namespace Lib;
 
@@ -14,12 +15,12 @@ int main(int argc, char **argv)
     Args args(argc, argv, options, sizeof(options));
 
     Server server;
-    Rover rover;
+
+    //Handler *handlers[] = {new RoverController()};
+    Handler *handler = new RoverController();
 
     // Setup rover
     println("Initialising rover");
-
-    rover.setup();
 
     // Create server
     println("Creating server");
@@ -37,16 +38,27 @@ int main(int argc, char **argv)
         println("Client connected");
 
         while (true) {
-            int accelerationPosition, steeringPosition;
-            if (server.receive(conn, (void *) &accelerationPosition, sizeof(int)) <= 0) {
-                break;
+            char *data = (char *) malloc(handler->getDataSize());
+
+            int totalBytesRead = 0;
+
+            while (totalBytesRead < handler->getDataSize()) {
+                int bytesRead = server.receive(conn, data + totalBytesRead, handler->getDataSize() - totalBytesRead);
+
+                if (bytesRead <= 0) {
+                    break;
+                }
+
+                totalBytesRead += bytesRead;
             }
-            if (server.receive(conn, (void *) &steeringPosition, sizeof(int)) <= 0) {
+
+            if (totalBytesRead < handler->getDataSize()) {
                 break;
             }
 
-            rover.calculateMotorValues(accelerationPosition, steeringPosition);
-            rover.write();
+            handler->handle(data);
+
+            //free(data);
         }
 
         println("Client disconnected");
@@ -55,8 +67,8 @@ int main(int argc, char **argv)
 
         println("Resetting rover");
 
-        rover.resetMotorValues();
-        rover.write();
+        //rover.resetMotorValues();
+        //rover.write();
     }
 
     return 0;

@@ -3,13 +3,13 @@
 #include <unistd.h>
 #include "lib.hpp"
 
-#define DEVICE_ID   0x2123
-#define CMD_DOWN    0x01
-#define CMD_UP      0x02
-#define CMD_LEFT    0x04
-#define CMD_RIGHT   0x08
-#define CMD_FIRE    0x10
-#define CMD_STOP    0x20
+#define LAUNCHER_DEVICE_ID  0x2123
+#define LAUNCHER_DOWN       0x01
+#define LAUNCHER_UP         0x02
+#define LAUNCHER_LEFT       0x04
+#define LAUNCHER_RIGHT      0x08
+#define LAUNCHER_FIRE       0x10
+#define LAUNCHER_STOP       0x20
 
 class Launcher
 {

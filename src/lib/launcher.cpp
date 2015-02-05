@@ -13,7 +13,7 @@ void Launcher::init()
         struct usb_device *dev;
 
         for (dev = bus->devices; dev; dev = dev->next) {
-            if (dev->descriptor.idVendor == DEVICE_ID) {
+            if (dev->descriptor.idVendor == LAUNCHER_DEVICE_ID) {
                 Lib::println("Launcher found!");
 
                 launcher = usb_open(dev);
