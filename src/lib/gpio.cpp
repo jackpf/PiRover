@@ -12,10 +12,8 @@ void GPIO::setup()
         return;
     }
 
-    // /dev/mem file descriptor
     int mem;
 
-    // Access physical memory
     if ((mem = open("/dev/mem", O_RDWR | O_SYNC)) < 0) {
         perror("Unable to access /dev/mem");
         exit(-1);
@@ -23,22 +21,21 @@ void GPIO::setup()
 
     // Map memory
     void *gpioMap = mmap(
-        NULL,                   // Any adddress in our space will do
+        NULL,                   // Address space
         BLOCK_SIZE,             // Map length
-        PROT_READ | PROT_WRITE, // Enable reading & writing to mapped memory
-        MAP_SHARED,             // Shared with other processes
-        mem,                    // File to map
+        PROT_READ | PROT_WRITE, // Access type
+        MAP_SHARED,             // Shared
+        mem,                    // File descriptor
         GPIO_BASE               // Offset to GPIO peripheral
     );
 
-    close(mem); // No need to keep mem_fd open after mmap
+    close(mem);
 
     if (gpioMap == MAP_FAILED) {
         perror("Unable to map GPIO address space");
         exit(-1);
     }
 
-    // Always use volatile pointer!
     gpio = (volatile unsigned int *) gpioMap;
 
     isSetup = true;
