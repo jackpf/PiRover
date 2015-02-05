@@ -56,7 +56,7 @@ int main(int argc, char **argv)
                 break;
             }
 
-            handler->handle(data, totalBytesRead);
+            handler->handle(data);
 
             //free(data);
         }

@@ -4,7 +4,7 @@
 class Handler
 {
 public:
-    virtual void handle(char *data, int len) = 0;
+    virtual void handle(char *data) = 0;
     virtual int getDataSize() = 0;
 };
 

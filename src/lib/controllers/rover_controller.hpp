@@ -8,6 +8,6 @@ private:
     Rover rover;
 public:
     RoverController();
-    void handle(char *data, int len);
+    void handle(char *data);
     int getDataSize();
 };

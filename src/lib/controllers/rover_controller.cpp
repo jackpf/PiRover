@@ -5,7 +5,7 @@ RoverController::RoverController()
     rover.init();
 }
 
-void RoverController::handle(char *data, int len)
+void RoverController::handle(char *data)
 {
     int accelerationPosition, steeringPosition;
 

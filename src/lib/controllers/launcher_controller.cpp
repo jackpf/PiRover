@@ -5,7 +5,7 @@ LauncherController::LauncherController()
     launcher.init();
 }
 
-void LauncherController::handle(void *data, int len)
+void LauncherController::handle(void *data)
 {
     int cmd;
     printf("received %d bytes", len);
