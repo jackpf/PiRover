@@ -21,12 +21,12 @@
         android:id="@+id/steering_wheel"
         android:layout_width="128sp"
         android:layout_height="128sp"
-        android:layout_alignLeft="@+id/fps_counter"
-        android:layout_below="@+id/fps_counter"
-        android:layout_marginTop="28dp"
         android:scaleType="matrix"
         android:src="@drawable/steering_wheel"
-        android:contentDescription="@string/controller_steering_wheel" />
+        android:contentDescription="@string/controller_steering_wheel"
+        android:layout_below="@+id/camera_status"
+        android:layout_alignStart="@+id/fps_counter"
+        android:layout_marginTop="40dp"/>
 
     <TextView
         android:id="@+id/camera_status"
@@ -71,5 +71,46 @@
         android:layout_alignBottom="@+id/camera_status"
         android:layout_alignLeft="@+id/camera"
         android:text="@string/camera_fps_count_default" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="^"
+        android:id="@+id/launcher_up"
+        android:layout_toEndOf="@+id/steering_wheel"
+        android:layout_alignParentTop="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="&lt;"
+        android:id="@+id/launcher_left"
+        android:layout_below="@+id/launcher_up"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="60dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=">"
+        android:id="@+id/launcher_right"
+        android:layout_alignTop="@+id/launcher_left"
+        android:layout_alignParentRight="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="v"
+        android:id="@+id/launcher_down"
+        android:layout_above="@+id/camera_status"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fire!"
+        android:id="@+id/launcher_fire"
+        android:layout_below="@+id/steering_wheel"
+        android:layout_alignEnd="@+id/launcher_up"/>
 
 </RelativeLayout>

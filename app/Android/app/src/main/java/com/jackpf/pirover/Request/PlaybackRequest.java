@@ -20,7 +20,7 @@ public class PlaybackRequest extends Request
     }
 
     @Override
-    public RequestResponse call(String ...args) throws ClientException, IOException
+    public RequestResponse call(Object ...args) throws ClientException, IOException
     {
         if (!video.isLoaded()) {
             video.load().isPlaying(true);

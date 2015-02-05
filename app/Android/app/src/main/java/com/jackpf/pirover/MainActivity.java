@@ -17,15 +17,20 @@ import com.jackpf.pirover.Camera.StreamStats;
 import com.jackpf.pirover.Client.Client;
 import com.jackpf.pirover.Controller.AccelerometerController;
 import com.jackpf.pirover.Controller.Controller;
+import com.jackpf.pirover.Controller.ControllerCommand;
+import com.jackpf.pirover.Controller.Launcher;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Request.BroadcastRequest;
 import com.jackpf.pirover.Request.CameraRequest;
 import com.jackpf.pirover.Request.ControlRequest;
 import com.jackpf.pirover.RequestThread.Callback;
+import com.jackpf.pirover.Service.Utils;
 import com.jackpf.pirover.View.BroadcastUI;
 import com.jackpf.pirover.View.CameraUI;
 import com.jackpf.pirover.View.ControllerUI;
+
+import org.apache.commons.lang.ArrayUtils;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -51,6 +56,11 @@ public class MainActivity extends Activity implements Observer
      * Controller instance
      */
     protected Controller controller;
+
+    /**
+     * Launcher instance
+     */
+    protected Launcher launcher;
     
     /**
      * Recorder instance
@@ -91,6 +101,8 @@ public class MainActivity extends Activity implements Observer
 
         controller      = new Controller();
         controller.addObserver(this);
+        launcher        = new Launcher();
+        launcher.addObserver(this);
 
         streamStats     = new StreamStats();
         recorder        = new Recorder(streamStats);
@@ -101,7 +113,7 @@ public class MainActivity extends Activity implements Observer
         cameraRequest   = new CameraRequest(cameraClient, recorder);
         controlRequest  = new ControlRequest(controlClient, controller);
 
-        initialiseUI(new CameraUI(this, recorder), new ControllerUI(this, controller), new BroadcastUI(this));
+        initialiseUI(new CameraUI(this, recorder), new ControllerUI(this, controller, launcher), new BroadcastUI(this));
 
         if (preferences.getBoolean(getString(R.string.pref_gyroscope_key), Boolean.valueOf(getString(R.string.pref_gyroscope_default)))) {
             accelerometerController =
@@ -229,7 +241,7 @@ public class MainActivity extends Activity implements Observer
                     }
                 }
             })
-            .execute(preferences.getString(getString(R.string.pref_broadcast_port_key), getString(R.string.pref_broadcast_port_default)), manualIp);
+            .execute(Integer.parseInt(preferences.getString(getString(R.string.pref_broadcast_port_key), getString(R.string.pref_broadcast_port_default))), manualIp);
     }
     
     /**
@@ -261,7 +273,7 @@ public class MainActivity extends Activity implements Observer
         });
 
         if (ip != null && ports != null) {
-            cameraThread.execute(ip, ports.get("camera"));
+            cameraThread.execute(ip, Integer.parseInt(ports.get("camera")));
         }
     }
     
@@ -279,7 +291,26 @@ public class MainActivity extends Activity implements Observer
             controlThread = new RequestThread(controlRequest);
 
             if (ip != null && ports != null) {
-                controlThread.execute(ip, ports.get("control"));
+                byte[] buf = ArrayUtils.addAll(
+                    Utils.intToByteArray(controller.getAcceleration()),
+                    Utils.intToByteArray(controller.getSteering())
+                );
+
+                controlThread.execute(ip, Integer.parseInt(ports.get("control")), new ControllerCommand(0x0, buf));
+            }
+        } else if (observer instanceof Launcher) {
+            if (controlThread instanceof RequestThread) {
+                controlThread.cancel(true);
+            }
+
+            controlThread = new RequestThread(controlRequest);
+
+            if (ip != null && ports != null) {
+                controlThread.execute(
+                    ip,
+                    Integer.parseInt(ports.get("control")),
+                    new ControllerCommand(0x1, Utils.intToByteArray((Integer) data))
+                );
             }
         }
     }

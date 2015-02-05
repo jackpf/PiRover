@@ -1,5 +1,12 @@
 package com.jackpf.pirover.Request;
 
+import com.jackpf.pirover.Camera.BufferedVideo;
+import com.jackpf.pirover.Camera.ClientException;
+import com.jackpf.pirover.Camera.DrawableFrameFactory;
+import com.jackpf.pirover.Camera.Recorder;
+import com.jackpf.pirover.Model.Request;
+import com.jackpf.pirover.Model.RequestResponse;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -7,13 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-
-import com.jackpf.pirover.Camera.BufferedVideo;
-import com.jackpf.pirover.Camera.ClientException;
-import com.jackpf.pirover.Camera.DrawableFrameFactory;
-import com.jackpf.pirover.Camera.Recorder;
-import com.jackpf.pirover.Model.Request;
-import com.jackpf.pirover.Model.RequestResponse;
 
 public class BrowseRequest extends Request
 {
@@ -23,11 +23,11 @@ public class BrowseRequest extends Request
     }
 
     @Override
-    public RequestResponse call(String ...args) throws ClientException, IOException
+    public RequestResponse call(Object ...args) throws ClientException, IOException
     {
         RequestResponse response = new RequestResponse();
         
-        File dir = new File(args[0]);
+        File dir = new File((String) args[0]);
         List<BufferedVideo> files = new ArrayList<BufferedVideo>();
         
         if (dir.exists() && dir.isDirectory()) {

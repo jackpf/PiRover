@@ -27,7 +27,7 @@ public abstract class Request
      * @return
      * @throws Exception
      */
-    public abstract RequestResponse call(String ...args) throws Exception;
+    public abstract RequestResponse call(Object ...args) throws Exception;
     
     /**
      * Called before request

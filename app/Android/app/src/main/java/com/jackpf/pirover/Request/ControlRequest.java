@@ -3,6 +3,7 @@ package com.jackpf.pirover.Request;
 import com.jackpf.pirover.Client.ClientException;
 import com.jackpf.pirover.Controller.Client;
 import com.jackpf.pirover.Controller.Controller;
+import com.jackpf.pirover.Controller.ControllerCommand;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 
@@ -22,24 +23,23 @@ public class ControlRequest extends Request
     }
 
     @Override
-    public RequestResponse call(String ...args) throws ClientException, IOException
+    public RequestResponse call(Object ...args) throws ClientException, IOException
     {
         if (!client.isConnected()) {
-            String ip = args[0], portStr = args[1];
+            String ip = (String) args[0];
+            Integer port = (Integer) args[1];
 
             if (ip == null) {
                 throw new ClientException("No IP");
             }
-            if (portStr == null) {
+            if (port == null) {
                 throw new ClientException("No port");
             }
 
-            int port = Integer.parseInt(portStr);
-
-            client.connect(ip, port, controller);
+            client.connect(ip, port);
         }
-        
-        client.update();
+
+        client.update((ControllerCommand) args[2]);
         
         return null;
     }

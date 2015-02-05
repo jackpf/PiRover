@@ -11,7 +11,7 @@ import com.jackpf.pirover.Model.UI;
  * Network thread
  * Performs all api requests
  */
-public class RequestThread extends AsyncTask<String, Void, Void>
+public class RequestThread extends AsyncTask<Object, Void, Void>
 {
     /**
      * Api request to call
@@ -93,7 +93,7 @@ public class RequestThread extends AsyncTask<String, Void, Void>
      * @param params
      */
     @Override
-    protected Void doInBackground(String... params)
+    protected Void doInBackground(Object... params)
     {
         try {
             // Just set the vars to the response

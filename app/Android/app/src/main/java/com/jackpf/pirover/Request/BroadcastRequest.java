@@ -1,11 +1,5 @@
 package com.jackpf.pirover.Request;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketTimeoutException;
-
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.text.format.Formatter;
@@ -17,6 +11,12 @@ import com.jackpf.pirover.Broadcast.TimeoutException;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Service.Utils;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketTimeoutException;
 
 public class BroadcastRequest extends Request
 {
@@ -34,12 +34,12 @@ public class BroadcastRequest extends Request
     }
 
     @Override
-    public RequestResponse call(String ...args) throws ConnectionException, TimeoutException, IOException
+    public RequestResponse call(Object ...args) throws ConnectionException, TimeoutException, IOException
     {
         RequestResponse response = new RequestResponse();
 
-        int port = Integer.parseInt(args[0]);
-        String manualIp = args.length > 1 ? args[1] : null;
+        Integer port = (Integer) args[0];
+        String manualIp = args.length > 1 ? (String) args[1] : null;
         
         for (int retries = 0; !broadcastResolver.packetIsValid() && retries < 5; retries++) {
             if (!cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
