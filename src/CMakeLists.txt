@@ -5,7 +5,7 @@ add_executable(camera camera.cpp ${LIB_DIR}/lib.cpp ${LIB_DIR}/server.cpp ${LIB_
 target_link_libraries(camera raspicam raspicam_cv opencv_core opencv_highgui)
 
 # Build controller
-add_executable(controller controller.cpp ${LIB_DIR}/lib.cpp ${LIB_DIR}/server.cpp ${LIB_DIR}/gpio.cpp ${LIB_DIR}/rover.cpp)
+add_executable(controller controller.cpp ${LIB_DIR}/lib.cpp ${LIB_DIR}/server.cpp ${LIB_DIR}/gpio.cpp ${LIB_DIR}/rover.cpp ${LIB_DIR}/controllers/rover_controller.cpp)
 target_link_libraries(controller pthread)
 
 # Build lights
@@ -14,10 +14,6 @@ target_link_libraries(lights pthread)
 
 # Build broadcast
 add_executable(broadcast broadcast.cpp ${LIB_DIR}/lib.cpp ${LIB_DIR}/broadcast.cpp)
-
-# Build launcher
-add_executable(launcher lib/launcher.cpp ${LIB_DIR}/lib.cpp)
-target_link_libraries(launcher usb)
 
 # Install targets
 install(TARGETS camera controller lights broadcast DESTINATION /usr/local/bin/)

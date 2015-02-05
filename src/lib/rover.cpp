@@ -1,6 +1,6 @@
 #include "rover.hpp"
 
-void Rover::setup()
+void Rover::init()
 {
     GPIO::setup();
 

@@ -3,6 +3,9 @@
  * Accesses the physical GPIO memory space directly, therefore must be run as root!
  */
 
+#ifndef H_GPIO
+#define H_GPIO
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -196,3 +199,5 @@ public:
      */
     static int pwmRead(int pin);
 };
+
+#endif
