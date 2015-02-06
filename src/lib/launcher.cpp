@@ -1,6 +1,6 @@
 #include "launcher.hpp"
 
-void Launcher::init()
+bool Launcher::init()
 {
     usb_init();
     usb_find_busses();
@@ -8,6 +8,8 @@ void Launcher::init()
 
     struct usb_bus *busses = usb_get_busses();
     struct usb_bus *bus;
+
+    connected = false;
 
     for (bus = busses; bus; bus = bus->next) {
         struct usb_device *dev;
@@ -26,18 +28,21 @@ void Launcher::init()
                         Lib::println("Detached %s", driverName);
                     } else {
                         Lib::println("%s can't be detached", driverName);
-                        return;
+                        return connected;
                     }
                 }
 
                 if (usb_claim_interface(launcher, 0) == 0) {
                     Lib::println("Device claimed");
+                    connected = true;
                 } else {
                     perror("Unable to claim device");
                 }
             }
         }
     }
+
+    return connected;
 }
 
 void Launcher::deinit()
@@ -48,6 +53,11 @@ void Launcher::deinit()
 
 void Launcher::send(int cmd)
 {
+    if (!connected) {
+        Lib::println(stderr, "Device not connected");
+        return;
+    }
+
     char msg[8] = {0x0};
     msg[0] = 0x02;
     msg[1] = cmd;

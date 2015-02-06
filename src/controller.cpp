@@ -2,6 +2,7 @@
 #include "server.hpp"
 #include "controllers/handler.hpp"
 #include "controllers/rover_controller.hpp"
+#include "controllers/launcher_controller.hpp"
 
 using namespace Lib;
 
@@ -16,8 +17,10 @@ int main(int argc, char **argv)
 
     Server server;
 
-    //Handler *handlers[] = {new RoverController()};
-    Handler *handler = new RoverController();
+    Handler *handlers[] = {
+        /* 0x0 */ new RoverController(),
+        /* 0x1 */ new LauncherController()
+    };
 
     // Setup rover
     println("Initialising rover");
@@ -38,12 +41,21 @@ int main(int argc, char **argv)
         println("Client connected");
 
         while (true) {
-            char *data = (char *) malloc(handler->getDataSize());
+            // Get cmd id
+            int id;
+            server.receive(conn, &id, sizeof(int));
+
+            if (id >= sizeof(handlers) / sizeof(Handler)) {
+                Lib::println(stderr, "Invalid command id of %d", id);
+                continue;
+            }
+
+            char *data = (char *) malloc(handlers[id]->getDataSize());
 
             int totalBytesRead = 0;
 
-            while (totalBytesRead < handler->getDataSize()) {
-                int bytesRead = server.receive(conn, data + totalBytesRead, handler->getDataSize() - totalBytesRead);
+            while (totalBytesRead < handlers[id]->getDataSize()) {
+                int bytesRead = server.receive(conn, data + totalBytesRead, handlers[id]->getDataSize() - totalBytesRead);
 
                 if (bytesRead <= 0) {
                     break;
@@ -52,13 +64,13 @@ int main(int argc, char **argv)
                 totalBytesRead += bytesRead;
             }
 
-            if (totalBytesRead < handler->getDataSize()) {
+            if (totalBytesRead < handlers[id]->getDataSize()) {
                 break;
             }
 
-            handler->handle(data);
+            handlers[id]->handle(data);
 
-            //free(data);
+            free(data);
         }
 
         println("Client disconnected");

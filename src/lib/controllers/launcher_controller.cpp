@@ -5,10 +5,10 @@ LauncherController::LauncherController()
     launcher.init();
 }
 
-void LauncherController::handle(void *data)
+void LauncherController::handle(char *data)
 {
     int cmd;
-    printf("received %d bytes", len);
+    printf("received %d bytes");
     memcpy(&cmd, data, sizeof(int));
 
     Lib::println("CMD: %d", cmd);

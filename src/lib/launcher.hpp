@@ -15,9 +15,10 @@ class Launcher
 {
 private:
     usb_dev_handle *launcher;
+    bool connected;
 
 public:
-    void init();
+    bool init();
     void deinit();
     void send(int cmd);
 };

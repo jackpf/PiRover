@@ -8,6 +8,6 @@ private:
     Launcher launcher;
 public:
     LauncherController();
-    void handle(void *data);
+    void handle(char *data);
     int getDataSize();
 };
