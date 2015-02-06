@@ -31,7 +31,7 @@ public class PlaybackRequest extends Request
         DrawableFrame frame = (DrawableFrame) video.getFrame();
         
         response.put("drawable", frame != null ? frame.getDrawable() : null);
-        response.put("fps", video.getFps());
+        response.put("fps", frame != null ? video.getFps() : 0);
         response.put("current_frame", video.getFramePosition());
         response.put("frame_count", video.getFrameCount());
         response.put("info", video.getInfo());

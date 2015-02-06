@@ -54,12 +54,6 @@ public class PlaybackUI extends UI<PlaybackActivity>
         if (vars.get("drawable") != null) {
             Drawable drawable = (Drawable) vars.get("drawable");
             ivCamera.setImageDrawable(drawable);
-            System.err.println("NOT NULL");
-        } else {
-            /* Have to update here instead of in PlaybackControlObserver
-               since it causes a CalledFromWrongThreadException when the video ends */
-            ((ImageButton) activity.findViewById(R.id.play)).setSelected(true);
-            System.err.println("NULL");
         }
 
         // Video info

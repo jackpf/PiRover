@@ -1,9 +1,9 @@
 package com.jackpf.pirover.Camera;
 
+import com.jackpf.pirover.Service.Utils;
+
 import java.io.IOException;
 import java.io.InputStream;
-
-import com.jackpf.pirover.Service.Utils;
 
 public class Client extends com.jackpf.pirover.Client.Client
 {
@@ -49,6 +49,10 @@ public class Client extends com.jackpf.pirover.Client.Client
                 return null;
             }
             int sz = Utils.byteArrayToInt(szBuf);
+
+            if (sz < 0) {
+                throw new IOException("Invalid frame buffer size: " + sz);
+            }
 
             byte[] buffer = new byte[sz], image = new byte[sz];
             int bytesRead = 0, bytesReadTotal = 0, bytesWritten = 0;
