@@ -2,6 +2,8 @@
 #include "server.hpp"
 #include "controllers/handler.hpp"
 #include "controllers/rover_controller.hpp"
+#include "controllers/launcher_controller.hpp"
+#include "controllers/shutdown_controller.hpp"
 
 using namespace Lib;
 
@@ -16,14 +18,14 @@ int main(int argc, char **argv)
 
     Server server;
 
-    //Handler *handlers[] = {new RoverController()};
-    Handler *handler = new RoverController();
-
-    // Setup rover
-    println("Initialising rover");
+    Handler *handlers[] = {
+        /* 0x0 */ new RoverController(),
+        /* 0x1 */ new LauncherController(),
+        /* 0x2 */ new ShutdownController(),
+    };
 
     // Create server
-    println("Creating server");
+    println("Creating controller server");
 
     if (!server.create(atoi(args.get("port")))) {
         perror("Could not create server");
@@ -38,12 +40,23 @@ int main(int argc, char **argv)
         println("Client connected");
 
         while (true) {
-            char *data = (char *) malloc(handler->getDataSize());
+            // Get cmd id
+            int id;
+            if (server.receive(conn, &id, sizeof(int)) <= 0) {
+                break;
+            }
+
+            if (id >= sizeof(handlers) / sizeof(Handler)) {
+                Lib::println(stderr, "Invalid command id of %d", id);
+                continue;
+            }
+
+            char *data = (char *) malloc(handlers[id]->getDataSize());
 
             int totalBytesRead = 0;
 
-            while (totalBytesRead < handler->getDataSize()) {
-                int bytesRead = server.receive(conn, data + totalBytesRead, handler->getDataSize() - totalBytesRead);
+            while (totalBytesRead < handlers[id]->getDataSize()) {
+                int bytesRead = server.receive(conn, data + totalBytesRead, handlers[id]->getDataSize() - totalBytesRead);
 
                 if (bytesRead <= 0) {
                     break;
@@ -52,23 +65,28 @@ int main(int argc, char **argv)
                 totalBytesRead += bytesRead;
             }
 
-            if (totalBytesRead < handler->getDataSize()) {
+            if (totalBytesRead < handlers[id]->getDataSize()) {
                 break;
             }
 
-            handler->handle(data);
+            handlers[id]->handle(data);
 
-            //free(data);
+            free(data);
         }
 
         println("Client disconnected");
 
         server.close(conn);
 
-        println("Resetting rover");
+        println("Cleaning up handlers");
 
-        //rover.resetMotorValues();
-        //rover.write();
+        for (int i = 0; i < sizeof(handlers) / sizeof(Handler); i++) {
+            handlers[i]->cleanup();
+        }
+    }
+
+    for (int i = 0; i < sizeof(handlers) / sizeof(Handler); i++) {
+        delete handlers[i];
     }
 
     return 0;

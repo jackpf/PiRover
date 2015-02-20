@@ -5,8 +5,18 @@ add_executable(camera camera.cpp ${LIB_DIR}/lib.cpp ${LIB_DIR}/server.cpp ${LIB_
 target_link_libraries(camera raspicam raspicam_cv opencv_core opencv_highgui)
 
 # Build controller
-add_executable(controller controller.cpp ${LIB_DIR}/lib.cpp ${LIB_DIR}/server.cpp ${LIB_DIR}/gpio.cpp ${LIB_DIR}/rover.cpp ${LIB_DIR}/controllers/rover_controller.cpp)
-target_link_libraries(controller pthread)
+add_executable(controller
+    controller.cpp
+    ${LIB_DIR}/lib.cpp
+    ${LIB_DIR}/server.cpp
+    ${LIB_DIR}/gpio.cpp
+    ${LIB_DIR}/rover.cpp
+    ${LIB_DIR}/launcher.cpp
+    ${LIB_DIR}/controllers/rover_controller.cpp
+    ${LIB_DIR}/controllers/launcher_controller.cpp
+    ${LIB_DIR}/controllers/shutdown_controller.cpp
+)
+target_link_libraries(controller pthread usb)
 
 # Build lights
 add_executable(lights lights.cpp ${LIB_DIR}/lib.cpp ${LIB_DIR}/gpio.cpp ${LIB_DIR}/network.cpp)

@@ -16,7 +16,13 @@ git clone --recursive http://github.com/jackpf/PiRover.git
 Install OpenCV libraries:
 
 ```
-sudo apt-get install libopencv-core-dev
+sudo apt-get install libopencv-dev
+```
+
+Install USB libraries:
+
+```
+sudo apt-get install libusb-dev
 ```
 
 Install PiRover:

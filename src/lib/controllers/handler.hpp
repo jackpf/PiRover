@@ -5,6 +5,7 @@ class Handler
 {
 public:
     virtual void handle(char *data) = 0;
+    virtual void cleanup() = 0;
     virtual int getDataSize() = 0;
 };
 
