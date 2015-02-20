@@ -32,28 +32,26 @@
 
     <ImageButton
         android:id="@+id/fastforward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_alignRight="@+id/video_progress"
         android:layout_below="@+id/video_progress"
         android:onClick="playbackControl"
-        android:src="@drawable/media_fastforward"
-        android:background="@null" />
+        android:background="@drawable/media_fastforward" />
 
     <ImageButton
         android:id="@+id/rewind"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_alignLeft="@+id/video_progress"
         android:layout_below="@+id/video_progress"
-        android:background="@null"
-        android:onClick="playbackControl"
-        android:src="@drawable/media_rewind" />
+        android:background="@drawable/media_rewind"
+        android:onClick="playbackControl" />
 
     <ImageButton
         android:id="@+id/play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_alignTop="@+id/fastforward"
         android:layout_centerHorizontal="true"
         android:background="@drawable/media_play_state"

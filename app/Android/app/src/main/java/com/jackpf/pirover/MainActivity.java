@@ -24,6 +24,7 @@ import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Request.BroadcastRequest;
 import com.jackpf.pirover.Request.CameraRequest;
 import com.jackpf.pirover.Request.ControlRequest;
+import com.jackpf.pirover.Request.ShutdownRequest;
 import com.jackpf.pirover.RequestThread.Callback;
 import com.jackpf.pirover.Service.Utils;
 import com.jackpf.pirover.View.BroadcastUI;
@@ -212,6 +213,16 @@ public class MainActivity extends Activity implements Observer
                 return true;
             case R.id.action_connect:
                 connect(null);
+                return true;
+            case R.id.action_shutdown:
+                new RequestThread(new ShutdownRequest(controlClient))
+                    .setCallback(new Callback() {
+                        @Override
+                        public void onPostExecute(RequestResponse vars, Exception e) {
+                            finish();
+                        }
+                    })
+                    .execute(ip, Integer.parseInt(ports.get("control")));
                 return true;
         }
         

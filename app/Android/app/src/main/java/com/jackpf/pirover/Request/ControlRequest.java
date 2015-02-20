@@ -29,11 +29,8 @@ public class ControlRequest extends Request
             String ip = (String) args[0];
             Integer port = (Integer) args[1];
 
-            if (ip == null) {
-                throw new ClientException("No IP");
-            }
-            if (port == null) {
-                throw new ClientException("No port");
+            if (ip == null || port == null) {
+                throw new ClientException("No IP/Port");
             }
 
             client.connect(ip, port);
