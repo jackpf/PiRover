@@ -3,6 +3,7 @@
 #include "controllers/handler.hpp"
 #include "controllers/rover_controller.hpp"
 #include "controllers/launcher_controller.hpp"
+#include "controllers/shutdown_controller.hpp"
 
 using namespace Lib;
 
@@ -19,14 +20,12 @@ int main(int argc, char **argv)
 
     Handler *handlers[] = {
         /* 0x0 */ new RoverController(),
-        /* 0x1 */ new LauncherController()
+        /* 0x1 */ new LauncherController(),
+        /* 0x2 */ new ShutdownController(),
     };
 
-    // Setup rover
-    println("Initialising rover");
-
     // Create server
-    println("Creating server");
+    println("Creating controller server");
 
     if (!server.create(atoi(args.get("port")))) {
         perror("Could not create server");
@@ -43,7 +42,9 @@ int main(int argc, char **argv)
         while (true) {
             // Get cmd id
             int id;
-            server.receive(conn, &id, sizeof(int));
+            if (server.receive(conn, &id, sizeof(int)) <= 0) {
+                break;
+            }
 
             if (id >= sizeof(handlers) / sizeof(Handler)) {
                 Lib::println(stderr, "Invalid command id of %d", id);
@@ -77,10 +78,15 @@ int main(int argc, char **argv)
 
         server.close(conn);
 
-        println("Resetting rover");
+        println("Cleaning up handlers");
 
-        //rover.resetMotorValues();
-        //rover.write();
+        for (int i = 0; i < sizeof(handlers) / sizeof(Handler); i++) {
+            handlers[i]->cleanup();
+        }
+    }
+
+    for (int i = 0; i < sizeof(handlers) / sizeof(Handler); i++) {
+        delete handlers[i];
     }
 
     return 0;

@@ -17,7 +17,7 @@ int main(int argc, char **argv)
     PiCam cam;
 
     // Create server
-    printf("Creating server\n");
+    printf("Creating camera server\n");
 
     if (!server.create(atoi(args.get("port")))) {
         perror("Could not create server");
