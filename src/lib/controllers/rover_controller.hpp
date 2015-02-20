@@ -9,5 +9,6 @@ private:
 public:
     RoverController();
     void handle(char *data);
+    void cleanup();
     int getDataSize();
 };
