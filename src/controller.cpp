@@ -30,7 +30,7 @@ int main(int argc, char **argv)
         exit(-1);
     }
 
-    //while (true) {
+    while (true) {
         println("Listening...");
 
         int conn = server.listen();
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
         server.close(conn);
 
         handlerManager.cleanup();
-    //}
+    }
 
     return 0;
 }
