@@ -20,7 +20,13 @@ public class BrowseActivity extends Activity
         setContentView(R.layout.activity_browse);
 
         initialiseUI(new BrowseUI(this));
-        
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
         new RequestThread(new BrowseRequest(), getUI(BrowseUI.class)).execute(
             Environment.getExternalStorageDirectory() + "/" + Recorder.RECORD_DIR
         );

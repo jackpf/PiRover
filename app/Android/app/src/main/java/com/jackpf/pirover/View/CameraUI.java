@@ -93,7 +93,7 @@ public class CameraUI extends UI<MainActivity>
             tvBandwidth.setText(
                 String.format(
                     context.getString(R.string.camera_bandwidth),
-                    Math.round(bandwidth)
+                    Math.round(bandwidth / 1024)
                 )
             );
         }

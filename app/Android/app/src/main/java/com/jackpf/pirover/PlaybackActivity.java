@@ -1,5 +1,7 @@
 package com.jackpf.pirover;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -16,6 +18,7 @@ import com.jackpf.pirover.RequestThread.Callback;
 import com.jackpf.pirover.View.EventListener.PlaybackControlObserver;
 import com.jackpf.pirover.View.PlaybackUI;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 public class PlaybackActivity extends Activity
@@ -93,6 +96,21 @@ public class PlaybackActivity extends Activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        switch (item.getItemId()) {
+            case R.id.action_delete:
+                new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.text_delete_confirm))
+                    .setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int button) {
+                            new File(getIntent().getStringExtra("video")).delete();
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(getString(android.R.string.no), null)
+                    .show();
+                return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
     
