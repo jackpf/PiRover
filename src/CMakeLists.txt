@@ -12,6 +12,7 @@ add_executable(controller
     ${LIB_DIR}/gpio.cpp
     ${LIB_DIR}/rover.cpp
     ${LIB_DIR}/launcher.cpp
+    ${LIB_DIR}/handler_manager.cpp
     ${LIB_DIR}/controllers/rover_controller.cpp
     ${LIB_DIR}/controllers/launcher_controller.cpp
     ${LIB_DIR}/controllers/shutdown_controller.cpp

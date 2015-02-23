@@ -1,9 +1,6 @@
 #include "lib.hpp"
 #include "server.hpp"
-#include "controllers/handler.hpp"
-#include "controllers/rover_controller.hpp"
-#include "controllers/launcher_controller.hpp"
-#include "controllers/shutdown_controller.hpp"
+#include "handler_manager.hpp"
 
 using namespace Lib;
 
@@ -18,11 +15,12 @@ int main(int argc, char **argv)
 
     Server server;
 
-    Handler *handlers[] = {
+    HandlerManager handlerManager(
+        3,
         /* 0x0 */ new RoverController(),
         /* 0x1 */ new LauncherController(),
-        /* 0x2 */ new ShutdownController(),
-    };
+        /* 0x2 */ new ShutdownController()
+    );
 
     // Create server
     println("Creating controller server");
@@ -32,7 +30,7 @@ int main(int argc, char **argv)
         exit(-1);
     }
 
-    while (true) {
+    //while (true) {
         println("Listening...");
 
         int conn = server.listen();
@@ -46,17 +44,19 @@ int main(int argc, char **argv)
                 break;
             }
 
-            if (id >= sizeof(handlers) / sizeof(Handler)) {
+            Handler *handler = handlerManager.get(id);
+
+            if (handler == NULL) {
                 Lib::println(stderr, "Invalid command id of %d", id);
                 continue;
             }
 
-            char *data = (char *) malloc(handlers[id]->getDataSize());
+            char *data = (char *) malloc(handler->getDataSize());
 
             int totalBytesRead = 0;
 
-            while (totalBytesRead < handlers[id]->getDataSize()) {
-                int bytesRead = server.receive(conn, data + totalBytesRead, handlers[id]->getDataSize() - totalBytesRead);
+            while (totalBytesRead < handler->getDataSize()) {
+                int bytesRead = server.receive(conn, data + totalBytesRead, handler->getDataSize() - totalBytesRead);
 
                 if (bytesRead <= 0) {
                     break;
@@ -65,11 +65,11 @@ int main(int argc, char **argv)
                 totalBytesRead += bytesRead;
             }
 
-            if (totalBytesRead < handlers[id]->getDataSize()) {
+            if (totalBytesRead < handler->getDataSize()) {
                 break;
             }
 
-            handlers[id]->handle(data);
+            handler->handle(data);
 
             free(data);
         }
@@ -78,16 +78,8 @@ int main(int argc, char **argv)
 
         server.close(conn);
 
-        println("Cleaning up handlers");
-
-        for (int i = 0; i < sizeof(handlers) / sizeof(Handler); i++) {
-            handlers[i]->cleanup();
-        }
-    }
-
-    for (int i = 0; i < sizeof(handlers) / sizeof(Handler); i++) {
-        delete handlers[i];
-    }
+        handlerManager.cleanup();
+    //}
 
     return 0;
 }
