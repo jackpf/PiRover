@@ -3,7 +3,7 @@
 
 SensorController::SensorController()
 {
-    //retVal = (double *) malloc(sizeof(int));
+    //retVal = (int *) malloc(sizeof(int));
 }
 
 SensorController::~SensorController()
@@ -15,6 +15,7 @@ Handler::ReturnData SensorController::handle(char *data)
 {
     ReturnData returnData;
 
+    // Thank you C++!
     retVal = new int(round(sensor.calculateDistance()));
 
     returnData.len = sizeof(int);
