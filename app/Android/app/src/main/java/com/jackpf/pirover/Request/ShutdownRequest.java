@@ -23,14 +23,7 @@ public class ShutdownRequest extends Request
     public RequestResponse call(Object ...args) throws ClientException, IOException
     {
         if (!client.isConnected()) {
-            String ip = (String) args[0];
-            Integer port = (Integer) args[1];
-
-            if (ip == null || port == null) {
-                throw new ClientException("No IP/Port");
-            }
-
-            client.connect(ip, port);
+            client.connect((String) args[0], (Integer) args[1]);
         }
 
         client.update(new ControllerCommand(0x2, new byte[]{}));
