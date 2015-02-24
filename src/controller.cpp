@@ -1,3 +1,4 @@
+#include <handler.hpp>
 #include "lib.hpp"
 #include "server.hpp"
 #include "handler_manager.hpp"
@@ -16,10 +17,11 @@ int main(int argc, char **argv)
     Server server;
 
     HandlerManager handlerManager(
-        3,
+        4,
         /* 0x0 */ new RoverController(),
         /* 0x1 */ new LauncherController(),
-        /* 0x2 */ new ShutdownController()
+        /* 0x2 */ new ShutdownController(),
+        /* 0x3 */ new SensorController()
     );
 
     // Create server
@@ -69,7 +71,11 @@ int main(int argc, char **argv)
                 break;
             }
 
-            handler->handle(data);
+            Handler::ReturnData returnData = handler->handle(data);
+
+            if (returnData.len > 0 && returnData.data != NULL) {
+                server.send(conn, returnData.data, returnData.len);
+            }
 
             free(data);
         }

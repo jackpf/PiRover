@@ -6,6 +6,7 @@
 #include "controllers/rover_controller.hpp"
 #include "controllers/launcher_controller.hpp"
 #include "controllers/shutdown_controller.hpp"
+#include "controllers/sensor_controller.hpp"
 
 class HandlerManager
 {
