@@ -11,13 +11,15 @@ add_executable(controller
     ${LIB_DIR}/server.cpp
     ${LIB_DIR}/gpio.cpp
     ${LIB_DIR}/rover.cpp
+    ${LIB_DIR}/sensor.cpp
     ${LIB_DIR}/launcher.cpp
     ${LIB_DIR}/handler_manager.cpp
     ${LIB_DIR}/controllers/rover_controller.cpp
     ${LIB_DIR}/controllers/launcher_controller.cpp
     ${LIB_DIR}/controllers/shutdown_controller.cpp
+    ${LIB_DIR}/controllers/sensor_controller.cpp
 )
-target_link_libraries(controller pthread usb)
+target_link_libraries(controller pthread usb rt)
 
 # Build lights
 add_executable(lights lights.cpp ${LIB_DIR}/lib.cpp ${LIB_DIR}/gpio.cpp ${LIB_DIR}/network.cpp)

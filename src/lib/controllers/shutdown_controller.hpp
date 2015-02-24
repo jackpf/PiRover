@@ -4,7 +4,7 @@
 class ShutdownController : public Handler
 {
 public:
-    void handle(char *data);
+    ReturnData handle(char *data);
     void cleanup();
     int getDataSize();
 };

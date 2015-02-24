@@ -5,13 +5,15 @@ LauncherController::LauncherController()
     launcher.init();
 }
 
-void LauncherController::handle(char *data)
+Handler::ReturnData LauncherController::handle(char *data)
 {
     int cmd;
 
     memcpy(&cmd, data, sizeof(int));
 
     launcher.send(cmd);
+
+    return NO_DATA;
 }
 
 void LauncherController::cleanup()

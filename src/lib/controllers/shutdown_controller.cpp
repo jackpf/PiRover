@@ -1,8 +1,10 @@
 #include "shutdown_controller.hpp"
 
-void ShutdownController::handle(char *data)
+Handler::ReturnData ShutdownController::handle(char *data)
 {
     system("halt");
+
+    return NO_DATA;
 }
 
 void ShutdownController::cleanup()

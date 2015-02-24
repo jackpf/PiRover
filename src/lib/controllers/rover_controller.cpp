@@ -5,7 +5,7 @@ RoverController::RoverController()
     rover.init();
 }
 
-void RoverController::handle(char *data)
+Handler::ReturnData RoverController::handle(char *data)
 {
     int accelerationPosition, steeringPosition;
 
@@ -14,6 +14,8 @@ void RoverController::handle(char *data)
 
     rover.calculateMotorValues(accelerationPosition, steeringPosition);
     rover.write();
+
+    return NO_DATA;
 }
 
 void RoverController::cleanup()
