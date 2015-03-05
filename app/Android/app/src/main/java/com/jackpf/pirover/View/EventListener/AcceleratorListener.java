@@ -42,6 +42,9 @@ public class AcceleratorListener implements View.OnTouchListener, Observer
     @Override
     public void update(Observable observable, Object data)
     {
+        // Make sure we're using matrix scale type
+        iv.setScaleType(ImageView.ScaleType.MATRIX);
+
         Matrix matrix = new Matrix();
         matrix.postTranslate(0, ControllerCalculator.calculateAcceleratorPosition(
             controller.getAcceleration(),

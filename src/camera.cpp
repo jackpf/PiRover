@@ -38,19 +38,21 @@ int main(int argc, char **argv)
         }
 
         int status;
+        vector<uchar> frame, lastFrame;
 
         do {
-            vector<uchar> buf = cam.getFrame();
+            lastFrame = frame;
+            frame = cam.getFrame();
 
             // Send image size
-            int sz[1] = {buf.size()};
+            int sz[1] = {frame.size()};
             status = server.send(conn, &sz, sizeof(int));
 
             // Send image data
             size_t sent = 0;
             do {
-                sent += server.send(conn, &buf[sent], buf.size() - sent);
-            } while (sent < buf.size());
+                sent += server.send(conn, &frame[sent], frame.size() - sent);
+            } while (sent < frame.size());
         } while (status >= 0);
 
         println("Client disconnected");
