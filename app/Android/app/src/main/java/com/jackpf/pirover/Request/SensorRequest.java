@@ -2,24 +2,22 @@ package com.jackpf.pirover.Request;
 
 import com.jackpf.pirover.Client.ClientException;
 import com.jackpf.pirover.Controller.Client;
-import com.jackpf.pirover.Controller.Controller;
 import com.jackpf.pirover.Controller.ControllerCommand;
 import com.jackpf.pirover.Model.Request;
 import com.jackpf.pirover.Model.RequestResponse;
+import com.jackpf.pirover.Service.Utils;
 
 import java.io.IOException;
 
-public class ControlRequest extends Request
+public class SensorRequest extends Request
 {
     private static Client client;
-    private static Controller controller;
-    
-    public ControlRequest(Object ...params)
+
+    public SensorRequest(Object... params)
     {
         super(params);
 
         client = (Client) params[0];
-        controller = (Controller) params[1];
     }
 
     @Override
@@ -29,8 +27,11 @@ public class ControlRequest extends Request
             client.connect((String) args[0], (Integer) args[1]);
         }
 
-        client.update((ControllerCommand) args[2]);
+        client.update(new ControllerCommand(0x3, new byte[]{}));
+
+        RequestResponse vars = new RequestResponse();
+        vars.put("distance", Utils.byteArrayToInt(client.retrieve(4)));
         
-        return null;
+        return vars;
     }
 }

@@ -56,4 +56,12 @@ public class ControllerUI extends UI<MainActivity>
         matrix.postTranslate(0, 288);
         ((ImageView) activity.findViewById(R.id.accelerator)).setImageMatrix(matrix);
     }
+
+    @Override
+    public void update()
+    {
+        if (vars.get("distance") != null) {
+            System.err.println(vars.get("distance"));
+        }
+    }
 }

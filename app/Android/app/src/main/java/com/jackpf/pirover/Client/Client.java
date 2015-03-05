@@ -7,8 +7,13 @@ public abstract class Client
 {
     protected Socket socket;
     
-    public void connect(String host, int port) throws ClientException
+    public void connect(String host, Integer port) throws ClientException
     {
+        // Just a sanity check in case port resolution failed or something
+        if (host == null || port == null) {
+            throw new ClientException("No IP/Port");
+        }
+
         try {
             if (isConnected()) {
                 disconnect();

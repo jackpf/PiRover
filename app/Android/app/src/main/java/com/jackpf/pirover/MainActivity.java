@@ -24,6 +24,7 @@ import com.jackpf.pirover.Model.RequestResponse;
 import com.jackpf.pirover.Request.BroadcastRequest;
 import com.jackpf.pirover.Request.CameraRequest;
 import com.jackpf.pirover.Request.ControlRequest;
+import com.jackpf.pirover.Request.SensorRequest;
 import com.jackpf.pirover.Request.ShutdownRequest;
 import com.jackpf.pirover.RequestThread.Callback;
 import com.jackpf.pirover.Service.Utils;
@@ -41,7 +42,7 @@ public class MainActivity extends Activity implements Observer
     /**
      * Network thread instances
      */
-    protected RequestThread cameraThread, controlThread;
+    protected RequestThread cameraThread, controlThread, sensorThread;
     
     /**
      * Client instances
@@ -51,7 +52,7 @@ public class MainActivity extends Activity implements Observer
     /**
      * Network request instances
      */
-    protected Request cameraRequest, controlRequest;
+    protected Request cameraRequest, controlRequest, sensorRequest;
     
     /**
      * Controller instance
@@ -113,6 +114,7 @@ public class MainActivity extends Activity implements Observer
         
         cameraRequest   = new CameraRequest(cameraClient, recorder);
         controlRequest  = new ControlRequest(controlClient, controller);
+        sensorRequest   = new SensorRequest(controlClient);
 
         initialiseUI(new CameraUI(this, recorder), new ControllerUI(this, controller, launcher), new BroadcastUI(this));
 
@@ -142,7 +144,7 @@ public class MainActivity extends Activity implements Observer
                 connect(null);
             }
         } else {
-            executeCameraRequest();
+            startThreads();
         }
 
         if (accelerometerController != null) {
@@ -171,9 +173,7 @@ public class MainActivity extends Activity implements Observer
     {
         super.onPause();
         
-        if (cameraThread instanceof RequestThread) {
-            cameraThread.cancel(true);
-        }
+        stopThreads();
         
         cameraClient.disconnect();
         controlClient.disconnect();
@@ -247,12 +247,29 @@ public class MainActivity extends Activity implements Observer
                         ports = (BroadcastResolver.PortMap) vars.get("ports");
                         Log.d("Broadcast", "Controller port: " + ports.get("control") + ", camera port: " + ports.get("camera"));
                         
-                        // Start connecting to camera
-                        executeCameraRequest();
+                        startThreads();
                     }
                 }
             })
             .execute(Integer.parseInt(preferences.getString(getString(R.string.pref_broadcast_port_key), getString(R.string.pref_broadcast_port_default))), manualIp);
+    }
+
+    protected void startThreads()
+    {System.err.println("start threads");
+        // Start continuous threads
+        executeCameraRequest();
+        //executeSensorRequest();
+    }
+
+    protected void stopThreads()
+    {
+        if (cameraThread instanceof RequestThread) {
+            cameraThread.cancel(true);
+        }
+
+        if (sensorThread instanceof RequestThread) {
+            sensorThread.cancel(true);
+        }
     }
     
     /**
@@ -285,6 +302,35 @@ public class MainActivity extends Activity implements Observer
 
         if (ip != null && ports != null) {
             cameraThread.execute(ip, Integer.parseInt(ports.get("camera")));
+        }
+    }
+
+    // Continuously execute sensor requests
+    protected void executeSensorRequest()
+    {
+        if (sensorThread instanceof RequestThread) {
+            sensorThread.cancel(true);
+        }
+
+        final Handler handler = new Handler();
+
+        sensorThread = new RequestThread(
+            sensorRequest,
+            getUI(ControllerUI.class)
+        ).setCallback(new Callback() {
+            @Override
+            public void onPostExecute(RequestResponse vars, Exception e) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        executeSensorRequest();
+                    }
+                }, 1000);
+            }
+        });
+
+        if (ip != null && ports != null) {
+            sensorThread.execute(ip, Integer.parseInt(ports.get("control")));
         }
     }
     
