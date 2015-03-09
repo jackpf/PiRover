@@ -16,6 +16,7 @@ import com.jackpf.pirover.Camera.Recorder;
 import com.jackpf.pirover.Camera.StreamStats;
 import com.jackpf.pirover.Client.Client;
 import com.jackpf.pirover.Controller.AccelerometerController;
+import com.jackpf.pirover.Controller.CameraController;
 import com.jackpf.pirover.Controller.Controller;
 import com.jackpf.pirover.Controller.ControllerCommand;
 import com.jackpf.pirover.Controller.Launcher;
@@ -63,6 +64,11 @@ public class MainActivity extends Activity implements Observer
      * Launcher instance
      */
     protected Launcher launcher;
+
+    /**
+     * Camera controller
+     */
+    protected CameraController cameraController;
     
     /**
      * Recorder instance
@@ -101,22 +107,24 @@ public class MainActivity extends Activity implements Observer
         
         setContentView(R.layout.activity_main);
 
-        controller      = new Controller();
+        controller          = new Controller();
         controller.addObserver(this);
-        launcher        = new Launcher();
+        launcher            = new Launcher();
         launcher.addObserver(this);
+        cameraController    = new CameraController();
+        cameraController.addObserver(this);
 
-        streamStats     = new StreamStats();
-        recorder        = new Recorder(streamStats);
+        streamStats         = new StreamStats();
+        recorder            = new Recorder(streamStats);
         
-        cameraClient    = new com.jackpf.pirover.Camera.Client(new DrawableFrameFactory(), streamStats);
-        controlClient   = new com.jackpf.pirover.Controller.Client();
+        cameraClient        = new com.jackpf.pirover.Camera.Client(new DrawableFrameFactory(), streamStats);
+        controlClient       = new com.jackpf.pirover.Controller.Client();
         
-        cameraRequest   = new CameraRequest(cameraClient, recorder);
-        controlRequest  = new ControlRequest(controlClient, controller);
-        sensorRequest   = new SensorRequest(controlClient);
+        cameraRequest       = new CameraRequest(cameraClient, recorder);
+        controlRequest      = new ControlRequest(controlClient);
+        sensorRequest       = new SensorRequest(controlClient);
 
-        initialiseUI(new CameraUI(this, recorder), new ControllerUI(this, controller, launcher), new BroadcastUI(this));
+        initialiseUI(new CameraUI(this, recorder), new ControllerUI(this, controller, launcher, cameraController), new BroadcastUI(this));
 
         if (preferences.getBoolean(getString(R.string.pref_gyroscope_key), Boolean.valueOf(getString(R.string.pref_gyroscope_default)))) {
             accelerometerController =
@@ -340,35 +348,35 @@ public class MainActivity extends Activity implements Observer
     @Override
     public void update(Observable observer, Object data)
     {
+        if (ip == null || ports == null) {
+            return;
+        }
+
+        if (controlThread instanceof RequestThread) {
+            controlThread.cancel(true);
+        }
+
+        controlThread = new RequestThread(controlRequest);
+
         if (observer instanceof Controller) {
-            if (controlThread instanceof RequestThread) {
-                controlThread.cancel(true);
-            }
+            byte[] buf = ArrayUtils.addAll(
+                Utils.intToByteArray(controller.getAcceleration()),
+                Utils.intToByteArray(controller.getSteering())
+            );
 
-            controlThread = new RequestThread(controlRequest);
-
-            if (ip != null && ports != null) {
-                byte[] buf = ArrayUtils.addAll(
-                    Utils.intToByteArray(controller.getAcceleration()),
-                    Utils.intToByteArray(controller.getSteering())
-                );
-
-                controlThread.execute(ip, Integer.parseInt(ports.get("control")), new ControllerCommand(0x0, buf));
-            }
+            controlThread.execute(ip, Integer.parseInt(ports.get("control")), new ControllerCommand(0x0, buf));
         } else if (observer instanceof Launcher) {
-            if (controlThread instanceof RequestThread) {
-                controlThread.cancel(true);
-            }
-
-            controlThread = new RequestThread(controlRequest);
-
-            if (ip != null && ports != null) {
-                controlThread.execute(
-                    ip,
-                    Integer.parseInt(ports.get("control")),
-                    new ControllerCommand(0x1, Utils.intToByteArray((Integer) data))
-                );
-            }
+            controlThread.execute(
+                ip,
+                Integer.parseInt(ports.get("control")),
+                new ControllerCommand(0x1, Utils.intToByteArray((Integer) data))
+            );
+        } else if (observer instanceof CameraController) {
+            controlThread.execute(
+                ip,
+                Integer.parseInt(ports.get("control")),
+                new ControllerCommand(0x4, new byte[]{})
+            );
         }
     }
 }

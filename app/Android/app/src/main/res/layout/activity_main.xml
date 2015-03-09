@@ -105,12 +105,20 @@
         android:layout_above="@+id/camera_status"
         android:layout_centerHorizontal="true"/>
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Fire!"
+        android:src="@drawable/fire"
         android:id="@+id/launcher_fire"
-        android:layout_below="@+id/steering_wheel"
-        android:layout_alignEnd="@+id/launcher_up"/>
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/camera_status"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/motion_off"
+        android:id="@+id/camera_motion"
+        android:layout_toStartOf="@+id/launcher_fire"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
