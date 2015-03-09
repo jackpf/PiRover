@@ -48,9 +48,10 @@ public class CameraUI extends UI<MainActivity>
     public void preUpdate()
     {
         // Update state to connecting
-        if (!tvStatus.getText().equals(context.getString(R.string.camera_state_connected))) {
-            tvStatus.setText(context.getString(R.string.camera_state_connecting));
-        }
+        //if (!tvStatus.getText().equals(context.getString(R.string.camera_state_connected))) {
+        //    tvStatus.setText(context.getString(R.string.camera_state_connecting));
+        //}
+        // Seems to make things flicker sometimes
     }
 
     @Override
