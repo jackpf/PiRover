@@ -31,10 +31,8 @@ function wpa_config_update {
         echo "Done."
         echo "Deleting $new_conf..."
         rm -f "$new_conf"
-        echo "Restarting network interfaces..."
-        /etc/init.d/networking restart
-        echo "Done."
-
+        echo "Restarting..."
+        reboot
     else
         echo "No new wpa_supplicant.conf info."
     fi
