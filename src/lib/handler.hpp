@@ -9,7 +9,7 @@ public:
         void *data;
     } ReturnData;
 
-    const ReturnData NO_DATA;
+    ReturnData NO_DATA;
 
     virtual ReturnData handle(char *data) = 0;
     virtual void cleanup() = 0;
