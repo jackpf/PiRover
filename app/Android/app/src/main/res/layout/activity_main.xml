@@ -51,9 +51,9 @@
         android:layout_height="128sp"
         android:layout_alignLeft="@+id/record"
         android:layout_alignTop="@+id/steering_wheel"
-        android:scaleType="matrix"
+        android:scaleType="fitEnd"
         android:src="@drawable/accelerator"
-        android:contentDescription="@string/controller_accelerator" />
+        android:contentDescription="@string/controller_accelerator"/>
 
     <TextView
         android:id="@+id/bandwidth"

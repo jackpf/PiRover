@@ -65,7 +65,7 @@ int main(int argc, char **argv)
                 sent += server.send(conn, &im[sent], im.size() - sent);
             } while (sent < im.size());
 
-            //Lib::println("Sent %d bytes", sent);
+            Lib::println("Sent %d bytes", sent);
         } while (status >= 0);
 
         println("Client disconnected");
