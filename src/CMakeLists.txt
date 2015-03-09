@@ -18,6 +18,7 @@ add_executable(controller
     ${LIB_DIR}/controllers/launcher_controller.cpp
     ${LIB_DIR}/controllers/shutdown_controller.cpp
     ${LIB_DIR}/controllers/sensor_controller.cpp
+    ${LIB_DIR}/controllers/camera_controller.cpp
 )
 target_link_libraries(controller pthread usb rt)
 

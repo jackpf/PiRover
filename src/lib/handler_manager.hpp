@@ -7,6 +7,7 @@
 #include "controllers/launcher_controller.hpp"
 #include "controllers/shutdown_controller.hpp"
 #include "controllers/sensor_controller.hpp"
+#include "controllers/camera_controller.hpp"
 
 class HandlerManager
 {

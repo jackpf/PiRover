@@ -1,16 +1,28 @@
 #include "lib.hpp"
 #include "picam.hpp"
 #include "server.hpp"
+#include <signal.h>
 
 using namespace Lib;
+using namespace cv;
 
 static Args::ArgumentOptions options[] = {
     {"port", 'p', "PORT", OPTION_REQUIRED, "Port to listen to"},
     {0}
 };
 
+static bool motionDetection = false;
+
+static void signalHandler(int sigNum)
+{
+    Lib::println("Turning motion detection %s", motionDetection ? "off" : "on");
+    motionDetection = !motionDetection;
+}
+
 int main(int argc, char **argv)
 {
+    signal(SIGUSR1, signalHandler);
+
     Args args(argc, argv, options, sizeof(options));
 
     Server server;
@@ -38,19 +50,22 @@ int main(int argc, char **argv)
         }
 
         int status;
+        vector<uchar> im;
 
         do {
-            vector<uchar> buf = cam.getFrame();
+            im = cam.encodeFrame(!motionDetection ? cam.getFrame() : cam.getFrameMotionDetection());
 
             // Send image size
-            int sz[1] = {buf.size()};
+            int sz[1] = {im.size()};
             status = server.send(conn, &sz, sizeof(int));
 
             // Send image data
             size_t sent = 0;
             do {
-                sent += server.send(conn, &buf[sent], buf.size() - sent);
-            } while (sent < buf.size());
+                sent += server.send(conn, &im[sent], im.size() - sent);
+            } while (sent < im.size());
+
+            //Lib::println("Sent %d bytes", sent);
         } while (status >= 0);
 
         println("Client disconnected");

@@ -3,6 +3,9 @@
 #include <errno.h>
 #include <string.h>
 #include <raspicam/raspicam_cv.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #define CAM_WIDTH   320
 #define CAM_HEIGHT  240
@@ -17,11 +20,12 @@ private:
     RaspiCam_Cv camera;
     Mat image;
     vector<uchar> buf;
+    Mat lastFrame, currentFrame, nextFrame;
 
 public:
     bool setup();
-
     void close();
-
-    vector<uchar> getFrame();
+    Mat getFrame();
+    Mat getFrameMotionDetection();
+    vector<uchar> encodeFrame(Mat frame);
 };

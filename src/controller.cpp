@@ -17,11 +17,12 @@ int main(int argc, char **argv)
     Server server;
 
     HandlerManager handlerManager(
-        4,
+        5,
         /* 0x0 */ new RoverController(),
         /* 0x1 */ new LauncherController(),
         /* 0x2 */ new ShutdownController(),
-        /* 0x3 */ new SensorController()
+        /* 0x3 */ new SensorController(),
+        /* 0x4 */ new CameraController()
     );
 
     // Create server
