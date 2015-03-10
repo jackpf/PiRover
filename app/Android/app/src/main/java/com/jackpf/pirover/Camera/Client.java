@@ -54,7 +54,10 @@ public class Client extends com.jackpf.pirover.Client.Client
                 throw new IOException("Invalid frame buffer size: " + sz);
             }
 
+            // Sometimes this seems to cause an out of memory exception when something else goes wrong like a disconnect
+            // not entirely sure why...
             byte[] buffer = new byte[sz], image = new byte[sz];
+
             int bytesRead = 0, bytesReadTotal = 0, bytesWritten = 0;
 
             // Read the image data
@@ -74,6 +77,8 @@ public class Client extends com.jackpf.pirover.Client.Client
             return frameFactory.createFrame(image);
         } catch (IOException e) {
             throw new ClientException("Unable to capture frame", e);
+        } catch (OutOfMemoryError e) {
+            throw new ClientException("Unable to allocate memory for frame");
         }
     }
 
