@@ -80,5 +80,7 @@
     <string name="date">Date</string>
 
     <string name="text_delete_confirm">Are you sure you want to delete this item?</string>
+    <string name="sensor_no_reading">No sensor reading</string>
+    <string name="sensor">Distance: %dCM</string>
 
 </resources>

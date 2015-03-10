@@ -18,28 +18,9 @@ read psk
 echo ""
 psk=${psk//\"/} # Remove quotes
 
-echo "Please select your PiRover's mounted memory card by typing in the number of the correct partition:"
+DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
+echo -e "network={\n\tssid=\"$ssid\"\n\tpsk=\"$psk\"\n}\n" >> "$DIR/wpa.conf"
+echo "Wrote data to $DIR/wpa.conf"
+echo "Next time your PiRover boots, it will attempt to connect to \"$ssid\""
 
-declare -a mounts
-mount=$(mount)
-i=0
-while read -r line; do
-    lineParts=($line)
-
-    if [ "${lineParts:0:1}" = "/" ]; then
-        echo "$i) ${line}"
-        mounts[$i]=${lineParts[2]}
-        let i+=1
-    fi
-done <<< "$mount"
-
-read partition
-echo ""
-
-if [ "$partition" -ge 0 ] && [ "$partition" -lt "${#mounts[@]}" ]; then
-    echo -e "network={\n\tssid=\"$ssid\"\n\tpsk=\"$psk\"\n}\n" >> "${mounts[$partition]}/wpa.conf"
-    echo "Wrote data to ${mounts[$partition]}/wpa.conf"
-    echo "Next time your PiRover boots, it will attempt to connect to \"$ssid\""
-else
-    echo "Invalid selection"
-fi
+read -p "Press enter to exit..."

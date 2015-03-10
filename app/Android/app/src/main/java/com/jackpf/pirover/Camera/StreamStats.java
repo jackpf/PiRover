@@ -20,7 +20,7 @@ public class StreamStats
         } else if (System.currentTimeMillis() - startTime > INTERVAL) {
             endTime = System.currentTimeMillis();
             double elapsedTime = (endTime - startTime) / 1000.0;
-            
+
             fps = (double) (frames / elapsedTime);
             bandwidth = (double) (this.bytes / elapsedTime);
             

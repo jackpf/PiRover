@@ -263,7 +263,7 @@ public class MainActivity extends Activity implements Observer
     }
 
     protected void startThreads()
-    {System.err.println("start threads");
+    {
         // Start continuous threads
         executeCameraRequest();
         //executeSensorRequest();

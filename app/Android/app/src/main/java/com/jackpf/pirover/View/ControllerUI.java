@@ -3,6 +3,7 @@ package com.jackpf.pirover.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jackpf.pirover.Controller.CameraController;
 import com.jackpf.pirover.Controller.Controller;
@@ -58,7 +59,9 @@ public class ControllerUI extends UI<MainActivity>
     public void update()
     {
         if (vars.get("distance") != null) {
-            System.err.println(vars.get("distance"));
+            ((TextView) activity.findViewById(R.id.sensor)).setText(
+                String.format(activity.getString(R.string.sensor), (Integer) vars.get("distance"))
+            );
         }
     }
 }

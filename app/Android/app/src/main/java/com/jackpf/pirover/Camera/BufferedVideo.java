@@ -194,8 +194,8 @@ public class BufferedVideo extends Observable
      */
     public Frame getIcon()
     {
-        // If the video is already loaded, just return the first frame
-        if (isLoaded()) {
+        // If the first frame is already loaded, just return it
+        if (frames.size() > 0) {
             return frames.get(0);
         }
 
