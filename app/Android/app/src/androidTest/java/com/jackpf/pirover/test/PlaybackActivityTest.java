@@ -3,15 +3,15 @@ package com.jackpf.pirover.test;
 import android.content.Intent;
 import android.test.ActivityUnitTestCase;
 
-import com.jackpf.pirover.MainActivity;
+import com.jackpf.pirover.PlaybackActivity;
 
-public class MainActivityTest extends ActivityUnitTestCase<MainActivity>
+public class PlaybackActivityTest extends ActivityUnitTestCase<PlaybackActivity>
 {
     private Intent intent;
 
-    public MainActivityTest()
+    public PlaybackActivityTest()
     {
-        super(MainActivity.class);
+        super(PlaybackActivity.class);
     }
     
     protected void setUp() throws Exception
@@ -20,8 +20,11 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity>
         
         intent = new Intent(
             getInstrumentation().getTargetContext(),
-            MainActivity.class
+            PlaybackActivity.class
         );
+
+        intent.putExtra("video", "test.prr");
+
         startActivity(intent, null, null);
     }
 

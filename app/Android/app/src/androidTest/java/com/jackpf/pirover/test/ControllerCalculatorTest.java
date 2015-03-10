@@ -29,61 +29,77 @@ public class ControllerCalculatorTest extends ActivityInstrumentationTestCase2<M
     
     public void testSteeringWheel() throws Exception
     {
-        ControllerCalculator.Position position;
+        int position, value;
         final int WIDTH = 384, HEIGHT = 384;
         
         // Center of steering wheel
+        value = ControllerCalculator
+            .calculateSteeringValue(WIDTH / 2, HEIGHT / 2, WIDTH, HEIGHT);
         position = ControllerCalculator
-            .calculateSteeringPosition(WIDTH / 2, HEIGHT / 2, WIDTH, HEIGHT);
-        assertEquals(position.value, 0);
-        assertEquals(position.position, 0);
+            .calculateSteeringPosition(value);
+        assertEquals(value, 0);
+        assertEquals(position, 0);
         
         // 45 degree angle
+        value = ControllerCalculator
+            .calculateSteeringValue(WIDTH, 0, WIDTH, HEIGHT);
         position = ControllerCalculator
-            .calculateSteeringPosition(WIDTH, 0, WIDTH, HEIGHT);
-        assertEquals(position.value, 5);
-        assertEquals(position.position, 45);
+            .calculateSteeringPosition(value);
+        assertEquals(value, 5);
+        assertEquals(position, 45);
         
         // -45 degree angle
+        value = ControllerCalculator
+            .calculateSteeringValue(0, 0, WIDTH, HEIGHT);
         position = ControllerCalculator
-            .calculateSteeringPosition(0, 0, WIDTH, HEIGHT);
-        assertEquals(position.value, -5);
-        assertEquals(position.position, -45);
+            .calculateSteeringPosition(value);
+        assertEquals(value, -5);
+        assertEquals(position, -45);
         
         // 90 degree angle
+        value = ControllerCalculator
+            .calculateSteeringValue(WIDTH, HEIGHT / 2, WIDTH, HEIGHT);
         position = ControllerCalculator
-            .calculateSteeringPosition(WIDTH, HEIGHT / 2, WIDTH, HEIGHT);
-        assertEquals(position.value, 10);
-        assertEquals(position.position, 90);
+            .calculateSteeringPosition(value);
+        assertEquals(value, 10);
+        assertEquals(position, 90);
         
         // 90+ degree angle
+        value = ControllerCalculator
+            .calculateSteeringValue(WIDTH, HEIGHT / 2 + 100, WIDTH, HEIGHT);
         position = ControllerCalculator
-            .calculateSteeringPosition(WIDTH, HEIGHT / 2 + 100, WIDTH, HEIGHT);
-        assertEquals(position.value, 10);
-        assertEquals(position.position, 90);
+            .calculateSteeringPosition(value);
+        assertEquals(value, 10);
+        assertEquals(position, 90);
     }
     
     public void testAccelerator() throws Exception
     {
-        ControllerCalculator.Position position;
+        int value, position;
         final int WIDTH = 96, HEIGHT = 384, INTRINSIC_HEIGHT = 96;
 
         // 0 acceleration
+        value = ControllerCalculator
+            .calculateAcceleratorValue(HEIGHT, WIDTH, HEIGHT, INTRINSIC_HEIGHT);
         position = ControllerCalculator
-            .calculateAcceleratorPosition(HEIGHT, WIDTH, HEIGHT, INTRINSIC_HEIGHT);
-        assertEquals(position.value, 0);
-        assertEquals(position.position, HEIGHT - INTRINSIC_HEIGHT);
+            .calculateAcceleratorPosition(value, HEIGHT, INTRINSIC_HEIGHT);
+        assertEquals(value, 0);
+        assertEquals(position, HEIGHT - INTRINSIC_HEIGHT);
 
         // Full acceleration
+        value = ControllerCalculator
+            .calculateAcceleratorValue(0, WIDTH, HEIGHT, INTRINSIC_HEIGHT);
         position = ControllerCalculator
-            .calculateAcceleratorPosition(0, WIDTH, HEIGHT, INTRINSIC_HEIGHT);
-        assertEquals(position.value, 10);
-        assertEquals(position.position, 0);
+            .calculateAcceleratorPosition(value, HEIGHT, INTRINSIC_HEIGHT);
+        assertEquals(value, 10);
+        assertEquals(position, 0);
 
         // Half acceleration
+        value = ControllerCalculator
+            .calculateAcceleratorValue(HEIGHT / 2, WIDTH, HEIGHT, INTRINSIC_HEIGHT);
         position = ControllerCalculator
-            .calculateAcceleratorPosition(HEIGHT / 2, WIDTH, HEIGHT, INTRINSIC_HEIGHT);
-        assertEquals(position.value, 5);
-        assertEquals(position.position, (HEIGHT - INTRINSIC_HEIGHT) / 2);
+            .calculateAcceleratorPosition(value, HEIGHT, INTRINSIC_HEIGHT);
+        assertEquals(value, 5);
+        assertEquals(position, (HEIGHT - INTRINSIC_HEIGHT) / 2);
     }
 }

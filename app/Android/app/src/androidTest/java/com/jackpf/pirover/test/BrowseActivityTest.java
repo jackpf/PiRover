@@ -1,17 +1,19 @@
 package com.jackpf.pirover.test;
 
+import android.content.Context;
 import android.content.Intent;
 import android.test.ActivityUnitTestCase;
 
+import com.jackpf.pirover.BrowseActivity;
 import com.jackpf.pirover.MainActivity;
 
-public class MainActivityTest extends ActivityUnitTestCase<MainActivity>
+public class BrowseActivityTest extends ActivityUnitTestCase<BrowseActivity>
 {
     private Intent intent;
 
-    public MainActivityTest()
+    public BrowseActivityTest()
     {
-        super(MainActivity.class);
+        super(BrowseActivity.class);
     }
     
     protected void setUp() throws Exception
@@ -20,7 +22,7 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity>
         
         intent = new Intent(
             getInstrumentation().getTargetContext(),
-            MainActivity.class
+            BrowseActivity.class
         );
         startActivity(intent, null, null);
     }

@@ -118,9 +118,9 @@
         android:layout_height="wrap_content"
         android:src="@drawable/motion_off"
         android:id="@+id/camera_motion"
-        android:layout_toStartOf="@+id/launcher_fire"
         android:layout_alignTop="@+id/launcher_fire"
-        android:layout_alignStart="@+id/steering_wheel"/>
+        android:layout_alignStart="@+id/steering_wheel"
+        android:layout_alignEnd="@+id/launcher_left"/>
 
     <TextView
         android:id="@+id/sensor"

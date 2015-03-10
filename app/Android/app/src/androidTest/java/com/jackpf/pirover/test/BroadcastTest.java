@@ -40,7 +40,7 @@ public class BroadcastTest extends ActivityInstrumentationTestCase2<MainActivity
         );
         
         try {
-            return request.call();
+            return request.call(1337);
         } catch (ConnectionException e) {
             fail("Connection failed: " + e.getMessage());
         } catch (TimeoutException e) {
