@@ -9,7 +9,7 @@ static Args::ArgumentOptions options[] = {
     {"port", 'p', "PORT", OPTION_REQUIRED, "Port to listen to"},
     {0}
 };
- 
+
 int main(int argc, char **argv)
 {
     Args args(argc, argv, options, sizeof(options));
