@@ -4,8 +4,8 @@
 #include <time.h>
 #include "gpio.hpp"
 
-#define PIN_TRIGGER 24
-#define PIN_ECHO    25
+#define PIN_TRIGGER 23
+#define PIN_ECHO    24
 
 class Sensor
 {
