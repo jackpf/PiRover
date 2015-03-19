@@ -2,7 +2,7 @@
 
 ServoController::ServoController()
 {
-    launcher.init();
+
 }
 
 Handler::ReturnData ServoController::handle(char *data)
