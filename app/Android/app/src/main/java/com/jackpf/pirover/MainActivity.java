@@ -266,7 +266,7 @@ public class MainActivity extends Activity implements Observer
     {
         // Start continuous threads
         executeCameraRequest();
-        //executeSensorRequest();
+        executeSensorRequest();
     }
 
     protected void stopThreads()
